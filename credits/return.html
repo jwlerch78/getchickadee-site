@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Chickadee Cloud Credits</title>
+  <link rel="icon" type="image/png" href="/assets/favicon.png">
+  <link rel="stylesheet" href="/assets/legal.css">
+  <style>
+    .card {
+      max-width: 460px;
+      margin: 12vh auto 0;
+      text-align: center;
+      padding: 0 24px;
+    }
+    .logo { width: 200px; max-width: 70%; height: auto; margin: 0 auto 28px; }
+    @media (prefers-color-scheme: dark) { .logo { filter: brightness(0) invert(1); } }
+    .mark {
+      width: 64px; height: 64px; margin: 0 auto 20px;
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      font-size: 32px; line-height: 1;
+    }
+    .mark.ok     { background: rgba(44,110,206,0.12); color: var(--accent); }
+    .mark.cancel { background: var(--card); color: var(--muted); }
+    h1 { font-size: 1.5em; margin: 0 0 12px; }
+    p  { color: var(--muted); margin: 0 auto 14px; max-width: 40ch; }
+    .hint { font-size: 0.9rem; margin-top: 22px; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <img class="logo" src="/assets/chickadee-logo.png" alt="Chickadee">
+
+    <div id="success" hidden>
+      <div class="mark ok">✓</div>
+      <h1>Payment complete</h1>
+      <p>Your Chickadee Cloud credits have been added to your account.</p>
+      <p>Head back to the <strong>Chickadee</strong> panel in Home Assistant (or your Dashie dashboard) — your balance updates automatically.</p>
+      <p class="hint">You can close this tab.</p>
+    </div>
+
+    <div id="cancel" hidden>
+      <div class="mark cancel">×</div>
+      <h1>Checkout canceled</h1>
+      <p>No charge was made.</p>
+      <p>You can start again anytime from the Chickadee panel on your device.</p>
+    </div>
+
+    <div id="neutral" hidden>
+      <div class="mark ok">💳</div>
+      <h1>Chickadee Cloud credits</h1>
+      <p>Manage your credits from the <strong>Chickadee</strong> panel on your device.</p>
+    </div>
+  </div>
+
+  <footer>
+    <a href="/privacy">Privacy</a> · <a href="/terms">Terms</a> · <a href="https://github.com/jwlerch78/chickadee">GitHub</a><br>
+    Built by the makers of <a href="https://dashieapp.com">Dashie</a>.
+  </footer>
+
+  <script>
+    // The checkout's success_url/cancel_url append ?credits=success|cancel
+    // (both the tablet flow and the console buy-credits modal use this page).
+    var state = new URLSearchParams(location.search).get('credits');
+    var id = state === 'success' ? 'success' : state === 'cancel' ? 'cancel' : 'neutral';
+    document.getElementById(id).hidden = false;
+    document.title = id === 'success' ? 'Credits added — Chickadee'
+                   : id === 'cancel'  ? 'Checkout canceled — Chickadee'
+                   : 'Chickadee Cloud Credits';
+  </script>
+</body>
+</html>
