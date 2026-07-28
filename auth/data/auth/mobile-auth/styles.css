@@ -1,0 +1,574 @@
+// GENERATED — vendored from dashieapp_staging by vendor/sync-auth.mjs.
+// Do NOT edit here; edit the source and re-run `node vendor/sync-auth.mjs`.
+// Source: js/data/auth/mobile-auth/styles.css
+
+/* auth.css - Phone Authentication Page Styles
+ * Matched to native login.css styling for consistency
+ */
+
+/* =============================================================================
+   BASE STYLES
+   ============================================================================= */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: #000000; /* Match native login */
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  color: #424242;
+}
+
+/* =============================================================================
+   AUTH CONTAINER (Modal Style)
+   ============================================================================= */
+
+.auth-container {
+  background: #FCFCFF; /* Match native login modal */
+  border-radius: 12px;
+  max-width: 420px;
+  width: 100%;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  animation: slideUp 0.4s ease-out;
+  overflow: hidden;
+}
+
+/* =============================================================================
+   HEADER
+   ============================================================================= */
+
+.auth-header {
+  padding: 30px 30px 20px 30px;
+  text-align: center;
+}
+
+.auth-header .logo {
+  width: 150px;
+  height: auto;
+  margin: 0 auto 20px auto;
+  display: block;
+}
+
+.auth-header h1 {
+  color: #424242;
+  font-size: 24px;
+  font-weight: 600;
+  margin: 0;
+}
+
+/* =============================================================================
+   DEVICE INFO SECTION
+   ============================================================================= */
+
+.device-info {
+  background: rgba(189, 193, 198, 0.05);
+  border: 1px solid rgba(189, 193, 198, 0.2);
+  border-radius: 8px;
+  padding: 20px 24px;
+  margin: 0 30px 10px 30px;
+  text-align: center;
+}
+
+
+.device-name {
+  font-size: 18px;
+  font-weight: 600;
+  color: #424242;
+  margin-bottom: 8px;
+}
+
+.device-code-label {
+  font-size: 12px;
+  color: #616161;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 500;
+}
+
+.device-code {
+  font-size: 32px;
+  font-weight: 700;
+  letter-spacing: 6px;
+  color: #ff9500; /* Dashie orange */
+  font-family: 'Courier New', monospace;
+  margin: 0;
+}
+
+/* =============================================================================
+   AUTH CONTENT
+   ============================================================================= */
+
+.auth-content {
+  padding: 10px 30px 30px 30px;
+  min-height: 220px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* Sign-in section */
+.sign-in-section {
+  text-align: center;
+}
+
+.instructions {
+  font-size: 16px;
+  color: #616161;
+  margin-bottom: 24px;
+  line-height: 1.5;
+}
+
+/* Custom Google Sign-In Button - matches main login */
+.google-signin-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  width: 100%;
+  max-width: 320px;
+  margin: 0 auto 16px auto;
+  padding: 12px 24px;
+  background: #FFFFFF;
+  border: 1px solid #DADCE0;
+  border-radius: 4px;
+  font-size: 16px;
+  font-weight: 500;
+  color: #3C4043;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.google-signin-button:hover {
+  background: #F8F9FA;
+  border-color: #D2D4D8;
+  box-shadow: 0 1px 2px rgba(60, 64, 67, 0.3), 0 1px 3px rgba(60, 64, 67, 0.15);
+}
+
+.google-signin-button:active {
+  background: #F1F3F4;
+  box-shadow: 0 1px 2px rgba(60, 64, 67, 0.3);
+}
+
+.google-signin-button .google-logo {
+  flex-shrink: 0;
+}
+
+#google-signin-button {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+.privacy-note {
+  font-size: 14px;
+  color: #9e9e9e;
+  margin-top: 16px;
+  font-style: italic;
+}
+
+/* Code entry section */
+.code-entry-section {
+  text-align: center;
+}
+
+.code-input-wrapper {
+  margin: 20px auto;
+}
+
+.code-input {
+  width: 100%;
+  padding: 14px 16px;
+  border: 2px solid #E0E0E0;
+  border-radius: 8px;
+  font-size: 18px;
+  font-family: 'Courier New', Courier, monospace;
+  letter-spacing: 2px;
+  text-align: center;
+  text-transform: uppercase;
+  transition: all 0.2s;
+  box-sizing: border-box;
+  background: #FFFFFF;
+  color: #424242;
+}
+
+.code-input:focus {
+  outline: none;
+  border-color: #ffaa00;
+  box-shadow: 0 0 0 3px rgba(255, 170, 0, 0.1);
+}
+
+.code-input::placeholder {
+  color: #BDBDC1;
+  letter-spacing: 1px;
+}
+
+.code-input.error {
+  border-color: #f44336;
+  animation: shake 0.5s ease;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-5px); }
+  40%, 80% { transform: translateX(5px); }
+}
+
+.code-entry-section .primary-button {
+  margin-top: 8px;
+}
+
+/* Loading section */
+.loading-section {
+  text-align: center;
+  padding: 20px 0;
+}
+
+.spinner {
+  width: 48px;
+  height: 48px;
+  border: 4px solid rgba(255, 149, 0, 0.1);
+  border-top-color: #ff9500; /* Dashie orange */
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 24px auto;
+}
+
+.status-message {
+  font-size: 16px;
+  color: #616161;
+  margin: 0;
+}
+
+/* Success section */
+.success-section {
+  text-align: center;
+  animation: fadeIn 0.5s ease-in;
+}
+
+.success-icon {
+  width: 80px;
+  height: 80px;
+  color: #ff9500; /* Dashie orange */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 24px auto;
+  animation: scaleIn 0.4s ease-out;
+}
+
+.success-icon svg {
+  width: 80px;
+  height: 80px;
+}
+
+.success-section h2 {
+  font-size: 24px;
+  color: #424242;
+  margin-bottom: 12px;
+  font-weight: 600;
+}
+
+.success-section p {
+  font-size: 16px;
+  color: #616161;
+  margin-bottom: 8px;
+  line-height: 1.6;
+}
+
+.redirect-note {
+  font-size: 15px !important;
+  color: #ff9500 !important; /* Dashie orange */
+  font-weight: 500;
+  margin-top: 16px !important;
+}
+
+.close-note-alt {
+  font-size: 14px !important;
+  color: #9e9e9e !important;
+  margin-top: 8px !important;
+}
+
+.dashboard-link {
+  color: #1a73e8;
+  text-decoration: none;
+  font-weight: 600;
+  border-bottom: 1px solid transparent;
+  transition: border-bottom-color 0.2s;
+}
+
+.dashboard-link:hover {
+  border-bottom-color: #1a73e8;
+}
+
+/* Error section */
+.error-section {
+  text-align: center;
+  animation: fadeIn 0.5s ease-in;
+}
+
+.confirm-account-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  animation: fadeIn 0.5s ease-in;
+}
+
+.error-icon {
+  width: 80px;
+  height: 80px;
+  background: #f44336;
+  color: #ffffff;
+  font-size: 48px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 24px auto;
+}
+
+.error-section h2 {
+  font-size: 22px;
+  color: #d32f2f;
+  margin-bottom: 12px;
+  font-weight: 600;
+}
+
+.error-text {
+  font-size: 15px;
+  color: #616161;
+  margin-bottom: 24px;
+  line-height: 1.6;
+  padding: 0 10px;
+}
+
+/* =============================================================================
+   BUTTONS
+   ============================================================================= */
+
+.primary-button {
+  background: #ff9500; /* Dashie orange */
+  color: #ffffff;
+  border: none;
+  padding: 12px 28px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-top: 12px;
+}
+
+.primary-button:hover {
+  background: #e68600;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(255, 149, 0, 0.3);
+}
+
+.primary-button:active {
+  transform: translateY(0);
+}
+
+/* Secondary button — used alongside .primary-button (e.g. the no-account
+   confirmation's Cancel). Lower-emphasis: outlined, no fill. */
+.secondary-button {
+  background: transparent;
+  color: #ff9500;
+  border: 1px solid rgba(255, 149, 0, 0.5);
+  padding: 12px 28px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-top: 10px;
+}
+
+.secondary-button:hover {
+  background: rgba(255, 149, 0, 0.08);
+}
+
+.secondary-button:active {
+  transform: translateY(0);
+}
+
+/* =============================================================================
+   FOOTER
+   ============================================================================= */
+
+.auth-footer {
+  padding: 20px 30px;
+  text-align: center;
+  border-top: 1px solid #e5e5e5;
+}
+
+.help-text {
+  font-size: 14px;
+  color: #9e9e9e;
+  margin: 0;
+}
+
+.help-text a {
+  color: #1a73e8;
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.2s;
+}
+
+.help-text a:hover {
+  color: #1557b0;
+  text-decoration: underline;
+}
+
+/* =============================================================================
+   UTILITY CLASSES
+   ============================================================================= */
+
+.hidden {
+  display: none !important;
+}
+
+/* Hide device info when showing success/error */
+body.auth-complete .device-info {
+  display: none;
+}
+
+/* =============================================================================
+   ANIMATIONS
+   ============================================================================= */
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* =============================================================================
+   MOBILE RESPONSIVENESS
+   ============================================================================= */
+
+@media (max-width: 600px) {
+  body {
+    padding: 0;
+    align-items: flex-start;
+  }
+
+  .auth-container {
+    border-radius: 0;
+    min-height: 100vh;
+    max-width: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .auth-header {
+    padding: 24px 20px 16px 20px;
+  }
+
+  .auth-header .logo {
+    width: 130px;
+  }
+
+  .auth-header h1 {
+    font-size: 20px;
+  }
+
+  .device-info {
+    margin: 0 20px 16px 20px;
+    padding: 20px;
+  }
+
+
+  .device-code {
+    font-size: 28px;
+    letter-spacing: 4px;
+  }
+
+  .auth-content {
+    padding: 16px 20px 24px 20px;
+    flex: 1;
+  }
+
+  .instructions {
+    font-size: 15px;
+  }
+
+  .success-section h2,
+  .error-section h2 {
+    font-size: 20px;
+  }
+
+  .success-section p,
+  .error-section p {
+    font-size: 15px;
+  }
+
+  .auth-footer {
+    padding: 16px 20px;
+    margin-top: auto;
+  }
+
+  .help-text {
+    font-size: 13px;
+  }
+}
+
+/* Extra small phones */
+@media (max-width: 375px) {
+  .device-code {
+    font-size: 24px;
+    letter-spacing: 3px;
+  }
+
+  .auth-header h1 {
+    font-size: 18px;
+  }
+
+  .success-icon,
+  .error-icon {
+    width: 64px;
+    height: 64px;
+    font-size: 40px;
+  }
+}

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Completing Sign-In — Chickadee</title>
+  <link rel="icon" type="image/png" href="/assets/favicon.png">
+  <script>
+    // Thin router: redirect to the vendored callback, preserving query params
+    // (?code=…&state=…). This is the URL registered as the Google OAuth
+    // redirect URI: https://getchickadee.org/oauth-callback.html
+    window.location.replace('/auth/data/auth/mobile-auth/callback.html' + window.location.search);
+  </script>
+</head>
+<body>
+  <div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;display:flex;align-items:center;justify-content:center;min-height:100vh;background:#000;color:#fff;">
+    Completing authentication…
+  </div>
+</body>
+</html>

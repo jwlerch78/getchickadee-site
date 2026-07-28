@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Authenticate Device — Chickadee</title>
+  <link rel="icon" type="image/png" href="/assets/favicon.png">
+  <script>
+    // Thin router: redirect to the vendored implementation, preserving query
+    // params (?code=…&env=…). The deep path keeps the page's relative module
+    // imports (../auth-config.js) resolving correctly — see vendor/VENDORED.md.
+    window.location.replace('/auth/data/auth/mobile-auth/index.html' + window.location.search);
+  </script>
+</head>
+<body>
+  <div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;display:flex;align-items:center;justify-content:center;min-height:100vh;background:#000;color:#fff;">
+    Redirecting to authentication…
+  </div>
+</body>
+</html>

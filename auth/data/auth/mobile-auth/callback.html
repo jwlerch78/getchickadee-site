@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<!-- GENERATED — vendored from dashieapp_staging by vendor/sync-auth.mjs. Do NOT edit here; edit the source and re-run `node vendor/sync-auth.mjs`. Source: js/data/auth/mobile-auth/callback.html -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Completing Sign-In - Dashie</title>
+  <style>
+    /* Match main login screen loading state styling exactly */
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #000000;
+      /* 100vh on iOS Safari extends behind the URL bar — content's
+         math-center falls below the visible center, so the card sat in
+         the lower half of the screen. 100dvh tracks the visible
+         viewport (iOS 15.4+). Falls back to 100vh on older browsers. */
+      min-height: 100vh;
+      min-height: 100dvh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0;
+      padding: 20px;
+    }
+
+    .callback-container {
+      background: #FCFCFF;
+      border-radius: 12px;
+      padding: 40px;
+      max-width: 400px;
+      width: 90%;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      /* Match loading-dashboard-state layout */
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+    }
+
+    .dashie-logo {
+      width: 150px;
+      height: auto;
+      display: block;
+    }
+
+    /* Match loading-dashboard-welcome */
+    .status-title {
+      color: #424242;
+      font-size: 24px;
+      font-weight: 600;
+      margin: 0;
+      text-align: center;
+    }
+
+    /* Match loading-dashboard-spinner */
+    .spinner {
+      width: 48px;
+      height: 48px;
+      border: 4px solid rgba(255, 149, 0, 0.1);
+      border-top-color: #ff9500;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    /* Match loading-dashboard-text */
+    .status-message {
+      color: #616161;
+      font-size: 18px;
+      font-weight: 500;
+      margin: 0;
+      text-align: center;
+    }
+
+    .error {
+      color: #d32f2f;
+      background: #ffebee;
+      padding: 16px;
+      border-radius: 8px;
+      border-left: 4px solid #d32f2f;
+    }
+
+    /* No-account confirmation buttons */
+    .confirm-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      width: 100%;
+    }
+
+    .cb-btn {
+      padding: 12px 28px;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      width: 100%;
+    }
+
+    .cb-btn-primary {
+      background: #ff9500;
+      color: #ffffff;
+      border: none;
+    }
+
+    .cb-btn-primary:active {
+      background: #e68600;
+    }
+
+    .cb-btn-secondary {
+      background: transparent;
+      color: #ff9500;
+      border: 1px solid rgba(255, 149, 0, 0.5);
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <div class="callback-container">
+    <img src="/assets/chickadee-logo.png" alt="Dashie" class="dashie-logo">
+    <h1 class="status-title" id="status-title">Welcome</h1>
+    <div class="spinner" id="spinner"></div>
+    <p class="status-message" id="status-message">Completing sign-in...</p>
+    <!-- No-account confirmation: shown when the chosen Google email has no
+         Dashie account. Hidden until authorize_device_code returns
+         status:'no_account'. -->
+    <div class="confirm-buttons" id="confirm-buttons" style="display: none;">
+      <button class="cb-btn cb-btn-primary" id="confirm-create-button">Create Account</button>
+      <button class="cb-btn cb-btn-secondary" id="confirm-cancel-button">Cancel</button>
+    </div>
+  </div>
+
+  <script type="module">
+    import { SUPABASE_CONFIG } from '../auth-config.js';
+    import { resolveBrand, applyBrandChrome, clearBrand } from './brand-config.js';
+
+    const EDGE_FUNCTION_URL = SUPABASE_CONFIG.edgeFunctionUrl;
+    const SUPABASE_ANON_KEY = SUPABASE_CONFIG.anonKey;
+
+    // Brand skin: the verification page persisted ?brand= to sessionStorage
+    // before the OAuth redirect (the callback URL itself carries no brand).
+    const BRAND = resolveBrand();
+    applyBrandChrome(BRAND);
+
+    // Which Google OAuth client minted this code — the SAME resolution the
+    // approval page used (brand override → Dashie default). Sent to jwt-auth
+    // so exchange + refresh use the matching client secret (a code/token from
+    // the Chickadee client can only be exchanged/refreshed with it).
+    const OAUTH_CLIENT_ID = BRAND.googleWebClientId || SUPABASE_CONFIG.googleWebClientId;
+
+    const titleEl = document.getElementById('status-title');
+    const spinnerEl = document.getElementById('spinner');
+    const msgEl = document.getElementById('status-message');
+    const confirmEl = document.getElementById('confirm-buttons');
+
+    function showError(message) {
+      spinnerEl.style.display = 'none';
+      confirmEl.style.display = 'none';
+      titleEl.textContent = 'Sign-In Failed';
+      msgEl.textContent = message;
+      msgEl.classList.add('error');
+    }
+
+    /**
+     * Authorize the device with the backend. When the chosen Google email
+     * has no Dashie account, the backend returns status:'no_account'
+     * (unless allowCreate is true) — we then surface a confirmation rather
+     * than silently creating an account. The device session stays
+     * 'pending' on the backend, so the TV keeps polling untouched.
+     */
+    async function authorizeDevice(tokens, userCode, provider, deviceType, allowCreate) {
+      // Secondary calendar-account adds (intent stashed by the verification
+      // page) get account-add copy instead of device-authorization copy.
+      const isAddAccount = sessionStorage.getItem('hybrid_device_intent') === 'add_account';
+      const deviceLabel = deviceType === 'ha_app' ? 'Home Assistant app' : 'device';
+      confirmEl.style.display = 'none';
+      msgEl.classList.remove('error');
+      spinnerEl.style.display = '';
+      titleEl.textContent = 'Welcome';
+      msgEl.textContent = allowCreate
+        ? `Creating your ${BRAND.productName} account...`
+        : (isAddAccount ? 'Linking your calendar account...' : `Authorizing your ${deviceLabel}...`);
+
+      const authResponse = await fetch(EDGE_FUNCTION_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
+        },
+        body: JSON.stringify({
+          operation: 'authorize_device_code',
+          // Generic field name; backend still accepts legacy
+          // `googleAccessToken` for in-flight clients, but new code sends
+          // `providerAccessToken` so the field is provider-agnostic.
+          providerAccessToken: tokens.access_token,
+          data: {
+            device_code: userCode,  // Using user_code as identifier
+            provider,
+            allow_create: allowCreate === true,
+            provider_tokens: {
+              access_token: tokens.access_token,
+              refresh_token: tokens.refresh_token,
+              expires_in: tokens.expires_in || 3600,
+              scope: tokens.scope,
+              // Rides into provider_info.client_id so refresh_token picks the
+              // right client secret later. Absent → Dashie client (default).
+              oauth_client_id: OAUTH_CLIENT_ID
+            }
+          }
+        })
+      });
+
+      const authData = await authResponse.json();
+
+      if (!authResponse.ok) {
+        throw new Error(authData.error || authData.message || 'Device authorization failed');
+      }
+
+      // No Dashie account exists for the chosen Google email — confirm
+      // before creating one, instead of silently provisioning an account
+      // when the user picked the wrong email at the OAuth picker.
+      if (authData.status === 'no_account') {
+        showAccountConfirm(
+          authData.providerProfile || { email: authData.email },
+          tokens, userCode, provider, deviceType
+        );
+        return;
+      }
+
+      if (!authData.success) {
+        throw new Error(authData.error || authData.message || 'Device authorization failed');
+      }
+
+      finishAuthorized(authData, userCode, deviceType);
+    }
+
+    /** Show the "no Dashie account — create one?" confirmation. */
+    function showAccountConfirm(profile, tokens, userCode, provider, deviceType) {
+      const displayName = profile.name || profile.email;
+      spinnerEl.style.display = 'none';
+      msgEl.classList.remove('error');
+      titleEl.textContent = `No ${BRAND.productName} Account`;
+      msgEl.textContent =
+        `No ${BRAND.productName} account exists for ${displayName} (${profile.email}). Would you like to create one?`;
+      confirmEl.style.display = 'flex';
+
+      const createBtn = document.getElementById('confirm-create-button');
+      const cancelBtn = document.getElementById('confirm-cancel-button');
+
+      createBtn.onclick = () => {
+        console.log('[OAuth callback] user confirmed account creation');
+        authorizeDevice(tokens, userCode, provider, deviceType, true)
+          .catch((e) => showError(e.message));
+      };
+      cancelBtn.onclick = () => {
+        console.log('[OAuth callback] user declined account creation');
+        confirmEl.style.display = 'none';
+        spinnerEl.style.display = 'none';
+        titleEl.textContent = 'Sign-In Cancelled';
+        msgEl.textContent = 'To use a different Google account, re-scan the code shown on your device.';
+      };
+    }
+
+    /** Store the phone JWT and redirect to the auth-complete page. */
+    function finishAuthorized(authData, userCode, deviceType) {
+      console.log('Device authorized successfully');
+
+      // Store phone JWT with proper metadata
+      if (authData.jwtToken) {
+        const payload = JSON.parse(atob(authData.jwtToken.split('.')[1]));
+        const jwtData = {
+          jwt: authData.jwtToken,
+          expiry: payload.exp ? payload.exp * 1000 : Date.now() + (72 * 60 * 60 * 1000),
+          userId: payload.sub,
+          userEmail: payload.email,
+          savedAt: Date.now()
+        };
+        localStorage.setItem('dashie-supabase-jwt', JSON.stringify(jwtData));
+      }
+
+      // Clean up session storage
+      sessionStorage.removeItem('hybrid_device_user_code');
+      sessionStorage.removeItem('hybrid_device_type');
+      sessionStorage.removeItem('hybrid_device_intent');
+
+      // Set flag so mobile site knows this is a completed auth
+      sessionStorage.setItem('hybrid-auth-complete', 'true');
+
+      // Secondary-add flows (Settings → "Add Calendar Account",
+      // calendar reauth pill, etc.) carry secondaryAdd=true and DON'T
+      // mint a primary Dashie JWT — only the calendar's OAuth tokens
+      // got stored. The phone has no signed-in Dashie session, so the
+      // default "Open Dashie Mobile Site" link on auth-complete
+      // would spin forever loading nothing. Pass intent=add_account
+      // so auth-complete swaps to a "calendar added, close this tab"
+      // confirmation that doesn't promise something we can't deliver.
+      // Brands without a post-auth destination (Chickadee: nothing to open —
+      // the add-on panel is already polling and completes on its own) end
+      // here with "return to Home Assistant" copy instead of redirecting to
+      // the Dashie auth-complete/app-download page.
+      if (!BRAND.completeUrl) {
+        clearBrand();
+        spinnerEl.style.display = 'none';
+        titleEl.textContent = 'Signed In';
+        msgEl.textContent = 'You can close this tab and return to Home Assistant.';
+        return;
+      }
+
+      const intentParam = authData.secondaryAdd === true ? '&intent=add_account' : '';
+      window.location.href = BRAND.completeUrl + '?type=' + encodeURIComponent(deviceType || 'firetv') + '&code=' + encodeURIComponent(userCode) + intentParam;
+    }
+
+    async function handleCallback() {
+      try {
+        // Parse URL parameters
+        const params = new URLSearchParams(window.location.search);
+        const code = params.get('code');
+        const state = params.get('state');
+        const error = params.get('error');
+        const errorDescription = params.get('error_description');
+        const errorUri = params.get('error_uri');
+
+        // Dump the raw callback URL + all params for diagnostics. Stored in
+        // localStorage so it survives the redirect chain to auth.html — read
+        // back with `localStorage.getItem('dashie-oauth-debug')` after
+        // landing on the error page.
+        const debugDump = {
+          callbackUrl: window.location.href,
+          allParams: Object.fromEntries(params.entries()),
+          timestamp: new Date().toISOString(),
+        };
+        try { localStorage.setItem('dashie-oauth-debug', JSON.stringify(debugDump)); } catch (_) {}
+        console.log('[OAuth callback] raw params:', debugDump);
+
+        // Check for error
+        if (error) {
+          console.error('Google OAuth returned an error:', { error, errorDescription, errorUri });
+          const detail = errorDescription ? `: ${errorDescription}` : '';
+          throw new Error(`OAuth error: ${error}${detail}`);
+        }
+
+        if (!code) {
+          throw new Error('No authorization code received');
+        }
+
+        // Check if this is a hybrid device flow callback (Google or Microsoft).
+        // Microsoft uses a distinct state value so the provider is detectable
+        // without cross-referencing sessionStorage — survives tab-restores.
+        const isGoogleHybridFlow = state === 'hybrid_device_flow';
+        const isMicrosoftHybridFlow = state === 'microsoft_hybrid_device_flow';
+        const isHybridDeviceFlow = isGoogleHybridFlow || isMicrosoftHybridFlow;
+        const provider = isMicrosoftHybridFlow ? 'microsoft' : 'google';
+        const userCode = sessionStorage.getItem('hybrid_device_user_code');
+        const deviceType = sessionStorage.getItem('hybrid_device_type');
+
+        console.log('OAuth callback', {
+          hasCode: !!code,
+          state,
+          isHybridDeviceFlow,
+          provider,
+          userCode
+        });
+
+        // Exchange code for tokens via the provider-appropriate edge operation.
+        msgEl.textContent = 'Exchanging authorization code for tokens...';
+
+        const exchangeOperation = provider === 'microsoft' ? 'exchange_microsoft_code' : 'exchange_code';
+        const response = await fetch(EDGE_FUNCTION_URL, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
+          },
+          body: JSON.stringify({
+            operation: exchangeOperation,
+            data: {
+              code: code,
+              redirect_uri: window.location.origin + '/oauth-callback.html',
+              // Absent on old cached pages → server defaults to the Dashie client.
+              oauth_client_id: OAUTH_CLIENT_ID
+            }
+          })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok || !data.success) {
+          throw new Error(data.error || data.message || 'Token exchange failed');
+        }
+
+        console.log('Token exchange successful', {
+          hasAccessToken: !!data.tokens?.access_token,
+          hasRefreshToken: !!data.tokens?.refresh_token
+        });
+
+        // If this is hybrid device flow, authorize the device. authorizeDevice
+        // handles the no_account confirmation loop internally.
+        if (isHybridDeviceFlow && userCode) {
+          await authorizeDevice(data.tokens, userCode, provider, deviceType, false);
+        } else {
+          // Regular OAuth flow - redirect to home
+          if (data.jwtToken) {
+            // Parse JWT to get expiry and user info
+            const payload = JSON.parse(atob(data.jwtToken.split('.')[1]));
+
+            const jwtData = {
+              jwt: data.jwtToken,
+              expiry: payload.exp ? payload.exp * 1000 : Date.now() + (72 * 60 * 60 * 1000),
+              userId: payload.sub,
+              userEmail: payload.email,
+              savedAt: Date.now()
+            };
+
+            localStorage.setItem('dashie-supabase-jwt', JSON.stringify(jwtData));
+          }
+          window.location.href = '/';
+        }
+
+      } catch (error) {
+        console.error('OAuth callback error:', error);
+        showError(error.message);
+
+        // Redirect back to auth.html with error if hybrid flow
+        const userCode = sessionStorage.getItem('hybrid_device_user_code');
+        if (userCode) {
+          setTimeout(() => {
+            window.location.href = '/auth.html?status=error&message=' + encodeURIComponent(error.message);
+          }, 3000);
+        }
+      }
+    }
+
+    // Run callback handler
+    handleCallback();
+  </script>
+</body>
+</html>
