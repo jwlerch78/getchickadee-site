@@ -3,94 +3,105 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Terms of Service — Chickadee</title>
+  <title>Terms — Chickadee</title>
   <link rel="icon" type="image/png" href="/assets/favicon.png">
-  <link rel="stylesheet" href="/assets/legal.css">
+  <link rel="stylesheet" href="/assets/site.css">
 </head>
 <body>
   <div class="container">
     <a class="home" href="/"><img src="/assets/chickadee-logo.png" alt="Chickadee"></a>
 
-    <h1>Terms of Service</h1>
+    <h1>Terms</h1>
     <p class="effective-date"><strong>Effective date:</strong> August 1, 2026</p>
 
-    <p>By installing or using Chickadee ("the Software") or Chickadee Cloud ("the
-    Service"), you agree to these Terms. Chickadee is operated by Dashie LLC, the
-    makers of <a href="https://dashieapp.com">Dashie</a>.</p>
-
-    <h2>The Software</h2>
-    <ul>
-      <li>Chickadee is an open-source Home Assistant add-on that provides voice and
-      AI for the Assist devices on your network. It is licensed under
-      <a href="https://github.com/jwlerch78/chickadee/blob/main/LICENSE">AGPL-3.0</a>
-      and is fully self-hostable.</li>
-      <li><strong>Local and bring-your-own-key modes are free, forever.</strong>
-      Every capability works with your own AI models, speech engines, and keys. No
-      account is required for these modes.</li>
-    </ul>
-
-    <h2>Chickadee Cloud &amp; credits</h2>
-    <ul>
-      <li>Chickadee Cloud is an <strong>optional</strong> convenience: hosted AI,
-      speech-to-text, and text-to-speech, so you can skip setup. It is
-      <strong>metered by usage and paid with prepaid credits — there is no
-      subscription.</strong></li>
-      <li>You buy credits through Stripe; the price and amount are shown at checkout
-      before you pay. Credits are consumed as you use the hosted engines, metered
-      per call (model, tokens, and audio processed).</li>
-      <li>Your current balance and usage history are visible in the console.</li>
-      <li><strong>Refunds:</strong> unused credits may be refunded on request while
-      the Service is in beta. Consumed credits are non-refundable except where
-      required by law.</li>
-      <li>We may change credit pricing or the underlying engines with reasonable
-      notice to signed-in users. Price changes never apply retroactively to credits
-      you've already purchased.</li>
-    </ul>
-
     <div class="callout">
-      <strong>Beta notice.</strong> Chickadee Cloud is currently in beta. It is
-      provided as-is, may change, and may have interruptions. Please keep this in
-      mind when purchasing credits.
+      <strong>The short version.</strong> Chickadee is free software under
+      AGPL-3.0. There is no service, no account, and nothing to buy, so there is
+      very little for terms to govern. Your licence is the
+      <strong>LICENSE</strong> file; this page covers the rest.
     </div>
+
+    <h2>The licence governs</h2>
+    <p>
+      Chickadee is licensed under <strong>AGPL-3.0</strong>, including the
+      network-use clause. The <code>LICENSE</code> file in the repository is
+      authoritative, and nothing on this page adds to it, narrows it, or grants
+      you anything beyond it. Where this page and the licence disagree, the
+      licence wins.
+    </p>
+
+    <h2>There is no service</h2>
+    <p>
+      Chickadee runs entirely on hardware you control. It has no accounts, no
+      subscriptions, no credits, and no hosted component operated by us — so
+      there is no uptime to promise, no billing relationship, and no terms of
+      service in the usual sense. Every capability works with your own engines
+      and your own keys, and nothing is feature-gated on paying, because there
+      is nothing to pay for.
+    </p>
 
     <h2>Your responsibilities</h2>
     <ul>
-      <li>You are responsible for your account, your Home Assistant instance, and
-      the devices you connect to Chickadee.</li>
-      <li>You may not resell the Service, abuse it, attempt to access other users'
-      data, or use it in any way that violates the acceptable-use policies of the
-      underlying AI or speech providers, or any applicable law.</li>
-      <li>When using bring-your-own-key mode, you are responsible for your own
-      provider accounts, keys, and any charges they incur.</li>
+      <li>You are responsible for your Home Assistant instance, the devices you
+        connect to Chickadee, and how you configure them.</li>
+      <li>When you configure a third-party provider, you are responsible for
+        your own account with them, your API keys, any charges they bill you,
+        and complying with their acceptable-use terms. That relationship is
+        between you and them.</li>
+      <li>You are responsible for using the software lawfully — including any
+        laws where you live about recording audio in your home.</li>
     </ul>
 
-    <h2>Disclaimer &amp; limitation of liability</h2>
+    <h2>No warranty, and the limits of liability</h2>
     <ul>
-      <li>The Software and Service are provided <strong>"as is,"</strong> without
-      warranties of any kind, express or implied. We do not warrant that the Service
-      will be uninterrupted or error-free.</li>
-      <li>AI-generated responses may be inaccurate; you are responsible for actions
-      you take based on them, including smart-home commands.</li>
+      <li>The software is provided <strong>"as is," without warranties of any
+        kind</strong>, express or implied, as set out in the licence. It may
+        have defects, and it may stop working.</li>
+      <li><strong>AI-generated responses can be wrong.</strong> This matters more
+        than usual here, because the assistant can operate physical devices in
+        your home — locks, heating, appliances. You are responsible for what you
+        let it control and for actions taken on its output. Do not give it
+        authority over anything where a wrong answer is dangerous.</li>
       <li>To the maximum extent permitted by law, Dashie LLC is not liable for
-      indirect, incidental, or consequential damages arising from your use of the
-      Software or Service. Our total liability for any claim is limited to the
-      amount of credits you purchased in the 90 days before the claim.</li>
+        any damages arising from your use of the software, including indirect,
+        incidental, or consequential damages. Some jurisdictions do not allow
+        these exclusions, in which case they apply only as far as the law
+        allows.</li>
     </ul>
 
-    <h2>Changes to these Terms</h2>
-    <p>We may update these Terms from time to time. When we do, we will update the
-    effective date above. Continued use after changes constitutes acceptance.</p>
+    <h2>Bug reports, and why there are no pull requests</h2>
+    <p>
+      Bug reports and feature requests are genuinely wanted; real-world Home
+      Assistant setups are the thing one maintainer cannot manufacture. Pull
+      requests are <strong>not</strong> accepted — this is a read-and-fork
+      project, not a collaborative one, and saying so is more honest than
+      leaving open a contribution path that dead-ends. Fork it, run it, change
+      it for yourself; that is what the licence is for.
+    </p>
+
+    <h2>Changes to these terms</h2>
+    <p>
+      If these change, the effective date above changes with them. The licence
+      that already applies to a version you have is not affected by anything
+      posted here later.
+    </p>
 
     <h2>Contact</h2>
-    <p>Questions about these Terms? Email
-    <a href="mailto:hello@getchickadee.org">hello@getchickadee.org</a> or open an
-    issue on the
-    <a href="https://github.com/jwlerch78/chickadee/issues">Chickadee repository</a>.</p>
+    <p>
+      Questions about these terms? Email
+      <a href="mailto:hello@getchickadee.org">hello@getchickadee.org</a>, or open
+      an issue on the Chickadee repository.
+    </p>
+    <!-- SOURCE_URL — link "the Chickadee repository" above once the repos exist. -->
   </div>
 
   <footer>
-    <a href="/privacy">Privacy</a> · <a href="/terms">Terms</a> · <a href="https://github.com/jwlerch78/chickadee">GitHub</a><br>
-    Built by the makers of <a href="https://dashieapp.com">Dashie</a>.
+    <p>
+      <a href="/">Home</a> ·
+      <a href="/privacy">Privacy</a> ·
+      <a href="/terms">Terms</a> ·
+      <a href="/about">About this project</a>
+    </p>
   </footer>
 </body>
 </html>

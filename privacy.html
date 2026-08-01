@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Privacy Policy — Chickadee</title>
   <link rel="icon" type="image/png" href="/assets/favicon.png">
-  <link rel="stylesheet" href="/assets/legal.css">
+  <link rel="stylesheet" href="/assets/site.css">
 </head>
 <body>
   <div class="container">
@@ -14,157 +14,134 @@
     <h1>Privacy Policy</h1>
     <p class="effective-date"><strong>Effective date:</strong> August 1, 2026</p>
 
-    <p>Chickadee is voice &amp; AI for Home Assistant. Its privacy posture depends
-    entirely on which engines you point it at — three modes, three answers.
-    Everything described here is verifiable in the
-    <a href="https://github.com/jwlerch78/chickadee">open-source repository</a>.
-    Chickadee is built and operated by the makers of
-    <a href="https://dashieapp.com">Dashie</a>; accounts and billing run on the
-    same backend (documented in
-    <a href="https://github.com/jwlerch78/chickadee/blob/main/PROVENANCE.md">PROVENANCE.md</a>).</p>
+    <div class="callout">
+      <strong>The short version.</strong> Chickadee has no account, no servers,
+      and no service. We do not receive your data, because there is nothing for
+      it to be sent to. What leaves your box is whatever <em>you</em> point it
+      at — and if you point it at your own hardware, nothing leaves at all.
+    </div>
 
-    <h2>What leaves your box, per mode</h2>
+    <h2>Why this policy is unusually short</h2>
+    <p>
+      Most privacy policies describe what a company does with data it collects.
+      Chickadee collects none, and this is structural rather than a promise:
+      the software has no sign-in, no telemetry, no update check, no crash
+      reporting, and no address of ours to send anything to. There is no account
+      to delete, because there was never one to create.
+    </p>
+    <p>
+      What follows is therefore mostly about the choices <em>you</em> make —
+      because in this design they are the only ones that move data anywhere.
+    </p>
 
-    <h3>Local mode (your own engines, no account)</h3>
-    <p><strong>Nothing leaves your network.</strong> Speech goes to the STT/TTS/LLM
-    endpoints you configured (your Ollama box, your Whisper server), the assistant
-    runs inside the add-on, and no Chickadee service is contacted — there is no
-    account, no telemetry, no version ping.</p>
+    <h2>What leaves your box</h2>
+    <p>
+      Chickadee runs each voice stage on an engine you choose, and the privacy
+      answer follows entirely from that choice.
+    </p>
 
-    <h3>Bring-your-own-key</h3>
-    <p>Audio and text go to <strong>the providers you configured</strong> (for
-    example Google, OpenAI, OpenRouter) under <strong>your</strong> API key,
-    directly from your box. Chickadee's servers are not involved. Your keys are
-    stored on-box only (<code>/data/api-keys.json</code>, file mode 600), are
-    masked in the console UI, and are excluded from Home Assistant backups.</p>
+    <h3>Your own engines, on your own network</h3>
+    <p>
+      <strong>Nothing leaves your network.</strong> Speech goes to the
+      speech-to-text, text-to-speech, and language-model endpoints you
+      configured — your Ollama box, your Whisper server — the assistant runs
+      inside the add-on on your own hardware, and no Chickadee service is
+      contacted, because none exists.
+    </p>
 
-    <h3>Chickadee Cloud (signed in)</h3>
-    <p>When you leave an engine blank while signed in, that stage runs on hosted
-    engines under your account:</p>
+    <h3>Home Assistant's own engines</h3>
+    <p>
+      Audio and text go wherever your Home Assistant Assist pipeline already
+      sends them. Chickadee adds no destination of its own; whatever you have
+      already configured and already trust is what handles it.
+    </p>
+
+    <h3>Your own API key</h3>
+    <p>
+      Audio and text go to <strong>the provider you configured</strong> — for
+      example Google, OpenAI, or OpenRouter — under <strong>your</strong> API
+      key, directly from your box to them, governed by your agreement with that
+      provider. We are not a party to it and never see the traffic. Your keys
+      are stored on-box only (<code>/data/api-keys.json</code>, file mode 600),
+      are masked in the console UI, and are excluded from Home Assistant
+      backups.
+    </p>
+
+    <h2>What the assistant sends when it answers</h2>
+    <p>
+      When a turn runs against a provider you configured, it sends the audio for
+      transcription, the turn text plus your Assist-exposed entity context for
+      the model, and the reply text for the voice. That context is scoped to
+      what the question needs — your exposed-entity states, not your whole Home
+      Assistant configuration. Which entities are exposed is controlled by you,
+      in Home Assistant.
+    </p>
+
+    <h2>Things Chickadee never does</h2>
     <ul>
-      <li><strong>Sent per turn:</strong> the audio (for speech-to-text), the turn
-      text plus your Assist-exposed entity context (for the AI), and the reply text
-      (for text-to-speech). Context is scoped to what the question needs — Chickadee
-      sends your exposed-entity states, not your whole Home Assistant config.</li>
-      <li><strong>Stored for billing:</strong> per-call usage rows — model, token
-      counts, latency, cost. Metered credits require this; it's the invoice.</li>
-      <li><strong>Transcripts:</strong> stored <strong>only</strong> if you enable
-      transcript retention / "share to improve" in the console (off by default).
-      Without it, billing rows carry usage numbers, not your words.</li>
+      <li>No analytics or tracking SDKs — no Google Analytics, Sentry, PostHog,
+        or anything comparable.</li>
+      <li>No startup phone-home, no update check, no version ping.</li>
+      <li>No listening in the background: wake-word detection happens on your
+        satellite or on the tablet itself, and the add-on only receives the
+        audio Home Assistant's Assist pipeline hands it.</li>
+      <li>No training on your data. Chickadee has no models of its own to train
+        and no pipeline that could collect data to train them with.</li>
+      <li>The <strong>LAN engine scan</strong> (console → Local Engines → Scan)
+        runs only when you click it, probes private subnets only, uses read-only
+        unauthenticated version-endpoint requests to identify engines, and
+        renders results in the console — they are never sent off-box.</li>
+      <li>The add-on ↔ integration bridge is same-box only. Nothing is exposed
+        on your LAN, and it is authenticated with a random per-install
+        secret.</li>
     </ul>
 
-    <h2>Account sign-in &amp; Google data</h2>
-    <p>Chickadee Cloud uses Google Sign-In solely to identify your account. We
-    request only these scopes:</p>
+    <h2>Two third-party requests, named for completeness</h2>
+    <p>
+      Neither carries your data, but both are outbound requests to somebody
+      else's server, and you would find them yourself:
+    </p>
     <ul>
-      <li><code>openid</code>, <code>email</code>, <code>profile</code> — your basic
-      profile (name, picture) and email address, for account identification and
-      billing.</li>
+      <li>The <strong>console page in your browser</strong> loads two pinned
+        open-source libraries (<code>hls.js</code> and <code>heic2any</code>)
+        from a public CDN — a standard static asset fetch by your browser, which
+        reveals your IP address to that CDN and nothing else. The voice pipeline
+        itself never touches a CDN.</li>
+      <li><strong>This website</strong> loads nothing at all: no fonts, no
+        scripts, no CDN, no analytics. View source and check.</li>
     </ul>
-    <p>Chickadee <strong>never</strong> requests access to your Google Calendar,
-    Google Drive, or any other Google data. We do not store your Google password;
-    authentication is handled entirely through Google's OAuth 2.0 flow. You can
-    revoke Chickadee's access at any time from your
-    <a href="https://myaccount.google.com/permissions" target="_blank" rel="noopener">Google Account Permissions</a> page.</p>
-
-    <h2>Service providers</h2>
-    <p>We do not sell, rent, or share your personal information. To operate
-    Chickadee Cloud we rely on a small set of trusted processors:</p>
-    <ul>
-      <li><strong>Supabase</strong> — account records, settings, and billing/usage
-      data (PostgreSQL, encrypted at rest).</li>
-      <li><strong>Stripe</strong> — payment processing for credit purchases. Card
-      details are entered on Stripe's checkout and handled by Stripe; Chickadee
-      never sees or stores your card number.</li>
-      <li><strong>Hosted AI &amp; voice providers</strong> — for stages you run on
-      Chickadee Cloud, audio/text is sent to the underlying speech and language
-      providers under our enterprise/API accounts, whose terms prohibit using
-      submitted data to train or improve their models.</li>
-      <li><strong>Legal requirements</strong> — we may disclose information if
-      required by law, court order, or governmental authority.</li>
-    </ul>
-
-    <h2>Data storage and security</h2>
-    <ul>
-      <li><strong>Encryption in transit:</strong> all data between your device, our
-      servers, and provider APIs uses HTTPS/TLS.</li>
-      <li><strong>Encryption at rest:</strong> account and billing data stored in
-      Supabase is encrypted at rest.</li>
-      <li><strong>Access tokens:</strong> OAuth tokens are stored securely and are
-      never logged or exposed in application code.</li>
-      <li><strong>On-box keys:</strong> in bring-your-own-key mode, your provider
-      keys never leave your Home Assistant box.</li>
-      <li><strong>Secure infrastructure:</strong> our backend runs on Supabase and
-      Vercel, both SOC 2 Type II certified platforms.</li>
-    </ul>
-
-    <h2>Data retention and deletion</h2>
-    <ul>
-      <li><strong>Billing/usage data:</strong> per-call usage rows are retained as
-      the record of your metered credit usage (your invoice history).</li>
-      <li><strong>Transcripts:</strong> retained only if you opted in; can be turned
-      off at any time in the console.</li>
-      <li><strong>Account deletion:</strong> available in the console
-      (Account → Danger Zone). Billing stops immediately, OAuth tokens are revoked,
-      and your data is purged after a 15-day grace window.</li>
-    </ul>
-
-    <h2>Artificial intelligence and machine learning</h2>
-    <p>Chickadee does not train its own AI/ML models on your data, and does not use,
-    retain, or transfer your data — including Google profile/email data — to
-    develop, improve, or train generalized or non-personalized models, whether our
-    own or any third party's. Where Chickadee Cloud uses hosted AI, we rely on the
-    enterprise/API tiers of each provider, whose terms contractually prohibit using
-    customer-submitted data for training. No data is sent to any AI provider except
-    to fulfill a request you initiated, and only the minimum data required.</p>
-
-    <h2>Things Chickadee never does, in any mode</h2>
-    <ul>
-      <li>No analytics or tracking SDKs (no Google Analytics, Sentry, PostHog, …).</li>
-      <li>No startup phone-home, no update checks, no version pings.</li>
-      <li>No listening: wake-word detection is your satellite's job; the add-on only
-      receives the audio Home Assistant's Assist pipeline hands it.</li>
-      <li>The <strong>LAN engine scan</strong> (console → Local Engines → Scan) runs
-      only when you click it, probes private subnets only, uses read-only
-      unauthenticated version-endpoint requests to identify engines, and its results
-      render in the console — they are never sent off-box.</li>
-      <li>One caveat for completeness: the <strong>console page in your browser</strong>
-      loads a few pinned open-source libraries from a public CDN — a standard static
-      fetch by your browser, no data sent beyond the request itself. The voice
-      pipeline never touches a CDN.</li>
-      <li>The add-on ↔ integration bridge is same-box only (nothing is exposed on
-      your LAN), authenticated with a random per-install secret.</li>
-    </ul>
-
-    <h2>Google API Limited Use</h2>
-    <p>Chickadee's use and transfer of information received from Google APIs adheres
-    to the
-    <a href="https://developers.google.com/terms/api-services-user-data-policy" target="_blank" rel="noopener">Google API Services User Data Policy</a>,
-    including the Limited Use requirements. We use Google data (email and profile)
-    only for authentication and account identification. We do not use Google data
-    for advertising, do not sell it, do not allow humans to read it except where you
-    explicitly request support or where required for security or law, and do not use
-    or transfer it to train generalized or non-personalized AI/ML models.</p>
 
     <h2>Children's privacy</h2>
-    <p>Chickadee is not directed at children under 13, and we do not knowingly
-    collect personal information from children under 13. If you believe a child has
-    provided us with personal information, please contact us.</p>
+    <p>
+      Chickadee is not directed at children under 13. Since it collects no
+      personal information from anyone, it collects none from children either.
+    </p>
 
     <h2>Changes to this policy</h2>
-    <p>We may update this policy from time to time. When we do, we will update the
-    effective date above. Material changes will be communicated to signed-in users.</p>
+    <p>
+      If this changes, the effective date above changes with it. Any change that
+      introduced data collection would be a change to the product, not just to
+      this page, and would be described as such.
+    </p>
 
     <h2>Contact</h2>
-    <p>Privacy questions are welcome in public — open an issue on the
-    <a href="https://github.com/jwlerch78/chickadee/issues">Chickadee repository</a>.
-    You can also email <a href="mailto:hello@getchickadee.org">hello@getchickadee.org</a>.
-    Chickadee is operated by Dashie LLC.</p>
+    <p>
+      Privacy questions are welcome in public — open an issue on the Chickadee
+      repository, or email
+      <a href="mailto:hello@getchickadee.org">hello@getchickadee.org</a>.
+      Chickadee is published by Dashie LLC; the
+      <a href="/about">About</a> page explains that relationship in full.
+    </p>
+    <!-- SOURCE_URL — link "the Chickadee repository" above once the repos exist. -->
   </div>
 
   <footer>
-    <a href="/privacy">Privacy</a> · <a href="/terms">Terms</a> · <a href="https://github.com/jwlerch78/chickadee">GitHub</a><br>
-    Built by the makers of <a href="https://dashieapp.com">Dashie</a>.
+    <p>
+      <a href="/">Home</a> ·
+      <a href="/privacy">Privacy</a> ·
+      <a href="/terms">Terms</a> ·
+      <a href="/about">About this project</a>
+    </p>
   </footer>
 </body>
 </html>
