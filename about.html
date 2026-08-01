@@ -75,14 +75,6 @@
         something you can build. That distinction is worth more than the word
         "open," so it is stated plainly rather than left to be discovered.</li>
     </ul>
-    <!-- SOURCE_URL / go-live: re-verify this list against reality before the
-         redirect comes out. The Android mirror is Phase 3 and may have landed;
-         if it has, replace that bullet AND add the STT model-weights caveat:
-         a fresh clone builds and runs, but on-device speech-to-text stays
-         disabled until scripts/fetch-stt-models.sh pulls ~260 MB of
-         sha256-pinned sherpa-onnx artifacts, which are deliberately not in git.
-         The providers feature-detect the models and self-disable without them,
-         so the build does not fail — it just quietly has no local STT. -->
 
     <h2>How it's built</h2>
     <p>
@@ -124,8 +116,5 @@
       <a href="/about">About this project</a>
     </p>
   </footer>
-<!-- SOURCE_URL — LICENSE and PROVENANCE.md are named as plain text because
-     they do not exist in jwlerch78/chickadee yet (README-only placeholder).
-     Link them once Thread B populates the repo. -->
 </body>
 </html>
