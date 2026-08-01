@@ -93,6 +93,29 @@
       in Home Assistant.
     </p>
 
+    <h2>When the assistant looks something up</h2>
+    <p>
+      Some questions can only be answered off the box, and those go out too. Each
+      of these fires <strong>only when a question needs it</strong> — never on a
+      schedule, never in the background:
+    </p>
+    <ul>
+      <li><strong>Web search</strong> — if you configured a search key, the search
+        text goes to that provider under your own account. No key configured means
+        no web search and no request.</li>
+      <li><strong>Sports scores</strong> — a request to ESPN. No key and no account
+        are involved, which also means there is nothing identifying you attached to
+        it beyond the ordinary properties of any web request, your IP among them.</li>
+      <li><strong>Images</strong> — a request to Wikimedia by default, or to
+        another image provider if you configured one.</li>
+      <li><strong>Weather</strong> — read from your own Home Assistant weather
+        entities. Nothing leaves the box for this.</li>
+    </ul>
+    <p>
+      In every case the request goes <strong>from your box to that provider</strong>.
+      Nothing is relayed through a server of ours, because we do not run one.
+    </p>
+
     <h2>Things Chickadee never does</h2>
     <ul>
       <li>No analytics or tracking SDKs — no Google Analytics, Sentry, PostHog,

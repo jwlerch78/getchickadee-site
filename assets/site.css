@@ -346,3 +346,35 @@ footer .fine { max-width: 56ch; margin: 8px auto 0; line-height: 1.6; }
 /* The setup-honesty block. Deliberately styled as a normal section rather than
    a warning: needing a key is a fact about the product, not a caveat to bury. */
 .plain-truth { border-left: 3px solid var(--accent); padding-left: 20px; }
+
+/* The key table — the BYOK lead. The point it has to make at a glance is that
+   the "None" column is nearly all of it. */
+.keys { width: 100%; border-collapse: collapse; margin: 22px 0; font-size: 0.94rem; }
+.keys th, .keys td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--border); vertical-align: top; }
+.keys thead th {
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  border-bottom: 1px solid var(--border);
+}
+.keys tbody th { font-weight: 650; white-space: nowrap; }
+.keys td { color: var(--muted); }
+.k-yes, .k-opt, .k-no { font-weight: 650; }
+.k-yes { color: #b3541e; }
+.k-opt { color: #8a6d1e; }
+.k-no  { color: #2e7d4f; }
+@media (prefers-color-scheme: dark) {
+  .k-yes { color: #f0a274; }
+  .k-opt { color: #e0c068; }
+  .k-no  { color: #6fca97; }
+}
+/* Below ~560px a 3-column table stops being readable; stack it into labelled
+   rows rather than letting it scroll sideways. */
+@media (max-width: 560px) {
+  .keys thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+  .keys tr { display: block; border-bottom: 1px solid var(--border); padding: 10px 0; }
+  .keys th, .keys td { display: block; border: 0; padding: 2px 0; white-space: normal; }
+  .keys tbody th { font-size: 1rem; }
+}
