@@ -2,10 +2,9 @@
   "cleanUrls": true,
   "trailingSlash": false,
   "redirects": [
-    { "source": "/privacy", "destination": "https://dashieapp.com/privacy-policy", "permanent": false },
-    { "source": "/privacy.html", "destination": "https://dashieapp.com/privacy-policy", "permanent": false },
-    { "source": "/terms", "destination": "https://dashieapp.com/terms-of-service", "permanent": false },
-    { "source": "/terms.html", "destination": "https://dashieapp.com/terms-of-service", "permanent": false },
-    { "source": "/(.*)", "destination": "https://dashieapp.com/", "permanent": false }
+    { "source": "/:path((?!assets/).+)", "destination": "/", "permanent": false }
+  ],
+  "rewrites": [
+    { "source": "/", "destination": "/holding.html" }
   ]
 }

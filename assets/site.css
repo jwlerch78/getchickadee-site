@@ -378,3 +378,43 @@ footer .fine { max-width: 56ch; margin: 8px auto 0; line-height: 1.6; }
   .keys th, .keys td { display: block; border: 0; padding: 2px 0; white-space: normal; }
   .keys tbody th { font-size: 1rem; }
 }
+
+/* ==========================================================================
+   Holding page (/) — the interim single screen that replaces the 2026-07-30
+   blanket redirect to dashieapp.com. Reuses the palette above rather than
+   carrying its own copy. Removed when the full site goes live.
+   ========================================================================== */
+
+main.holding {
+  max-width: 620px;
+  text-align: center;
+  padding: 12vh 24px 6vh;
+}
+main.holding .logo { width: 100%; max-width: 320px; margin: 0 auto 26px; }
+main.holding h1 {
+  font-size: clamp(1.25rem, 3.4vw, 1.7rem);
+  line-height: 1.35;
+  margin: 0 0 1em;
+}
+main.holding .lede { font-size: 1rem; margin: 0 auto 1.1em; }
+main.holding .soon {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  color: var(--muted);
+  font-size: 0.95rem;
+  padding: 12px 18px;
+  margin: 1.8em auto 1.6em;
+}
+main.holding .soon strong { color: var(--fg); }
+.repos { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+.repos a {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  padding: 8px 14px;
+}
+.repos a:hover { border-color: var(--accent); text-decoration: none; }
+.licence { color: var(--muted); font-size: 0.82rem; margin: 14px 0 0; }
