@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>About this project — Chickadee</title>
+  <meta name="description" content="What Chickadee is, who builds it, what is published and what isn't, and how it relates to Dashie.">
+  <link rel="icon" type="image/png" href="/assets/favicon.png">
+  <link rel="stylesheet" href="/assets/site.css">
+</head>
+<body>
+  <div class="container">
+    <a class="home" href="/"><img src="/assets/chickadee-logo.png" alt="Chickadee"></a>
+
+    <h1>About this project</h1>
+
+    <p>
+      Chickadee is a Home Assistant dashboard and voice assistant for a wall
+      tablet. It is free, needs no account, and runs on hardware you own. This
+      page answers the questions you would otherwise have to reverse-engineer
+      from the commit log.
+    </p>
+
+    <h2>Who builds it</h2>
+    <p>
+      One maintainer. Chickadee is built by the maker of
+      <a href="https://dashieapp.com">Dashie</a>, a paid family dashboard
+      product, and the two share a codebase — the voice stack underneath
+      Chickadee is the one that has been running in real households since 2025.
+      They are separate products with separate audiences: Dashie is a
+      subscription product aimed at families who want calendar, chores and
+      location features, and Chickadee is the Home Assistant one, free and
+      account-free.
+    </p>
+    <p>
+      That relationship is stated here because you are entitled to know it, not
+      because there is anything you need to do about it. Chickadee has no upsell,
+      no trial, no sign-in prompt, and no path that leads to a payment page; it
+      works forever without any of that. If you want the longer version — which
+      parts of the cloud are not published and why, how the money works, and what
+      this repository's history looks like — the <code>PROVENANCE.md</code> file
+      in the repository is written to be checked rather than skimmed.
+    </p>
+
+    <h2>What's published, and what isn't</h2>
+    <p>
+      "Open source" gets used loosely, so here is the specific version, as of the
+      effective date below.
+    </p>
+    <ul>
+      <li><strong>The add-on</strong> — server, console, and AI brain runtime.
+        AGPL-3.0, published, and genuinely self-hostable: with your own engines,
+        nothing contacts a service of ours, because there isn't one.</li>
+      <li><strong>The Home Assistant integration</strong> — AGPL-3.0,
+        published.</li>
+      <li><strong>The Android app</strong> — the source mirror is planned and is
+        not published yet. Until it is, the app is a binary you download, not
+        something you can build. That distinction is worth more than the word
+        "open," so it is stated plainly rather than left to be discovered.</li>
+    </ul>
+    <!-- SOURCE_URL / go-live: re-verify this list against reality before the
+         redirect comes out. The Android mirror is Phase 3 and may have landed;
+         if it has, replace that bullet AND add the STT model-weights caveat:
+         a fresh clone builds and runs, but on-device speech-to-text stays
+         disabled until scripts/fetch-stt-models.sh pulls ~260 MB of
+         sha256-pinned sherpa-onnx artifacts, which are deliberately not in git.
+         The providers feature-detect the models and self-disable without them,
+         so the build does not fail — it just quietly has no local STT. -->
+
+    <h2>How it's built</h2>
+    <p>
+      Chickadee is <strong>heavily AI-assisted and human-reviewed</strong>, by
+      one person, on top of a mature voice stack. That is why the commit history
+      is short and fast, and it is said here rather than only in the repository
+      because you should not have to go looking for it. Judge the code.
+    </p>
+    <p>
+      Pull requests are not accepted — this is a read-and-fork project, not a
+      collaborative one. Bug reports and feature requests are genuinely wanted;
+      real-world Home Assistant setups are the one thing a single maintainer
+      cannot manufacture.
+    </p>
+
+    <h2>The name</h2>
+    <p>
+      A chickadee is a small bird with a very recognisable call, which seemed
+      right for something that sits on a wall waiting to be spoken to. One of
+      the shipped wake-word models is also called <code>chickadee</code>;
+      nothing selects it for you, and which wake word you pick changes nothing
+      about where your audio goes.
+    </p>
+
+    <h2>Contact</h2>
+    <p>
+      <a href="mailto:hello@getchickadee.org">hello@getchickadee.org</a>, or open
+      an issue on the Chickadee repository. Questions about any of the above are
+      fair game, including the awkward ones.
+    </p>
+  </div>
+
+  <footer>
+    <p>
+      <a href="/">Home</a> ·
+      <a href="/privacy">Privacy</a> ·
+      <a href="/terms">Terms</a> ·
+      <a href="/about">About this project</a>
+    </p>
+  </footer>
+</body>
+</html>
