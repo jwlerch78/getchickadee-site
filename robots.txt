@@ -1,0 +1,5 @@
+# getchickadee.org — everything here is public and meant to be found.
+User-agent: *
+Allow: /
+
+Sitemap: https://getchickadee.org/sitemap.xml

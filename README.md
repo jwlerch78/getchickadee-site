@@ -29,11 +29,20 @@ redirect is the go-live action, and it needs John's explicit approval.
 | `about.html` | `/about` — provenance: who builds it, what's published, the Dashie relationship |
 | `privacy.html` | `/privacy` |
 | `terms.html` | `/terms` |
+| `404.html` | Served by Vercel for unknown paths |
 | `assets/site.css` | The only stylesheet — every page uses it |
-| `assets/` | Wordmark (900×300) + favicon (256×256) |
+| `assets/` | Wordmark (900×300), favicon (256×256), `og.png` (1200×630) |
+| `robots.txt`, `sitemap.xml` | Four URLs; update `lastmod` when a page changes materially |
 
-Brand art matches `dashieapp_staging/.reference/brand-assets/chickadee/`
-byte-for-byte; don't regenerate it.
+Wordmark and favicon match `dashieapp_staging/.reference/brand-assets/chickadee/`
+byte-for-byte; don't regenerate them.
+
+`assets/og.png` is the social preview card — what renders when someone posts the
+link to Reddit or a forum. It was composed by rendering a 1200×630 HTML page in
+headless Chrome rather than by hand, so it can be regenerated when the headline
+changes; the source is not kept in the repo because it is nine lines of CSS
+around the wordmark. If you change the landing page's `h1`, change this too or
+the card will quote copy the site no longer uses.
 
 ## Go-live checklist
 
