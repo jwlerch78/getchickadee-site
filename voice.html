@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Voice &amp; AI — Chickadee for Home Assistant</title>
+  <meta name="description" content="Real voice AI for Home Assistant, tuned for a household — on your own API key or a model on your own network. No account, no credits, no hosted service.">
+  <link rel="icon" type="image/png" href="/assets/favicon.png">
+  <meta property="og:title" content="Voice &amp; AI — Chickadee for Home Assistant">
+  <meta property="og:description" content="Real voice AI for Home Assistant, on your own key or your own model. No account, no credits.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://getchickadee.org/voice">
+  <meta property="og:image" content="https://getchickadee.org/assets/og.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="stylesheet" href="/assets/site.css">
+</head>
+<body>
+
+  <nav class="nav">
+    <a class="nav-brand" href="/"><img src="/assets/chickadee-logo.png" alt="Chickadee"></a>
+    <div class="nav-links">
+      <a href="/">Home</a>
+      <a href="/voice" aria-current="page">Voice &amp; AI</a>
+      <a href="/about">About</a>
+    </div>
+  </nav>
+
+  <main class="wide">
+
+    <header class="hero">
+      <div class="hero-badge">✦ Chickadee Voice</div>
+      <h1>Voice AI for Home Assistant, tuned for a household.</h1>
+      <p class="tagline">
+        The models, tools, prompts, and voices already wired together — running on
+        whichever brain you point it at.
+      </p>
+      <p class="description">
+        Good household voice for HA usually means evenings of assembling models,
+        tools, voices, and prompts, then tuning them until answers stop being
+        useless. Chickadee ships that assembly done: control your smart home, ask
+        real questions, and hear the answer in a voice your household picked.
+        <strong>You supply the brain — your own API key, or a model on your own
+        network.</strong>
+      </p>
+      <div class="shot" style="max-width:720px;margin:28px auto 0"><span>Chickadee answering a spoken question over a Home Assistant dashboard, with a result card on screen</span></div>
+    </header>
+
+    <section class="plain-truth">
+      <h2>What setup actually looks like</h2>
+      <p>
+        Stated here rather than discovered later. Chickadee has no hosted service,
+        so before voice answers anything you point it at a brain. There are three
+        ways, and none of them involves an account with us:
+      </p>
+      <ul>
+        <li><strong>Home Assistant's own engines.</strong> If you already run
+          Whisper, Piper, or a local conversation agent in Assist, Chickadee uses
+          them as they are. Nothing new to sign up for.</li>
+        <li><strong>Your own API key.</strong> Paste a key from Google, OpenAI, or
+          OpenRouter into the console. About a minute, and it buys you
+          frontier-model comprehension. You pay that provider directly, at their
+          prices; we never see the traffic and take no cut.</li>
+        <li><strong>A model on your own network.</strong> Point it at your own LLM
+          and speech servers and nothing leaves your LAN at all.</li>
+      </ul>
+      <p>
+        We would rather lead with this than have you find it in the setup screen
+        after being told it works out of the box. It doesn't work out of the box —
+        it works about a minute after you choose a brain, and then it keeps working
+        with no bill from us, ever.
+      </p>
+    </section>
+
+    <section>
+      <h2 class="centered">Why bother, over raw Assist</h2>
+      <p class="section-subtitle centered">Three things that separate this from
+        stock Home Assistant, Alexa, or Google.</p>
+      <div class="grid-3">
+        <div class="tile">
+          <svg class="icon" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+          <h3>Assembled, not just available</h3>
+          <p>Tools, prompts, voices, and the dialog loop come wired together and
+            tuned for spoken answers — the part that normally eats your evenings.
+            Every piece is swappable if you disagree with a choice.</p>
+        </div>
+        <div class="tile">
+          <svg class="icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <h3>Adaptive context</h3>
+          <p>It sends the model only what your question needs — the relevant
+            devices and their states, not your whole house. Faster, cheaper on your
+            own key, and more accurate.</p>
+        </div>
+        <div class="tile">
+          <svg class="icon" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          <h3>Your model, your account</h3>
+          <p>Gemini, OpenAI, OpenRouter, or Ollama on your own box — you pick, and
+            you hold the key. No proxy of ours in the middle, nothing metered, no
+            lock-in and nothing to cancel.</p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2 class="centered">You decide what leaves your home</h2>
+      <p class="section-subtitle centered">Every stage of the pipeline is a
+        separate choice, and the console colour-codes each one so you can see at a
+        glance whether it stays on your network.</p>
+      <div class="grid-3" style="grid-template-columns:repeat(auto-fit,minmax(300px,1fr))">
+        <div class="tier local">
+          <h3><span class="dot green"></span> Stays on your network</h3>
+          <ul>
+            <li>Your own LLM — home and device data never leaves the LAN</li>
+            <li>On-device speech recognition and local text-to-speech, for a fully
+              offline stack</li>
+            <li>Device control always runs locally, and works with no internet at
+              all</li>
+            <li>No account and no ongoing cost — you are paying for your own
+              hardware and nothing else</li>
+          </ul>
+        </div>
+        <div class="tier byok">
+          <h3><span class="dot amber"></span> Goes to a provider you chose</h3>
+          <ul>
+            <li>A hosted model can be far cheaper than hardware capable of running a
+              good one locally</li>
+            <li>Stronger speech recognition and more natural voices than a small
+              local box can manage</li>
+            <li>Audio and text go <strong>directly from your box to that
+              provider</strong>, on your key, under your agreement with them</li>
+            <li>No Chickadee server sits in the middle — there isn't one. We never
+              see it and cannot meter it</li>
+          </ul>
+        </div>
+      </div>
+      <div class="callout">
+        Pick a local model alongside local speech and local voices and
+        <strong>nothing leaves your LAN at any point</strong> — no lookups, no
+        telemetry, no version check. That configuration is fully supported, not a
+        degraded mode.
+      </div>
+    </section>
+
+    <section>
+      <h2 class="centered">What you get</h2>
+      <p class="section-subtitle centered">All of it on the same wake word.</p>
+      <div class="legend">
+        <span><span class="dot green"></span> Runs locally</span>
+        <span><span class="dot amber"></span> Needs a model you supply</span>
+      </div>
+      <div class="item-list">
+        <div class="item">
+          <span class="dot green"></span>
+          <div>
+            <h3>Set it up once, for every device</h3>
+            <p>Configure in the console and every tablet and satellite in the house
+              adopts it. No per-device fuss.</p>
+          </div>
+        </div>
+        <div class="item">
+          <span class="dot green"></span>
+          <div>
+            <h3>Optimised prompting</h3>
+            <p>The model is called only when it is needed, with the context it
+              needs, and answers are shaped for being heard rather than read.</p>
+          </div>
+        </div>
+        <div class="item">
+          <span class="dot green"></span>
+          <div>
+            <h3>Instant for the common case</h3>
+            <p>Device and music commands resolve locally and sub-second, without
+              touching a model at all. Only open-ended questions go to the brain —
+              which on your own key means most of what you say costs nothing.</p>
+          </div>
+        </div>
+        <div class="item">
+          <span class="dot green"></span>
+          <div>
+            <h3>Local-first resilience</h3>
+            <p>Device control runs locally, so lights and scenes keep working when
+              your internet is down — or when the provider is.</p>
+          </div>
+        </div>
+        <div class="item">
+          <span class="dot green"></span>
+          <div>
+            <h3>Wake word on the device</h3>
+            <p>Detection runs on the tablet or your satellite, not in the cloud.
+              Custom-trained models ship with it, and the community ones work too.</p>
+          </div>
+        </div>
+        <div class="item">
+          <span class="dot amber"></span>
+          <div>
+            <h3>Voices &amp; personalities</h3>
+            <p>Pick the character your household wants to hear. Local engines like
+              Piper work; a hosted voice provider on your own key sounds better.</p>
+          </div>
+        </div>
+        <div class="item">
+          <span class="dot amber"></span>
+          <div>
+            <h3>Better speech recognition</h3>
+            <p>On-device transcription is included and works offline. A hosted
+              speech provider on your key handles household names and unusual words
+              considerably better.</p>
+          </div>
+        </div>
+        <div class="item">
+          <span class="dot amber"></span>
+          <div>
+            <h3>Web answers</h3>
+            <p>Nothing built in searches the web for free. A model with its own
+              grounded search (Gemini) covers it, or point it at a self-hosted
+              SearXNG.</p>
+          </div>
+        </div>
+        <div class="item">
+          <span class="dot green"></span>
+          <div>
+            <h3>Smart conversation <span class="tag">Coming soon</span></h3>
+            <p>Follow-up questions without re-saying the wake word, and background
+              chatter ignored instead of looping.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="cta-box">
+      <h2>Try it</h2>
+      <p class="section-subtitle">The add-on gives every Assist device you already
+        own — Voice PE, ESPHome satellites, your phone — the same assistant. No
+        screen required, and no account at any point.</p>
+      <!-- SOURCE_URL — replace with the real repository button once Thread B
+           creates the Chickadee repositories. See README. -->
+      <p class="pending">
+        The add-on repository URL goes here once the Chickadee repositories are
+        published.
+      </p>
+    </section>
+
+  </main>
+
+  <footer>
+    <p>
+      <a href="/">Home</a> ·
+      <a href="/voice">Voice &amp; AI</a> ·
+      <a href="/about">About</a> ·
+      <a href="/privacy">Privacy</a> ·
+      <a href="/terms">Terms</a> ·
+      <a href="mailto:hello@getchickadee.org">hello@getchickadee.org</a>
+    </p>
+    <p class="fine">
+      No analytics, no trackers, no third-party requests — this page loads nothing
+      but itself. Chickadee is built by the maker of
+      <a href="https://dashieapp.com">Dashie</a>; the <a href="/about">About</a>
+      page explains the relationship.
+    </p>
+  </footer>
+</body>
+</html>

@@ -36,6 +36,11 @@ body {
 
 main { flex: 1; max-width: 760px; width: 100%; margin: 0 auto; padding: 8vh 24px 4vh; }
 
+/* Marketing pages run wider than prose pages — 760px is right for a privacy
+   policy and cramped for a feature grid. */
+main.wide { max-width: 1040px; padding-top: 56px; }
+main.wide .lede, main.wide .tagline, main.wide .description { margin-left: auto; margin-right: auto; }
+
 a { color: var(--accent); text-decoration: none; }
 a:hover { text-decoration: underline; }
 
@@ -147,3 +152,191 @@ footer p { margin: 0 0 6px; }
 footer a { color: var(--muted); }
 footer a:hover { color: var(--accent); }
 footer .fine { max-width: 56ch; margin: 8px auto 0; line-height: 1.6; }
+
+/* ==========================================================================
+   Marketing pages (/, /voice)
+   Structure ported from dashieapp.com, minus everything that implies paying.
+   No JavaScript anywhere: the carousel is CSS scroll-snap and the nav is
+   static markup, so /privacy's "this page loads nothing" stays literally true.
+   ========================================================================== */
+
+.nav {
+  border-bottom: 1px solid var(--border);
+  padding: 14px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.nav-brand img { height: 30px; width: auto; display: block; }
+@media (prefers-color-scheme: dark) { .nav-brand img { filter: brightness(0) invert(1); } }
+.nav-links { display: flex; gap: 20px; font-size: 0.92rem; font-weight: 550; }
+.nav-links a { color: var(--muted); }
+.nav-links a:hover, .nav-links a[aria-current] { color: var(--accent); }
+
+.wide { max-width: 1000px; width: 100%; margin: 0 auto; padding: 0 24px; }
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  color: var(--muted);
+  font-size: 0.86rem;
+  font-weight: 600;
+  padding: 5px 14px;
+  margin-bottom: 18px;
+}
+.hero-badge img { height: 16px; width: auto; }
+
+.tagline { font-size: 1.14rem; color: var(--fg); max-width: 56ch; margin: 0 auto 1em; }
+.description { color: var(--muted); max-width: 62ch; margin: 0 auto 1.6em; }
+
+.btn {
+  display: inline-block;
+  background: var(--accent);
+  color: #fff;
+  font-weight: 600;
+  padding: 12px 26px;
+  border-radius: 10px;
+  transition: background .15s ease;
+}
+.btn:hover { background: var(--accent-hover); text-decoration: none; }
+.btn-ghost {
+  background: transparent;
+  color: var(--accent);
+  border: 1px solid var(--border);
+}
+.btn-ghost:hover { background: var(--card); }
+.btn-row { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-bottom: 10px; }
+
+.section-subtitle { color: var(--muted); max-width: 60ch; margin: 0 auto 26px; }
+.centered { text-align: center; }
+
+/* Image slots. Every product shot is pending Chickadee-branded art — the
+   Dashie screenshots are deliberately NOT reused here. See README. */
+.shot {
+  background: var(--card);
+  border: 1px dashed var(--border);
+  border-radius: 12px;
+  color: var(--muted);
+  font-size: 0.88rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 24px;
+  aspect-ratio: 16 / 10;
+}
+.shot span { max-width: 40ch; }
+.shot img { width: 100%; height: 100%; object-fit: cover; border-radius: 12px; }
+
+/* Carousel — scroll-snap, no script. Swipe on touch, drag/scroll on desktop. */
+.carousel {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: min(82%, 560px);
+  gap: 16px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  padding: 4px 4px 18px;
+  -webkit-overflow-scrolling: touch;
+}
+.carousel > * { scroll-snap-align: center; }
+.slide {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 18px;
+}
+.slide h3 { margin-bottom: 6px; }
+.slide p { color: var(--muted); font-size: 0.94rem; margin-bottom: 14px; }
+.carousel-hint { color: var(--muted); font-size: 0.84rem; text-align: center; margin: 0; }
+
+.platform-list { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; margin-top: 20px; }
+.platform-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 18px;
+  font-size: 0.94rem;
+  font-weight: 550;
+}
+
+.grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
+.grid-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
+
+.tile {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px;
+}
+.tile h3 { margin-bottom: 6px; }
+.tile p { color: var(--muted); font-size: 0.93rem; margin: 0; }
+
+.icon {
+  width: 26px;
+  height: 26px;
+  stroke: var(--accent);
+  stroke-width: 1.9;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  margin-bottom: 12px;
+  display: block;
+}
+
+/* Local / your-key colour coding, ported from the dashieapp.com privacy tiers.
+   The old orange tier was "Dashie's hosted cloud, drawn from your credits".
+   Chickadee has no such tier, so amber now means "your own key, to a third
+   party you chose" — a disclosure rather than an upsell. */
+.tier { border-radius: 12px; padding: 20px 22px; border: 1px solid var(--border); background: var(--card); }
+.tier.local { border-left: 3px solid #2e9e5b; }
+.tier.byok { border-left: 3px solid #d08a1e; }
+.tier h3 { display: flex; align-items: center; gap: 9px; margin-bottom: 10px; }
+.tier ul { margin: 0; padding-left: 20px; }
+.tier li { color: var(--muted); font-size: 0.93rem; }
+.dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; flex: none; }
+.dot.green { background: #2e9e5b; }
+.dot.amber { background: #d08a1e; }
+
+.legend { display: flex; gap: 18px; justify-content: center; flex-wrap: wrap; color: var(--muted); font-size: 0.86rem; margin-bottom: 24px; }
+.legend span { display: inline-flex; align-items: center; gap: 7px; }
+
+.item-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 18px; }
+.item { display: flex; gap: 12px; }
+.item .dot { margin-top: 7px; }
+.item h3 { margin-bottom: 4px; }
+.item p { color: var(--muted); font-size: 0.93rem; margin: 0; }
+
+.tag {
+  background: var(--border);
+  border-radius: 5px;
+  color: var(--muted);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: .03em;
+  padding: 2px 7px;
+  text-transform: uppercase;
+  vertical-align: middle;
+  margin-left: 6px;
+}
+
+.cta-box {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 34px 28px;
+  text-align: center;
+}
+
+/* The setup-honesty block. Deliberately styled as a normal section rather than
+   a warning: needing a key is a fact about the product, not a caveat to bury. */
+.plain-truth { border-left: 3px solid var(--accent); padding-left: 20px; }
