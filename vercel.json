@@ -3,8 +3,5 @@
   "trailingSlash": false,
   "redirects": [
     { "source": "/:path((?!assets/).+)", "destination": "/", "permanent": false }
-  ],
-  "rewrites": [
-    { "source": "/", "destination": "/holding.html" }
   ]
 }

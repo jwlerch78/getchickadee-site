@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Chickadee — Free Home Assistant Tablet Kiosk with Voice AI</title>
+  <meta name="description" content="A free alternative to Fully Kiosk for hosting Home Assistant dashboards on Android tablets — full-screen dashboard, photo screensaver, motion wake, wake-word voice AI, cameras, and Music Assistant. No account, no subscription, open source.">
+  <link rel="icon" type="image/png" href="/assets/favicon.png">
+  <meta property="og:title" content="Chickadee — Free Home Assistant Tablet Kiosk with Voice AI">
+  <meta property="og:description" content="Host your Home Assistant dashboards on any Android tablet, with real voice AI. No account, no subscription. AGPL-3.0.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://getchickadee.org/">
+  <meta property="og:image" content="https://getchickadee.org/assets/og.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="stylesheet" href="/assets/site.css">
+</head>
+<body>
+
+  <nav class="nav">
+    <a class="nav-brand" href="/"><picture><source srcset="/assets/chickadee-logo-dark.png" media="(prefers-color-scheme: dark)"><img src="/assets/chickadee-logo.png" alt="Chickadee"></picture></a>
+    <div class="nav-links">
+      <a href="/" aria-current="page">Home</a>
+      <a href="/voice">Voice &amp; AI</a>
+      <a href="/about">About</a>
+    </div>
+  </nav>
+
+  <main class="wide">
+
+    <header class="hero">
+      <div class="hero-badge">For Home Assistant</div>
+      <h1>A smarter smart home.</h1>
+      <p class="tagline">
+        A free alternative to Fully Kiosk for hosting your dashboards on Android
+        tablets. Voice enable it for an even smarter smart home.
+      </p>
+      <p class="description">
+        Chickadee puts your Home Assistant dashboards on any Android tablet — a
+        clean, purpose-built kiosk that comes up in minutes. Add voice and it
+        answers out loud, using a wake word, on whichever AI model you point it
+        at. <strong>No account, no subscription, no service to sign in to.</strong>
+      </p>
+      <p class="badges">
+        <span class="badge">Free</span>
+        <span class="badge">No account</span>
+        <span class="badge">Works offline</span>
+        <span class="badge">Open source, AGPL-3.0</span>
+      </p>
+    </header>
+
+    <section>
+      <div class="carousel">
+        <div class="slide">
+          <h3>Your dashboard, full screen</h3>
+          <p>Chickadee renders your existing Home Assistant dashboard edge to edge
+            on any Android tablet — no browser chrome, no address bar, no sleeping
+            screen.</p>
+          <div class="shot"><span>Chickadee showing a Home Assistant dashboard full screen on a wall tablet</span></div>
+        </div>
+        <div class="slide">
+          <h3>Photos when idle, dashboard on approach</h3>
+          <p>Fall back to a photo screensaver from Immich, Unsplash, or your HA
+            media folder — then wake to the dashboard on motion or a face.</p>
+          <div class="shot"><span>Photo screensaver running on an idle wall panel</span></div>
+        </div>
+        <div class="slide">
+          <h3>Talk to it</h3>
+          <p>Wake word, speech to text, and spoken answers on the tablet itself —
+            wired straight into HA Assist, or routed to your own model.
+            <a href="/voice">See how the voice works</a></p>
+          <div class="shot"><span>Chickadee answering a spoken question over a Home Assistant dashboard</span></div>
+        </div>
+        <div class="slide">
+          <h3>Cameras that pop up when it matters</h3>
+          <p>Stream RTSP and Frigate feeds, auto-surface them on motion, and scrub
+            recordings on an on-screen timeline.</p>
+          <div class="shot"><span>A live camera feed over a Home Assistant dashboard</span></div>
+        </div>
+        <div class="slide">
+          <h3>Your tablet is a speaker, too</h3>
+          <p>Use the tablet as a Music Assistant player, pick a target speaker, and
+            control multi-room audio without leaving the dashboard.</p>
+          <div class="shot"><span>Speaker selector for Music Assistant playback</span></div>
+        </div>
+      </div>
+      <p class="carousel-hint">Scroll or swipe →</p>
+    </section>
+
+    <section class="centered">
+      <h2>Runs on the tablet you already have</h2>
+      <p class="section-subtitle">Any Android tablet — wall-mounted, on a stand, or
+        propped in the kitchen.</p>
+      <div class="platform-list">
+        <div class="platform-item">
+          <svg class="icon" style="margin:0" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><line x1="18" y1="12" x2="18.01" y2="12"/></svg>
+          Amazon Fire tablets
+        </div>
+        <div class="platform-item">
+          <svg class="icon" style="margin:0" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><line x1="18" y1="12" x2="18.01" y2="12"/></svg>
+          Samsung, Lenovo &amp; other Android
+        </div>
+        <div class="platform-item">
+          <svg class="icon" style="margin:0" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          Wall-mounted kiosk panels
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2 class="centered">What's included</h2>
+      <p class="section-subtitle centered">All of it, in the free download. Nothing
+        is held back for a paid tier, because there isn't one.</p>
+      <div class="grid-4">
+        <div class="tile">
+          <svg class="icon" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          <h3>Screensaver &amp; photos</h3>
+          <p>Photo slideshows from multiple sources with motion-activated wake.</p>
+        </div>
+        <div class="tile">
+          <svg class="icon" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          <h3>Lock mode</h3>
+          <p>Lock the tablet with an optional PIN to prevent unintended use.</p>
+        </div>
+        <div class="tile">
+          <svg class="icon" viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v4M8 23h8"/></svg>
+          <h3>Voice control</h3>
+          <p>Wake word and natural-language commands, on the model you choose.
+            <a href="/voice">More →</a></p>
+        </div>
+        <div class="tile">
+          <svg class="icon" viewBox="0 0 24 24"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
+          <h3>Video streaming</h3>
+          <p>Stream the tablet's camera as an RTSP feed, and view incoming feeds on
+            demand or when triggered.</p>
+        </div>
+        <div class="tile">
+          <svg class="icon" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          <h3>Home Assistant integration</h3>
+          <p>Display any dashboard, with a built-in API that's backwards compatible
+            with the Fully Kiosk integration.</p>
+        </div>
+        <div class="tile">
+          <svg class="icon" viewBox="0 0 24 24"><rect x="2" y="6" width="16" height="12" rx="2"/><path d="M22 10v4"/><polyline points="11 9 9 12 13 12 11 15"/></svg>
+          <h3>Battery management</h3>
+          <p>Manage charging without HA automations, for battery longevity on a
+            permanently-mounted tablet.</p>
+        </div>
+        <div class="tile">
+          <svg class="icon" viewBox="0 0 24 24"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+          <h3>Music player</h3>
+          <p>Play across your tablets with multi-room audio via Music Assistant.</p>
+        </div>
+        <div class="tile">
+          <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+          <h3>Free to use</h3>
+          <p>No account and no subscription — install it and point it at Home
+            Assistant.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="honesty">
+      <h2>What it doesn't do</h2>
+      <p>
+        The things you would otherwise find out three evenings in. If any of these
+        is a dealbreaker, better to know now.
+      </p>
+      <ul>
+        <li>
+          <strong>Voice needs your own AI key, or your own model.</strong> There is
+          no hosted option — no account, nothing to sign in to — so the brain has to
+          run somewhere you provide. Everything else is already on your box: speech
+          and voices use Home Assistant's own Whisper and Piper, weather comes from
+          your HA entities, scores and images need no key at all. Web search wants
+          one more free key if you want it.
+          <a href="/voice">The full list, and how many keys that really is.</a>
+        </li>
+        <li>
+          <strong>A fully local model needs real hardware.</strong> A GPU or an
+          Apple-silicon box on your network answers in a couple of seconds. A small
+          CPU-only Home Assistant box takes minutes per reply, which is not a usable
+          assistant. This is the most common disappointment, so plan the hardware
+          before you plan the privacy.
+        </li>
+        <li>
+          <strong>Every account is yours to create.</strong> No single sign-up
+          covers it — the AI key is one account, and web search is another if you
+          want it. That is more setup than a product with a company behind it, and
+          it is the trade: your keys, your quotas, your bills, nothing metered
+          through us.
+        </li>
+        <li>
+          <strong>No calendar, chores, or family location features.</strong> Those
+          belong to a different product; the <a href="/about">About</a> page says
+          which. Chickadee is Home Assistant, cameras, music, and voice.
+        </li>
+        <li>
+          <strong>Pull requests are not accepted.</strong> Bug reports and feature
+          requests genuinely are. This is a read-and-fork project with one
+          maintainer, and saying so is more honest than leaving open a contribution
+          path that dead-ends.
+        </li>
+        <li>
+          <strong>It is heavily AI-assisted, human-reviewed</strong>, by one
+          maintainer, on top of a voice stack that has been running in real
+          households since 2025. That is why the commit history is short and fast.
+          Judge the code.
+        </li>
+      </ul>
+    </section>
+
+    <section class="cta-box">
+      <h2>Get started</h2>
+      <p class="section-subtitle">Add the add-on to Home Assistant, then put the app
+        on a tablet if you want a screen. Both are free.</p>
+      <!-- SOURCE_URL — the "add to Home Assistant" button is HELD BACK on purpose.
+           jwlerch78/chickadee exists but contains only a README, so the one-click
+           install and a pasted repository URL would both fail in HA. Restore the
+           button (and the pasted-URL line on the home page) once Thread B lands
+           the add-on channels. The source link below is safe — it resolves. -->
+      <div class="btn-row">
+        <a class="btn btn-ghost" href="https://github.com/jwlerch78/chickadee">View the source</a>
+      </div>
+      <p class="pending">
+        The one-click install goes here once the add-on channels land in the
+        repository — today it holds a README and nothing to install.
+      </p>
+
+    </section>
+
+  </main>
+
+  <footer>
+    <p>
+      <a href="/">Home</a> ·
+      <a href="/voice">Voice &amp; AI</a> ·
+      <a href="/about">About</a> ·
+      <a href="/privacy">Privacy</a> ·
+      <a href="/terms">Terms</a> ·
+      <a href="mailto:hello@getchickadee.org">hello@getchickadee.org</a>
+    </p>
+    <p class="fine">
+      No analytics, no trackers, no third-party requests — this page loads nothing
+      but itself. Chickadee is built by the maker of
+      <a href="https://dashieapp.com">Dashie</a>; the <a href="/about">About</a>
+      page explains the relationship.
+    </p>
+  </footer>
+</body>
+</html>

@@ -23,7 +23,34 @@ rules for anyone editing copy:
 - **Never hard-code the number of engine options.** Write "one of the
   following", not "three ways" — the list has already grown once.
 
-## 🚦 The site is not live yet
+## 🚦 Currently serving the HOLDING PAGE
+
+`index.html` **is the holding page**. The full site's home page is parked at
+`home.html`, and `vercel.json` 307s every path except `/` and `/assets/*` back
+to `/`, so none of the five unapproved pages is reachable.
+
+### ⚠️ Why it is done by filename and not by a rewrite
+
+The first attempt used `rewrites: [{ "source": "/", "destination": "/holding.html" }]`
+while leaving the full site at `index.html`. **It failed in production.**
+Vercel's filesystem takes precedence over `rewrites` — because `index.html`
+existed, `/` served it and the rewrite never fired, publishing the unapproved
+full-site home page. A 17-path local simulation had passed, because it modelled
+the redirects correctly and Vercel's rewrite precedence incorrectly.
+
+So the holding page is `index.html` outright. `/` is a plain filesystem hit
+with **no routing rule to get wrong**. Don't "tidy" this back into a rewrite.
+
+### Swapping back at full go-live
+
+```bash
+git mv index.html holding.html   # park the holding page
+git mv home.html index.html      # restore the full site home
+```
+then drop the `redirects` array from `vercel.json`. Work the checklist below
+first.
+
+## 🚦 The full site is not live yet
 
 `vercel.json` currently carries a **blanket 307** sending every path to
 `dashieapp.com`. It dates from the 2026-07-30 brand retirement and is being kept
