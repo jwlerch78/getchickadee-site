@@ -1,17 +1,93 @@
 # getchickadee.org
 
-The public site for [Chickadee](https://github.com/jwlerch78/chickadee) — voice
-& AI for Home Assistant. Static, no framework, no analytics. Deployed on Vercel.
+The public site for **Chickadee** — a Home Assistant dashboard and voice
+assistant for a wall tablet. Free, no account, runs on the user's own hardware.
+
+Static HTML. No framework, no build step, no JavaScript, no webfonts, no
+analytics, no third-party requests of any kind. Deployed on Vercel.
+
+> **The no-third-party-requests rule is a product claim, not a preference.**
+> The site tells people Chickadee doesn't phone home; a page that loaded a CDN
+> font while saying so would be the first thing a sceptical reader caught. If
+> you are about to add a script tag pointing at another host, don't.
+
+## 🚦 The site is not live yet
+
+`vercel.json` currently carries a **blanket 307** sending every path to
+`dashieapp.com`. It dates from the 2026-07-30 brand retirement and is being kept
+deliberately: it lets the relaunch be built and committed in the open without
+anything reaching production before the rest of the work is ready.
+
+**Everything in this repo is therefore currently unreachable.** Removing that
+redirect is the go-live action, and it needs John's explicit approval.
 
 ## Structure
 
-- `index.html` — landing page
-- `assets/` — wordmark + favicon
-- `privacy.html`, `terms.html` — legal pages (pending review)
-- `credits/return.html` — Stripe checkout return (Phase 3)
-- Auth/confirmation screens are vendored from the Dashie app repo (device-flow
-  OAuth contract is shared — not forked). See the build plan.
+| Path | Page |
+|---|---|
+| `index.html` | Landing — what it is, how voice works, install, what it doesn't do |
+| `about.html` | `/about` — provenance: who builds it, what's published, the Dashie relationship |
+| `privacy.html` | `/privacy` |
+| `terms.html` | `/terms` |
+| `assets/site.css` | The only stylesheet — every page uses it |
+| `assets/` | Wordmark (900×300) + favicon (256×256) |
+
+Brand art matches `dashieapp_staging/.reference/brand-assets/chickadee/`
+byte-for-byte; don't regenerate it.
+
+## Go-live checklist
+
+Work through this **before** removing the redirect. Several items are claims the
+site makes that were true when written and must be re-checked, because this
+brand has reversed direction three times in eight days.
+
+- [ ] **Thread B has created the Chickadee repositories.** `jwlerch78/chickadee`
+      currently 301s to `dashie-ha`; every source link on the site is withheld
+      until it exists. Creating it also releases that redirect — Thread B's
+      ordering note asks for both name reclaims the same day.
+- [ ] **Render the withheld links.** `grep -rn SOURCE_URL .` finds one marker
+      per page (four). Between them they cover five places: the install block
+      and the source block on the landing page, and the "Chickadee repository"
+      mention in the contact line of `/privacy`, `/terms`, and `/about`. Each
+      is currently plain text — inside a `.pending` box on the landing page, a
+      bare sentence elsewhere — so none is a dead link.
+- [ ] **Re-verify the "what's published" list in `/about`.** It says the Android
+      source mirror is not published. If Phase 3 has landed, update that bullet
+      *and* add the STT model-weights caveat staged in the HTML comment beside
+      it — a fresh clone builds, but on-device speech-to-text self-disables
+      until `scripts/fetch-stt-models.sh` fetches ~260 MB of pinned weights.
+- [ ] **Re-verify the CDN disclosure in `/privacy`.** It names `hls.js` and
+      `heic2any` loading from jsDelivr in the console. True as of 2026-08-01
+      (`dashie-ha/frontend/console/index.html`). If the hardening pass removed
+      them, the disclosure should shrink rather than silently overstate.
+- [ ] **Re-verify the install steps** on the landing page against the add-on's
+      actual README — panel name, restart prompt, and the repository URL.
+- [ ] **Fix the GitHub repo description.** It still reads *"Retired. The
+      Chickadee brand was consolidated into Dashie on 2026-07-30."* Live and
+      indexed right now; `vercel.json` does not mask it.
+- [ ] **Confirm `hello@getchickadee.org` still delivers.** ImprovMX MX records
+      are in place; send one test mail. An unmonitored contact address on a
+      privacy page is worse than none.
+- [ ] **Then** remove the redirect (below) and confirm the apex serves the
+      landing page.
+
+### The go-live change
+
+Replace the `redirects` array in `vercel.json` with an empty one, or drop the
+key. Keep `cleanUrls` and `trailingSlash`. That is the entire deploy.
 
 ## Deploy
 
-Push to `main` → Vercel builds automatically. No build step; it's static files.
+Push to `main` → Vercel builds automatically. Static files, no build step.
+
+**A commit can reach production**, so treat pushing as deploying and confirm
+with John first. The repo is public: explicit-path commits
+(`git commit -m "…" -- <files>`), and no AI/Claude co-author trailers.
+
+## History
+
+Some of this repo's history describes an earlier design in which Chickadee had
+an account, Google sign-in, and metered credits. That is gone — there is no
+account and no service — and the pages were rewritten on 2026-08-01. The old
+commits are left in place rather than rewritten; the project's disclosure
+posture does not survive selectively tidying its own record.
