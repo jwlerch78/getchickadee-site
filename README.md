@@ -84,6 +84,19 @@ Drop each in `assets/` and replace the `<div class="shot"><span>…</span></div>
 with `<div class="shot"><img src="/assets/…" alt="…"></div>`. The slot keeps its
 16:10 box either way, so nothing reflows.
 
+## Copy changes waiting on someone else to ship
+
+Not gates — just things to fold in **when the capability actually exists**, never before.
+The rule the whole site runs on: a claim goes up when it is true, not when it is planned.
+
+- **Optional API-Sports key.** Sports runs keyless on ESPN and always will by
+  default; Thread B is adding an API-Sports adapter as an optional fallback
+  upgrade for broader coverage. When it ships, it becomes one more `Optional`
+  row in the `/voice` key table (the table's shape already takes it) and a line
+  in the "optional upgrades" section. **No urgency, and do not add it early** —
+  the table's whole job is being an accurate count of what a user must go and
+  get.
+
 ## Go-live checklist
 
 Work through this **before** removing the redirect. Several items are claims the
@@ -123,12 +136,13 @@ brand has reversed direction three times in eight days.
       tier that has quietly become card-required is the single most damaging
       thing this site could get wrong with an r/HA audience. Source of truth:
       `dashieapp_staging/.reference/build-plans/20260801_BYOK_TOOLS_FEASIBILITY.md`.
-- [ ] **Confirm the ESPN decision has been made.** `/voice` and `/privacy` both
-      state that sports scores need no key, which is true — but the feasibility
-      report flags `site.api.espn.com` as an undocumented endpoint publishing no
-      terms either way, and says that deserves a conscious decision *before*
-      shipping in a public, source-published product. Not Thread C's call; the
-      copy depends on it.
+- [x] ~~**Confirm the ESPN decision has been made.**~~ **Decided 2026-08-01:
+      direct + disclosed.** Chickadee calls ESPN's public endpoints directly and
+      says so plainly — no proxy, no concealment — precedent-verified against
+      years of open ESPN-endpoint use elsewhere in the HA ecosystem
+      (`ha-teamtracker` and others). The `/voice` "sports needs no key" row and
+      the `/privacy` disclosure are **correct as written**; no copy change was
+      required.
 - [ ] **Fix the GitHub repo description.** It still reads *"Retired. The
       Chickadee brand was consolidated into Dashie on 2026-07-30."* Live and
       indexed right now; `vercel.json` does not mask it.
