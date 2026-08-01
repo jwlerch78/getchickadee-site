@@ -23,9 +23,14 @@ redirect is the go-live action, and it needs John's explicit approval.
 
 ## Structure
 
+Structure is ported from dashieapp.com's `index.html` + `voice-ai.html`, with
+every payment implication removed — see the port commit for the item-by-item
+list of what changed and why.
+
 | Path | Page |
 |---|---|
-| `index.html` | Landing — what it is, how voice works, install, what it doesn't do |
+| `index.html` | Home — hero, carousel, platforms, what's included, what it doesn't do |
+| `voice.html` | `/voice` — Voice & AI, the setup-honesty section, privacy tiers |
 | `about.html` | `/about` — provenance: who builds it, what's published, the Dashie relationship |
 | `privacy.html` | `/privacy` |
 | `terms.html` | `/terms` |
@@ -43,6 +48,29 @@ headless Chrome rather than by hand, so it can be regenerated when the headline
 changes; the source is not kept in the repo because it is nine lines of CSS
 around the wordmark. If you change the landing page's `h1`, change this too or
 the card will quote copy the site no longer uses.
+
+## Product shots — the one thing the site is missing
+
+Every product image is a `.shot` placeholder that states what belongs there.
+**The Dashie screenshots are deliberately not reused**: they carry the orange
+Dashie mark and "Hey Dashie" as the wake word, and Dashie-branded UI on a
+Chickadee site reads as a rebadge — which costs more trust than any disclosure
+buys back.
+
+Needed, in priority order (voice leads the page now):
+
+| # | Shot | Where |
+|---|---|---|
+| 1 | Answering a spoken question, result card on screen | `/voice` hero — the money shot |
+| 2 | Dashboard full screen on a wall tablet | home carousel 1 |
+| 3 | Photo screensaver, idle | home carousel 2 |
+| 4 | Voice answer over a dashboard | home carousel 3 |
+| 5 | Live camera feed | home carousel 4 |
+| 6 | Music Assistant speaker selector | home carousel 5 |
+
+Drop each in `assets/` and replace the `<div class="shot"><span>…</span></div>`
+with `<div class="shot"><img src="/assets/…" alt="…"></div>`. The slot keeps its
+16:10 box either way, so nothing reflows.
 
 ## Go-live checklist
 
