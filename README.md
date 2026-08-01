@@ -78,16 +78,19 @@ Work through this **before** removing the redirect. Several items are claims the
 site makes that were true when written and must be re-checked, because this
 brand has reversed direction three times in eight days.
 
-- [ ] **Thread B has created the Chickadee repositories.** `jwlerch78/chickadee`
-      currently 301s to `dashie-ha`; every source link on the site is withheld
-      until it exists. Creating it also releases that redirect — Thread B's
-      ordering note asks for both name reclaims the same day.
-- [ ] **Render the withheld links.** `grep -rn SOURCE_URL .` finds one marker
-      per page (four). Between them they cover five places: the install block
-      and the source block on the landing page, and the "Chickadee repository"
-      mention in the contact line of `/privacy`, `/terms`, and `/about`. Each
-      is currently plain text — inside a `.pending` box on the landing page, a
-      bare sentence elsewhere — so none is a dead link.
+- [x] ~~**Thread B has created the Chickadee repositories.**~~ Done 2026-08-01:
+      `chickadee`, `chickadee-integration`, `chickadee-voice-integration` all
+      exist and resolve.
+- [x] ~~**Render the withheld links.**~~ Done — source, issues, and both
+      integration repos are linked and verified 200.
+- [ ] 🔴 **`jwlerch78/chickadee` is a README-only placeholder.** The add-on
+      channels are not in it yet, so **the one-click "Add to Home Assistant"
+      button and the pasted-repository-URL line are deliberately held back** —
+      both would fail in HA today. `grep -rn SOURCE_URL .` finds them. Restore
+      when Thread B lands the add-on channels, and click the button once to
+      confirm HA actually finds the add-on.
+- [ ] **Link `LICENSE` and `PROVENANCE.md` on `/about` and `/terms`.** Both are
+      named as plain text because they 404 in the placeholder repo.
 - [ ] **Re-verify the "what's published" list in `/about`.** It says the Android
       source mirror is not published. If Phase 3 has landed, update that bullet
       *and* add the STT model-weights caveat staged in the HTML comment beside

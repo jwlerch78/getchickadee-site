@@ -212,12 +212,19 @@
       <h2>Get started</h2>
       <p class="section-subtitle">Add the add-on to Home Assistant, then put the app
         on a tablet if you want a screen. Both are free.</p>
-      <!-- SOURCE_URL — replace with the real repository button + download link
-           once Thread B creates the Chickadee repositories. See README. -->
+      <!-- SOURCE_URL — the "add to Home Assistant" button is HELD BACK on purpose.
+           jwlerch78/chickadee exists but contains only a README, so the one-click
+           install and a pasted repository URL would both fail in HA. Restore the
+           button (and the pasted-URL line on the home page) once Thread B lands
+           the add-on channels. The source link below is safe — it resolves. -->
+      <div class="btn-row">
+        <a class="btn btn-ghost" href="https://github.com/jwlerch78/chickadee">View the source</a>
+      </div>
       <p class="pending">
-        The add-on repository URL and the app download go here once the Chickadee
-        repositories are published.
+        The one-click install goes here once the add-on channels land in the
+        repository — today it holds a README and nothing to install.
       </p>
+
     </section>
 
   </main>
