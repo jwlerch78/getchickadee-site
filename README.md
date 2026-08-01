@@ -11,6 +11,18 @@ analytics, no third-party requests of any kind. Deployed on Vercel.
 > font while saying so would be the first thing a sceptical reader caught. If
 > you are about to add a script tag pointing at another host, don't.
 
+## The positioning, in one line
+
+**Bring your AI key — optionally one more for web search — and everything else
+runs on the box you already have.** Setup friction is owned, not apologised for:
+every account is the user's own, nothing is metered through us. Two standing
+rules for anyone editing copy:
+
+- **Never mention a hosted service.** One does not exist. If one is ever built,
+  it does not appear here without an explicit decision.
+- **Never hard-code the number of engine options.** Write "one of the
+  following", not "three ways" — the list has already grown once.
+
 ## 🚦 The site is not live yet
 
 `vercel.json` currently carries a **blanket 307** sending every path to
@@ -30,7 +42,7 @@ list of what changed and why.
 | Path | Page |
 |---|---|
 | `index.html` | Home — hero, carousel, platforms, what's included, what it doesn't do |
-| `voice.html` | `/voice` — Voice & AI, the setup-honesty section, privacy tiers |
+| `voice.html` | `/voice` — Voice & AI, the BYOK key table, privacy tiers, optional upgrades |
 | `about.html` | `/about` — provenance: who builds it, what's published, the Dashie relationship |
 | `privacy.html` | `/privacy` |
 | `terms.html` | `/terms` |
@@ -102,6 +114,21 @@ brand has reversed direction three times in eight days.
       them, the disclosure should shrink rather than silently overstate.
 - [ ] **Re-verify the install steps** on the landing page against the add-on's
       actual README — panel name, restart prompt, and the repository URL.
+- [ ] 🔴 **Re-check every provider free-tier claim.** `/voice` quotes specific,
+      perishable numbers: Tavily 1,000 searches/month with no card, Deepgram
+      $200 signup credit with no card, ElevenLabs free-tier API at 10,000
+      chars/month, Inworld ~40 min/month. **These expire without warning** —
+      Brave killed its free Search API tier in February 2026 and now requires an
+      uncapped card, which is exactly why it appears nowhere here. A quoted free
+      tier that has quietly become card-required is the single most damaging
+      thing this site could get wrong with an r/HA audience. Source of truth:
+      `dashieapp_staging/.reference/build-plans/20260801_BYOK_TOOLS_FEASIBILITY.md`.
+- [ ] **Confirm the ESPN decision has been made.** `/voice` and `/privacy` both
+      state that sports scores need no key, which is true — but the feasibility
+      report flags `site.api.espn.com` as an undocumented endpoint publishing no
+      terms either way, and says that deserves a conscious decision *before*
+      shipping in a public, source-published product. Not Thread C's call; the
+      copy depends on it.
 - [ ] **Fix the GitHub repo description.** It still reads *"Retired. The
       Chickadee brand was consolidated into Dashie on 2026-07-30."* Live and
       indexed right now; `vercel.json` does not mask it.
