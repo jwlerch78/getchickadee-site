@@ -4,8 +4,9 @@
    because the product claims the same thing and the audience checks. */
 
 :root {
-  --accent: #2C6ECE;        /* wing blue, from the mark */
+  --accent: #2C6ECE;        /* wing blue — sampled from the mark (#316ec7) */
   --accent-hover: #2559A8;
+  --on-accent: #ffffff;     /* text on an accent-filled surface */
   --bg: #ffffff;
   --fg: #1a1c20;
   --muted: #5b6270;
@@ -14,6 +15,12 @@
 }
 @media (prefers-color-scheme: dark) {
   :root {
+    /* The light-mode blue is only 3.65:1 on this background — below AA. Dark
+       mode gets a lighter blue (7.35:1), which then needs dark text on top of
+       any accent-filled surface. */
+    --accent: #6ea8f0;
+    --accent-hover: #8fbdf5;
+    --on-accent: #0d1b2e;
     --bg: #14161a;
     --fg: #e9ecf1;
     --muted: #9aa2b1;
@@ -44,11 +51,11 @@ main.wide .lede, main.wide .tagline, main.wide .description { margin-left: auto;
 a { color: var(--accent); text-decoration: none; }
 a:hover { text-decoration: underline; }
 
-/* The wordmark ink is near-black; lift it rather than ship a second asset. */
-.logo, .home img { display: block; height: auto; }
-@media (prefers-color-scheme: dark) {
-  .logo, .home img { filter: brightness(0) invert(1); }
-}
+/* The wordmark ships in two versions rather than being filtered. A
+   brightness(0) invert(1) flattens the mark to a white silhouette — it loses
+   the eye and the blue wing. chickadee-logo-dark.png inverts the ink and keeps
+   the wing, selected by <picture> so it costs no JavaScript. */
+.logo, .home img, .home picture { display: block; height: auto; }
 
 /* ---- landing ---- */
 
@@ -170,7 +177,6 @@ footer .fine { max-width: 56ch; margin: 8px auto 0; line-height: 1.6; }
   flex-wrap: wrap;
 }
 .nav-brand img { height: 30px; width: auto; display: block; }
-@media (prefers-color-scheme: dark) { .nav-brand img { filter: brightness(0) invert(1); } }
 .nav-links { display: flex; gap: 20px; font-size: 0.92rem; font-weight: 550; }
 .nav-links a { color: var(--muted); }
 .nav-links a:hover, .nav-links a[aria-current] { color: var(--accent); }
@@ -198,7 +204,7 @@ footer .fine { max-width: 56ch; margin: 8px auto 0; line-height: 1.6; }
 .btn {
   display: inline-block;
   background: var(--accent);
-  color: #fff;
+  color: var(--on-accent);
   font-weight: 600;
   padding: 12px 26px;
   border-radius: 10px;
