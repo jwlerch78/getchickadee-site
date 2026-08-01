@@ -11,6 +11,17 @@ analytics, no third-party requests of any kind. Deployed on Vercel.
 > font while saying so would be the first thing a sceptical reader caught. If
 > you are about to add a script tag pointing at another host, don't.
 
+> **No internal annotations in shipped HTML. Ever.**
+> Not `TODO`, not thread names, not "held back until X", and above all not a
+> comment explaining why something was *removed*. This shipped once: the live
+> holding page carried a comment narrating the removal of the provenance
+> sentence, and an external reviewer found it before we did. On a page whose
+> whole posture is honesty, an annotated removal reads as an annotated
+> cover-up. Anything a future editor needs to know goes in **this README** or
+> the thread status file — both are for exactly that. View-source is part of
+> the shipped artifact on this site more than most, because this audience
+> reads it.
+
 ## The positioning, in one line
 
 **Bring your AI key — optionally one more for web search — and everything else
@@ -138,15 +149,22 @@ brand has reversed direction three times in eight days.
 - [ ] 🔴 **`jwlerch78/chickadee` is a README-only placeholder.** The add-on
       channels are not in it yet, so **the one-click "Add to Home Assistant"
       button and the pasted-repository-URL line are deliberately held back** —
-      both would fail in HA today. `grep -rn SOURCE_URL .` finds them. Restore
-      when Thread B lands the add-on channels, and click the button once to
-      confirm HA actually finds the add-on.
+      both would fail in HA today. They live in the CTA block at the bottom of
+      `home.html` and `voice.html` (the `.pending` box). Restore when Thread B
+      lands the add-on channels, and click the button once to confirm HA
+      actually finds the add-on.
 - [ ] **Link `LICENSE` and `PROVENANCE.md` on `/about` and `/terms`.** Both are
       named as plain text because they 404 in the placeholder repo.
+- [ ] 🔒 **`/about` must keep the full Dashie disclosure.** The holding page
+      deliberately does not carry it (John, session 9) and the source repos do —
+      so `/about` is where the complete relationship statement lives. It is
+      currently at `about.html`, under "Who builds it". **Do not remove it when
+      the full site ships**; a site with no disclosure anywhere is the failure
+      this project is designed against.
 - [ ] **Re-verify the "what's published" list in `/about`.** It says the Android
       source mirror is not published. If Phase 3 has landed, update that bullet
-      *and* add the STT model-weights caveat staged in the HTML comment beside
-      it — a fresh clone builds, but on-device speech-to-text self-disables
+      *and* add the STT model-weights caveat: a fresh clone builds, but
+      on-device speech-to-text self-disables
       until `scripts/fetch-stt-models.sh` fetches ~260 MB of pinned weights.
 - [ ] **Re-verify the CDN disclosure in `/privacy`.** It names `hls.js` and
       `heic2any` loading from jsDelivr in the console. True as of 2026-08-01
