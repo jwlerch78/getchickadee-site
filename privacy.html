@@ -135,10 +135,10 @@
         secret.</li>
     </ul>
 
-    <h2>One third-party request, named for completeness</h2>
+    <h2>Requests to other people's servers, named for completeness</h2>
     <p>
-      It doesn't carry your data, but it is an outbound request to somebody
-      else's server, and you would find it yourself:
+      There are two. Neither carries anything you said or typed, but both are
+      outbound requests you would find yourself, so here they are:
     </p>
     <ul>
       <li>The <strong>console page in your browser</strong> loads one pinned
@@ -146,9 +146,20 @@
         from a public CDN. That is a standard static asset fetch by your browser,
         which reveals your IP address to that CDN and nothing else. The voice
         pipeline itself never touches a CDN.</li>
-      <li><strong>This website</strong> loads nothing at all: no fonts, no
-        scripts, no CDN, no analytics. View source and check.</li>
+      <li>The <strong>clock screensaver, if you turn its weather on</strong>,
+        looks up your approximate location from your IP address
+        (<code>ipapi.co</code>) and then the forecast for it
+        (<code>api.open-meteo.com</code>) — once when it loads, then every ten
+        minutes while it is showing. Your IP is what identifies the location;
+        there is no account and nothing else is sent. The plain clock, with no
+        weather, makes no requests at all, and a screensaver that shows your own
+        photos or simply dims the screen never loads this page in the first
+        place.</li>
     </ul>
+    <p>
+      Every other page on this site loads nothing at all: no fonts, no scripts,
+      no CDN, no analytics. View source and check.
+    </p>
 
     <h2>Children's privacy</h2>
     <p>
