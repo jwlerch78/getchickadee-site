@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Chickadee Screensaver</title>
+  <meta name="robots" content="noindex">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      background: #000;
+      color: #fff;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
+    .clock {
+      font-size: 20vw;
+      font-weight: 200;
+      letter-spacing: -0.02em;
+      line-height: 1;
+    }
+    .weather {
+      font-size: 5vw;
+      opacity: 0;
+      margin-top: 2vh;
+      display: flex;
+      align-items: center;
+      gap: 1vw;
+      transition: opacity 0.5s ease-in;
+    }
+    .weather.loaded { opacity: 0.8; }
+    .weather-icon { font-size: 6vw; }
+    .weather-temp { font-weight: 300; }
+  </style>
+  <script>
+    // Weather is OFF by default and enabled with ?weather=1.
+    //
+    // The equivalent Dashie page fetches ipapi.co (IP geolocation) and then
+    // api.open-meteo.com, on load and every 10 minutes. That is two outbound
+    // requests from a tablet sitting idle in someone's home, and the first one
+    // hands a third party the household's IP address to resolve a location.
+    // Chickadee's privacy page says this site loads nothing but itself, so
+    // making those calls the default would falsify it on the one page that runs
+    // unattended for hours. Off by default keeps the claim true; the capability
+    // is one query parameter away for anyone who wants parity.
+    var WEATHER_ENABLED = new URLSearchParams(location.search).get('weather') === '1';
+
+    document.addEventListener('DOMContentLoaded', function () {
+      updateClock();
+      setInterval(updateClock, 1000);
+      if (WEATHER_ENABLED) {
+        loadWeather();
+        setInterval(loadWeather, 600000);
+      }
+    });
+
+    function updateClock() {
+      var now = new Date();
+      var h = now.getHours();
+      var m = String(now.getMinutes()).padStart(2, '0');
+      var hour12 = h % 12 || 12;
+      document.getElementById('clock').textContent = hour12 + ':' + m;
+    }
+
+    async function loadWeather() {
+      try {
+        const geo = await fetch('https://ipapi.co/json/').then(r => r.json());
+        if (geo.error) throw new Error('Geolocation failed');
+
+        const weather = await fetch(
+          'https://api.open-meteo.com/v1/forecast?latitude=' + geo.latitude +
+          '&longitude=' + geo.longitude +
+          '&current=temperature_2m,weather_code&temperature_unit=fahrenheit'
+        ).then(r => r.json());
+
+        const temp = Math.round(weather.current.temperature_2m);
+        const icon = getWeatherIcon(weather.current.weather_code);
+        const el = document.getElementById('weather');
+        el.innerHTML = '<span class="weather-icon">' + icon + '</span>' +
+                       '<span class="weather-temp">' + temp + '°</span>';
+        el.classList.add('loaded');
+      } catch (e) {
+        // Stay silent and keep showing the clock. This page runs unattended on a
+        // wall tablet; a failed lookup must never replace the time with an error.
+        console.log('Weather load failed:', e.message);
+      }
+    }
+
+    function getWeatherIcon(code) {
+      if (code === 0) return '☀️';
+      if (code <= 3) return '⛅';
+      if (code <= 49) return '🌫️';
+      if (code <= 59) return '🌧️';
+      if (code <= 69) return '🌧️';
+      if (code <= 79) return '❄️';
+      if (code <= 82) return '🌧️';
+      if (code <= 86) return '🌨️';
+      if (code <= 99) return '⛈️';
+      return '🌡️';
+    }
+  </script>
+</head>
+<body>
+  <div class="clock" id="clock"></div>
+  <div class="weather" id="weather"></div>
+</body>
+</html>
