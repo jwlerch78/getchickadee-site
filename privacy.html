@@ -135,17 +135,17 @@
         secret.</li>
     </ul>
 
-    <h2>Two third-party requests, named for completeness</h2>
+    <h2>One third-party request, named for completeness</h2>
     <p>
-      Neither carries your data, but both are outbound requests to somebody
-      else's server, and you would find them yourself:
+      It doesn't carry your data, but it is an outbound request to somebody
+      else's server, and you would find it yourself:
     </p>
     <ul>
-      <li>The <strong>console page in your browser</strong> loads two pinned
-        open-source libraries (<code>hls.js</code> and <code>heic2any</code>)
-        from a public CDN — a standard static asset fetch by your browser, which
-        reveals your IP address to that CDN and nothing else. The voice pipeline
-        itself never touches a CDN.</li>
+      <li>The <strong>console page in your browser</strong> loads one pinned
+        open-source library (<code>heic2any</code>, for reading iPhone photos)
+        from a public CDN. That is a standard static asset fetch by your browser,
+        which reveals your IP address to that CDN and nothing else. The voice
+        pipeline itself never touches a CDN.</li>
       <li><strong>This website</strong> loads nothing at all: no fonts, no
         scripts, no CDN, no analytics. View source and check.</li>
     </ul>

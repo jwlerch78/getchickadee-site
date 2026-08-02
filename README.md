@@ -166,10 +166,15 @@ brand has reversed direction three times in eight days.
       *and* add the STT model-weights caveat: a fresh clone builds, but
       on-device speech-to-text self-disables
       until `scripts/fetch-stt-models.sh` fetches ~260 MB of pinned weights.
-- [ ] **Re-verify the CDN disclosure in `/privacy`.** It names `hls.js` and
-      `heic2any` loading from jsDelivr in the console. True as of 2026-08-01
-      (`dashie-ha/frontend/console/index.html`). If the hardening pass removed
-      them, the disclosure should shrink rather than silently overstate.
+- [x] ~~**Re-verify the CDN disclosure in `/privacy`.**~~ Re-checked 2026-08-02:
+      Thread B removed `hls.js` (deleted, not relocated — it had no consumer in
+      any tree). `heic2any` is still there, so the disclosure now names one
+      library, not two. **Re-check again at publish** — it shrinks to nothing
+      once heic2any moves to the family delta.
+- [ ] **Set the effective date to the publish date.** Both legal pages say
+      *August 1, 2026*, which is when they were written, not when they went
+      live. They have never been published, so pick the real date at push time
+      rather than shipping a date that predates the page being reachable.
 - [ ] **Re-verify the install steps** on the landing page against the add-on's
       actual README — panel name, restart prompt, and the repository URL.
 - [ ] 🔴 **Re-check every provider free-tier claim.** `/voice` quotes specific,
