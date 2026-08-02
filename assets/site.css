@@ -59,11 +59,11 @@ main.wide .lede, main.wide .tagline, main.wide .description { margin-left: auto;
 a { color: var(--accent); text-decoration: none; }
 a:hover { text-decoration: underline; }
 
-/* The wordmark ships in two versions rather than being filtered: a
-   brightness(0) invert(1) flattens the mark to a featureless white silhouette.
-   ⚠️ The current art is the BLUE-winged mark and is awaiting John's orange
-   redesign, so the mark and the palette do not match yet. Asset swap only —
-   no CSS change needed when the new art lands. */
+/* The wordmark ships in two versions rather than being filtered: a CSS filter
+   would flatten the mark and destroy the bird's negative-space head. The dark
+   variant inverts ONLY the neutral ink — the brand orange is left exactly as
+   authored — so the charcoal text goes light and the eye's white centre goes
+   dark, which is the negative-space behaviour the mark is designed around. */
 .logo, .home img, .home picture { display: block; height: auto; }
 
 /* ---- landing ---- */
