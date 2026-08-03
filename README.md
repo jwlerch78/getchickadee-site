@@ -178,14 +178,26 @@ brand has reversed direction three times in eight days.
 - [ ] **Re-verify the install steps** on the landing page against the add-on's
       actual README — panel name, restart prompt, and the repository URL.
 - [ ] 🔴 **Re-check every provider free-tier claim.** `/voice` quotes specific,
-      perishable numbers: Tavily 1,000 searches/month with no card, Deepgram
-      $200 signup credit with no card, ElevenLabs free-tier API at 10,000
-      chars/month, Inworld ~40 min/month. **These expire without warning** —
-      Brave killed its free Search API tier in February 2026 and now requires an
-      uncapped card, which is exactly why it appears nowhere here. A quoted free
-      tier that has quietly become card-required is the single most damaging
-      thing this site could get wrong with an r/HA audience. Source of truth:
-      `dashieapp_staging/.reference/build-plans/20260801_BYOK_TOOLS_FEASIBILITY.md`.
+      perishable numbers. **These expire without warning** — Brave killed its
+      free Search API tier in February 2026 and now requires an uncapped card,
+      which is why it appears nowhere here. A quoted free tier that has quietly
+      become card-required is the single most damaging thing this site could get
+      wrong with an r/HA audience.
+
+      **Checked 2026-08-02 against the live pricing pages:**
+
+      | Claim | Result |
+      |---|---|
+      | Tavily 1,000/month, no card | ✅ "1,000 API credits / month", "No credit card required" |
+      | Deepgram $200 signup, no card | ✅ "$200 Credit", "No credit card required" |
+      | ElevenLabs ~10,000 chars/month | ✅ number confirmed |
+      | Inworld free TTS | ❌ **was wrong** — the page said ~40 min, Inworld says **up to 70 min**. Fixed. |
+
+      ⚠️ **ElevenLabs free-tier API access is still unverified.** The
+      feasibility doc flagged it as unconfirmed; the pricing page does not say
+      either way. The copy no longer asserts it — do not put it back without a
+      source, because a user who signs up and finds the API gated has been
+      actively misled.
 - [x] ~~**Confirm the ESPN decision has been made.**~~ **Decided 2026-08-01:
       direct + disclosed.** Chickadee calls ESPN's public endpoints directly and
       says so plainly — no proxy, no concealment — precedent-verified against
