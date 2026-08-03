@@ -169,63 +169,95 @@ Work through this **before** removing the redirect. Several items are claims the
 site makes that were true when written and must be re-checked, because this
 brand has reversed direction three times in eight days.
 
+**Reconciled against reality 2026-08-03.** Five items were already done and
+still showed unchecked, which is the failure this file exists to prevent — an
+unchecked box reads as work remaining, and a checklist that cries wolf gets
+skimmed at exactly the moment it matters. Each is now closed **with the evidence
+and the SHA**, not just ticked. Two of the closures found real defects on the
+way (`/about` pointed at a `PROVENANCE.md` that 404s where it said it was;
+the install steps omitted the restart and the channel choice), and one — the
+go-live change itself — was actively wrong; see the correction below.
+
+**Where the gates stand:** T's board has Chickadee beta **C1–C7 all ✅**
+(session 26s), so the technical gate the full-site flip was staged behind has
+fired. What remains is `hello@`, and **John's word** — the flip has always been
+his call, and nothing here changes that.
+
 - [x] ~~**Thread B has created the Chickadee repositories.**~~ Done 2026-08-01:
       `chickadee`, `chickadee-integration`, `chickadee-voice-integration` all
       exist and resolve.
 - [x] ~~**Render the withheld links.**~~ Done — source, issues, and both
       integration repos are linked and verified 200.
-- [ ] 🔴 **`jwlerch78/chickadee` is a README-only placeholder.** The add-on
-      channels are not in it yet, so **the one-click "Add to Home Assistant"
-      button and the pasted-repository-URL line are deliberately held back** —
-      both would fail in HA today. They live in the CTA block at the bottom of
-      `home.html` and `voice.html` (the `.pending` box). Restore when Thread B
-      lands the add-on channels, and click the button once to confirm HA
-      actually finds the add-on.
-- [ ] **Link `LICENSE` and `PROVENANCE.md` on `/about` and `/terms`.** Both are
-      named as plain text because they 404 in the placeholder repo.
+- [x] ~~**`jwlerch78/chickadee` is a README-only placeholder.**~~ Re-checked
+      2026-08-03: it is a real add-on repository — `repository.yaml` plus both
+      channel directories (`chickadee`, `chickadee_dev`) and a `LICENSE`. The
+      CTA is **already restored** in `home.html` and `voice.html`; the
+      `.pending` box is gone. ⬜ **One sub-item is still open and needs a box:**
+      nobody has clicked the button and confirmed HA actually finds the add-on.
+      Everything else here was verified over HTTP; that one cannot be.
+- [x] ~~**Link `LICENSE` and `PROVENANCE.md` on `/about` and `/terms`.**~~ Done
+      2026-08-03 (`97e699f`). The premise had gone stale in both directions:
+      `LICENSE` now serves 200 in all three repos and `/terms` already linked
+      it, while `PROVENANCE.md` **404s in every Chickadee repo** — it lives at
+      [`jwlerch78/dashie-ha`](https://github.com/jwlerch78/dashie-ha/blob/main/PROVENANCE.md),
+      which is where all three repo READMEs point. `/about` said "the
+      `PROVENANCE.md` file in the repository", so the disclosure page was the
+      one surface sending readers somewhere the file is not. Now linked to the
+      real location. **Deliberately not linking `LICENSE` on `/about`**: it
+      links each repo, and `/terms` is the page whose job that is.
 - [ ] 🔒 **`/about` must keep the full Dashie disclosure.** The holding page
       deliberately does not carry it (John, session 9) and the source repos do —
       so `/about` is where the complete relationship statement lives. It is
       currently at `about.html`, under "Who builds it". **Do not remove it when
       the full site ships**; a site with no disclosure anywhere is the failure
       this project is designed against.
-- [ ] **Re-verify the "what's published" list in `/about`.** It says the Android
-      source mirror is not published. If Phase 3 has landed, update that bullet
-      *and* add the STT model-weights caveat: a fresh clone builds, but
-      on-device speech-to-text self-disables
-      until `scripts/fetch-stt-models.sh` fetches ~260 MB of pinned weights.
+- [x] ~~**Re-verify the "what's published" list in `/about`.**~~ Re-checked
+      against GitHub 2026-08-03 (`51a84fa`): `chickadee-android` genuinely does
+      not exist, so the "not published yet" bullet is correct, and the page's
+      "accurate as of" stamp was moved to the date it was actually checked.
+      **Re-check again at publish** — this bullet goes stale the day the mirror
+      lands, and it is the one claim on the page that flips without anyone
+      touching the site.
 - [x] ~~**Re-verify the CDN disclosure in `/privacy`.**~~ Re-checked 2026-08-02:
       Thread B removed `hls.js` (deleted, not relocated — it had no consumer in
       any tree). `heic2any` is still there, so the disclosure now names one
       library, not two. **Re-check again at publish** — it shrinks to nothing
       once heic2any moves to the family delta.
-- [ ] **Set the effective date to the publish date.** Both legal pages say
-      *August 1, 2026*, which is when they were written, not when they went
-      live. They have never been published, so pick the real date at push time
-      rather than shipping a date that predates the page being reachable.
-- [ ] **Re-verify the install steps** on the landing page against the add-on's
-      actual README — panel name, restart prompt, and the repository URL.
-- [ ] 🔴 **Re-check every provider free-tier claim.** `/voice` quotes specific,
-      perishable numbers. **These expire without warning** — Brave killed its
-      free Search API tier in February 2026 and now requires an uncapped card,
-      which is why it appears nowhere here. A quoted free tier that has quietly
-      become card-required is the single most damaging thing this site could get
-      wrong with an r/HA audience.
+- [x] ~~**Set the effective date to the publish date.**~~ Done at go-live
+      (`a9dda31`): both legal pages read **August 2, 2026**, the day they became
+      reachable. `about.html`'s "accurate as of" was deliberately left separate —
+      it is a snapshot claim, not an effective date, and it moves whenever the
+      claim is re-checked.
+- [x] ~~**Re-verify the install steps** against the add-on's actual README.~~
+      Done 2026-08-03 (`de1dffd`). The repository URL and the
+      Settings → Add-ons → Add-on Store → ⋮ → Repositories path both matched.
+      Three things the README tells a user that the site did not: **restart HA
+      when it asks**, **install `Chickadee` and not `Chickadee (Dev)`** (the
+      store shows both), and **the add-on installs the voice integration for
+      you**. The third matters more than it reads — a hand-added integration is
+      not add-on-managed, and per T's s26r finding the installer then skips it
+      forever behind a log line that looks like a deliberate choice. No panel
+      name is claimed anywhere on the site, so there was nothing to contradict.
+- [x] ~~**Re-check every provider free-tier claim.**~~ 🚫 **RETIRED as a
+      recurring item 2026-08-03 (`42cc863`) — do not reinstate it.** The site no
+      longer quotes a single provider figure. Every one was a standing promise
+      to watch someone else's pricing page, and two had already broken: Inworld
+      moved ~40 → 70 minutes with nothing to signal it, and Brave killed its
+      free Search API tier outright in February 2026.
 
-      **Checked 2026-08-02 against the live pricing pages:**
+      Each figure was replaced by a **link to the provider's own pricing page**,
+      which is always current by construction. What stays is the *shape*,
+      because that is what the argument actually rests on — "Optional — free
+      tier, no card" still makes the second key credible, and "free tiers,
+      enough to hear the difference, not enough to run on" still sets the
+      expectation. Neither needs a number.
 
-      | Claim | Result |
-      |---|---|
-      | Tavily 1,000/month, no card | ✅ "1,000 API credits / month", "No credit card required" |
-      | Deepgram $200 signup, no card | ✅ "$200 Credit", "No credit card required" |
-      | ElevenLabs ~10,000 chars/month | ✅ number confirmed |
-      | Inworld free TTS | ❌ **was wrong** — the page said ~40 min, Inworld says **up to 70 min**. Fixed. |
-
-      ⚠️ **ElevenLabs free-tier API access is still unverified.** The
-      feasibility doc flagged it as unconfirmed; the pricing page does not say
-      either way. The copy no longer asserts it — do not put it back without a
-      source, because a user who signs up and finds the API gated has been
-      actively misled.
+      🔒 **The standing rule that replaces this checkbox:** do not reintroduce a
+      provider figure. If a sentence seems to need one, it is leaning on
+      something we cannot keep true. 🎁 This also mooted the long-open
+      "is ElevenLabs' free tier API-accessible?" question — the page no longer
+      characterises their tier beyond "a free tier exists", so there is nothing
+      left to verify.
 - [x] ~~**Confirm the ESPN decision has been made.**~~ **Decided 2026-08-01:
       direct + disclosed.** Chickadee calls ESPN's public endpoints directly and
       says so plainly — no proxy, no concealment — precedent-verified against
@@ -233,19 +265,62 @@ brand has reversed direction three times in eight days.
       (`ha-teamtracker` and others). The `/voice` "sports needs no key" row and
       the `/privacy` disclosure are **correct as written**; no copy change was
       required.
-- [ ] **Fix the GitHub repo description.** It still reads *"Retired. The
-      Chickadee brand was consolidated into Dashie on 2026-07-30."* Live and
-      indexed right now; `vercel.json` does not mask it.
-- [ ] **Confirm `hello@getchickadee.org` still delivers.** ImprovMX MX records
-      are in place; send one test mail. An unmonitored contact address on a
-      privacy page is worse than none.
-- [ ] **Then** remove the redirect (below) and confirm the apex serves the
-      landing page.
+- [x] ~~**Fix the GitHub repo description.**~~ Fixed. Verified over the API
+      2026-08-03 — the "Retired… consolidated into Dashie" text is gone. It now
+      reads *"Chickadee — a free alternative to Fully Kiosk for Home Assistant
+      dashboards on Android tablets…"*, which is John's own framing and a third
+      wording; it is not the one this file previously recorded, so **read it
+      from GitHub rather than from here** if it matters to a copy decision.
+- [ ] 🔴 **Confirm `hello@getchickadee.org` still delivers.** ImprovMX MX
+      records are in place; send one test mail. An unmonitored contact address
+      on a privacy page is worse than none. **This is the last checklist item
+      that is neither done nor John's judgement call** — every contact line on
+      all six pages is held on it.
+- [ ] **Then** make the go-live change (below) and confirm the apex serves the
+      landing page and that `/voice` + `/about` serve their own content.
 
 ### The go-live change
 
-Replace the `redirects` array in `vercel.json` with an empty one, or drop the
-key. Keep `cleanUrls` and `trailingSlash`. That is the entire deploy.
+⚠️ **Corrected 2026-08-03. This section used to say "replace the `redirects`
+array with an empty one, or drop the key." Do not do that** — it was written
+when the array held only the mask, and the array has grown since. Dropping it
+does three things and only one of them is intended.
+
+The array now holds **five** rules. Exactly one is the mask:
+
+```json
+{ "source": "/:path((?!assets/|privacy|terms|screensaver|robots|sitemap).+)",
+  "destination": "/", "permanent": false }
+```
+
+**Delete that one rule and nothing else.** The other four are the legacy
+`/privacy-policy[.html]` and `/terms-of-service[.html]` catchers — Dashie's URL
+shape, which someone arriving with that habit will still try. They are not part
+of the mask and must survive go-live. (The app itself is safe either way:
+`kiosk-overlay/js/brand.js` points at the clean `/privacy` and `/terms`.)
+
+🔴 **And deleting the mask alone is still not enough — it unmasks `/home` too.**
+`home.html` is superseded (see the warning at the top of this file): it is the
+earlier port, carrying an unreviewed `h1` and the carousel, and it is **parked,
+not shipping**. With the mask gone it would serve at `/home`. The sitemap does
+not list it, so this would not be indexed — it would just be quietly reachable,
+which is how an unreviewed page gets found by exactly the audience that reads
+view-source.
+
+So the go-live change is:
+
+1. Delete the catch-all mask rule; keep the other four.
+2. Add `{ "source": "/home", "destination": "/", "permanent": false }`, **or**
+   delete `home.html` outright. Prefer the redirect until John has ruled on the
+   carousel proposal — deleting the file forecloses it.
+3. Keep `cleanUrls` and `trailingSlash`.
+4. Verify after deploy: `/voice` and `/about` serve their own content (200, not
+   a redirect to `/`), `/home` does **not**, and `/privacy-policy.html` still
+   lands on `/privacy`.
+
+📌 The general lesson, and the reason this is spelled out: **a procedure that
+describes config by its shape ("the array") rots when the config grows.** Name
+the rule, not the container.
 
 ## Deploy
 
