@@ -180,8 +180,10 @@ go-live change itself — was actively wrong; see the correction below.
 
 **Where the gates stand:** T's board has Chickadee beta **C1–C7 all ✅**
 (session 26s), so the technical gate the full-site flip was staged behind has
-fired. What remains is `hello@`, and **John's word** — the flip has always been
-his call, and nothing here changes that.
+fired. **`hello@` is confirmed working** (John, 2026-08-03 — he had tested it
+previously), so the contact lines are un-held and **every checklist item is now
+either done or John's judgement call.** What remains for the flip is **his
+word** — it has always been his call, and nothing here changes that.
 
 - [x] ~~**Thread B has created the Chickadee repositories.**~~ Done 2026-08-01:
       `chickadee`, `chickadee-integration`, `chickadee-voice-integration` all
@@ -271,11 +273,24 @@ his call, and nothing here changes that.
       dashboards on Android tablets…"*, which is John's own framing and a third
       wording; it is not the one this file previously recorded, so **read it
       from GitHub rather than from here** if it matters to a copy decision.
-- [ ] 🔴 **Confirm `hello@getchickadee.org` still delivers.** ImprovMX MX
-      records are in place; send one test mail. An unmonitored contact address
-      on a privacy page is worse than none. **This is the last checklist item
-      that is neither done nor John's judgement call** — every contact line on
-      all six pages is held on it.
+- [x] ~~**Confirm `hello@getchickadee.org` still delivers.**~~ **Confirmed
+      working 2026-08-03** — John had tested it previously. DNS was verified
+      independently (MX → `mx1`/`mx2.improvmx.com`, SPF
+      `include:spf.improvmx.com`); what could not be seen from outside was
+      whether the alias itself existed, and it does.
+
+      **Contact lines un-held the same day** across `index.html` (the live
+      page), `404.html`, `about.html`, `voice.html`, `privacy.html` and
+      `terms.html`. Email sits *alongside* the issue links rather than replacing
+      them — public issues stay the right default for technical questions.
+      ⚠️ On `/privacy` it is more than a convenience: a privacy page whose only
+      contact is a public tracker forces a data request to be made in public and
+      requires a GitHub account, so that page says explicitly that email reaches
+      a person and needs no account.
+
+      🅿️ **`home.html` was deliberately NOT un-held** — it is parked and
+      superseded, and editing it would imply it ships. If it is ever promoted,
+      restoring its contact line is part of that proposal, not a leftover.
 - [ ] **Then** make the go-live change (below) and confirm the apex serves the
       landing page and that `/voice` + `/about` serve their own content.
 

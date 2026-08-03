@@ -427,4 +427,5 @@ main.holding .soon strong { color: var(--fg); }
   padding: 8px 14px;
 }
 .repos a:hover { border-color: var(--fill); text-decoration: none; }
-.licence { color: var(--muted); font-size: 0.82rem; margin: 14px 0 0; }
+.licence,
+main.holding .contact { color: var(--muted); font-size: 0.82rem; margin: 14px 0 0; }
