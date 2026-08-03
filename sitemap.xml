@@ -1,23 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Only pages that are actually reachable and meant to be indexed.
+     /voice, /about and /home are masked by the holding-page redirect in
+     vercel.json, so listing them would advertise URLs that 307 to /.
+     /screensaver is deliberately absent: it is a functional page the app
+     loads, and it carries <meta name="robots" content="noindex">. -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://getchickadee.org/</loc>
-    <lastmod>2026-08-01</lastmod>
-  </url>
-  <url>
-    <loc>https://getchickadee.org/voice</loc>
-    <lastmod>2026-08-01</lastmod>
-  </url>
-  <url>
-    <loc>https://getchickadee.org/about</loc>
-    <lastmod>2026-08-01</lastmod>
+    <lastmod>2026-08-02</lastmod>
   </url>
   <url>
     <loc>https://getchickadee.org/privacy</loc>
-    <lastmod>2026-08-01</lastmod>
+    <lastmod>2026-08-02</lastmod>
   </url>
   <url>
     <loc>https://getchickadee.org/terms</loc>
-    <lastmod>2026-08-01</lastmod>
+    <lastmod>2026-08-02</lastmod>
   </url>
 </urlset>

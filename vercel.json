@@ -6,6 +6,6 @@
     { "source": "/privacy-policy", "destination": "/privacy", "permanent": false },
     { "source": "/terms-of-service.html", "destination": "/terms", "permanent": false },
     { "source": "/terms-of-service", "destination": "/terms", "permanent": false },
-    { "source": "/:path((?!assets/|privacy|terms|screensaver).+)", "destination": "/", "permanent": false }
+    { "source": "/:path((?!assets/|privacy|terms|screensaver|robots|sitemap).+)", "destination": "/", "permanent": false }
   ]
 }
