@@ -34,11 +34,12 @@ rules for anyone editing copy:
 - **Never hard-code the number of engine options.** Write "one of the
   following", not "three ways" — the list has already grown once.
 
-## 🚦 Currently serving the HOLDING PAGE
+## 🚦 What `index.html` is
 
-`index.html` **is the holding page**. The full site's home page is parked at
-`home.html`, and `vercel.json` 307s every path except `/` and `/assets/*` back
-to `/`, so none of the five unapproved pages is reachable.
+`index.html` is **the approved landing page** — the copy John rewrote and
+published. It began as a holding page while the rest of the site was masked, and
+the masking is still in force, but its content is not a placeholder: it is what
+goes live. `vercel.json` 307s the unapproved pages back to `/`.
 
 ### ⚠️ Why it is done by filename and not by a rewrite
 
@@ -52,24 +53,41 @@ the redirects correctly and Vercel's rewrite precedence incorrectly.
 So the holding page is `index.html` outright. `/` is a plain filesystem hit
 with **no routing rule to get wrong**. Don't "tidy" this back into a rewrite.
 
-### Swapping back at full go-live
+### 🔴 `index.html` is canonical. `home.html` is superseded — do NOT promote it.
 
-```bash
-git mv index.html holding.html   # park the holding page
-git mv home.html index.html      # restore the full site home
-```
-then drop the `redirects` array from `vercel.json`. Work the checklist below
-first.
+**An earlier version of this file said the opposite** and gave a swap recipe
+(`git mv home.html index.html`) that would have replaced John's reviewed copy
+with copy he has never read, at the exact moment nobody is reading the diff.
+Ruled 2026-08-02: *approved copy wins; fix the README rather than following it.*
 
-## 🚦 The full site is not live yet
+- **`index.html` holds the approved hero.** John rewrote it, reviewed it, and
+  said publish. Whatever is served at `/`, its content is this.
+- **`home.html` is the earlier dashieapp.com port.** Different `h1`, plus a
+  carousel and feature grid that were never reviewed. It is **superseded, not
+  parked for promotion.**
+- If anything in it is worth keeping — the carousel is the only candidate —
+  that is a **separate proposal to John after go-live**, never a go-live-day
+  change.
 
-`vercel.json` currently carries a **blanket 307** sending every path to
-`dashieapp.com`. It dates from the 2026-07-30 brand retirement and is being kept
-deliberately: it lets the relaunch be built and committed in the open without
-anything reaching production before the rest of the work is ready.
+### At full go-live
 
-**Everything in this repo is therefore currently unreachable.** Removing that
-redirect is the go-live action, and it needs John's explicit approval.
+Dropping the `redirects` array is what unmasks `/voice` and `/about`.
+
+> ⚠️ **It also makes `/home` reachable**, serving the unapproved copy above.
+> Delete `home.html`, or keep one redirect for it. Do not just drop the array
+> and assume the masking of that page came with it.
+
+Work the checklist below first. **When the holding page comes down at all is
+John's call** and is gated on Thread T's C5 PASS — this section only says what
+goes live when it does.
+
+## 🚦 What is live right now
+
+Live and public: **`/`** (the approved landing page), **`/privacy`**,
+**`/terms`**, **`/screensaver`**, `/assets/*`, `robots.txt`, `sitemap.xml`.
+
+Still masked by the catch-all in `vercel.json`, all 307 to `/`: `/voice`,
+`/about`, `/home`, `/index.html`, `/404.html`.
 
 ## Structure
 
@@ -79,7 +97,8 @@ list of what changed and why.
 
 | Path | Page |
 |---|---|
-| `index.html` | Home — hero, carousel, platforms, what's included, what it doesn't do |
+| `index.html` | **`/` — the approved landing page.** Canonical; see the warning above |
+| `home.html` | ⚠️ **superseded**, not served, not to be promoted. Earlier dashieapp.com port |
 | `voice.html` | `/voice` — Voice & AI, the BYOK key table, privacy tiers, optional upgrades |
 | `about.html` | `/about` — provenance: who builds it, what's published, the Dashie relationship |
 | `privacy.html` | `/privacy` |
@@ -87,17 +106,20 @@ list of what changed and why.
 | `404.html` | Served by Vercel for unknown paths |
 | `assets/site.css` | The only stylesheet — every page uses it |
 | `assets/` | Wordmark (900×300), favicon (256×256), `og.png` (1200×630) |
-| `robots.txt`, `sitemap.xml` | Four URLs; update `lastmod` when a page changes materially |
+| `robots.txt`, `sitemap.xml` | Three URLs — only pages that are live AND indexable. `/screensaver` is excluded (noindex) |
 
-Wordmark and favicon match `dashieapp_staging/.reference/brand-assets/chickadee/`
-byte-for-byte; don't regenerate them.
+`chickadee-logo.png` and `favicon.png` are byte-for-byte copies from
+`dashieapp_staging/.reference/brand-assets/chickadee/` — don't regenerate them.
+`chickadee-logo-dark.png` is **derived** (neutral ink inverted, brand orange
+untouched) because no dark-surface wordmark shipped; the same file is in
+brand-assets so Thread A uses one artifact rather than rolling its own.
+`og.png` bakes the mark in, so it must be **re-rendered**, not copied, whenever
+the mark or the headline changes.
 
-`assets/og.png` is the social preview card — what renders when someone posts the
-link to Reddit or a forum. It was composed by rendering a 1200×630 HTML page in
-headless Chrome rather than by hand, so it can be regenerated when the headline
-changes; the source is not kept in the repo because it is nine lines of CSS
-around the wordmark. If you change the landing page's `h1`, change this too or
-the card will quote copy the site no longer uses.
+`assets/og.png` is the social preview card — what renders when someone posts
+the link to Reddit or a forum. It is composed by rendering a 1200×630 HTML page
+in headless Chrome; the source is not kept here because it is nine lines of CSS
+around the wordmark.
 
 ## Product shots — the one thing the site is missing
 
@@ -107,16 +129,22 @@ Dashie mark and "Hey Dashie" as the wake word, and Dashie-branded UI on a
 Chickadee site reads as a rebadge — which costs more trust than any disclosure
 buys back.
 
-Needed, in priority order (voice leads the page now):
+⚠️ **Re-scoped 2026-08-02.** Five of these six originally targeted `home.html`'s
+carousel, and `home.html` is now superseded (see the warning near the top). Only
+the first has a slot on a page that ships.
 
-| # | Shot | Where |
-|---|---|---|
-| 1 | Answering a spoken question, result card on screen | `/voice` hero — the money shot |
-| 2 | Dashboard full screen on a wall tablet | home carousel 1 |
-| 3 | Photo screensaver, idle | home carousel 2 |
-| 4 | Voice answer over a dashboard | home carousel 3 |
-| 5 | Live camera feed | home carousel 4 |
-| 6 | Music Assistant speaker selector | home carousel 5 |
+| # | Shot | Where | Still needed? |
+|---|---|---|---|
+| 1 | Answering a spoken question, result card on screen | `/voice` hero | ✅ **yes** — a real slot on a page that ships |
+| 2 | Dashboard full screen on a wall tablet | was home carousel | ⏸ only if the carousel is proposed post-go-live |
+| 3 | Photo screensaver, idle | was home carousel | ⏸ same |
+| 4 | Voice answer over a dashboard | was home carousel | ⏸ same |
+| 5 | Live camera feed | was home carousel | ⏸ same |
+| 6 | Music Assistant speaker selector | was home carousel | ⏸ same |
+
+**The live landing page has no image slot at all.** If it should have one, that
+is a design change to approved copy and therefore John's call — not something to
+add while dropping a screenshot in.
 
 Drop each in `assets/` and replace the `<div class="shot"><span>…</span></div>`
 with `<div class="shot"><img src="/assets/…" alt="…"></div>`. The slot keeps its
