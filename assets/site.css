@@ -185,7 +185,14 @@ footer .fine { max-width: 56ch; margin: 8px auto 0; line-height: 1.6; }
   gap: 16px;
   flex-wrap: wrap;
 }
-.nav-brand img { height: 30px; width: auto; display: block; }
+/* 36px, not 30px. The mark is a 3:1 horizontal lockup in which the wordmark is only
+   110/300 of the canvas height, so a 30px slot rendered the NAME at 11px — the smallest
+   instance of it anywhere on the site (hero and holding render it at 39–42px). The nav has
+   no fixed height (padding 14px, align-items:center), so this just grows the bar by 6px.
+   Note this is NOT the kiosk popout's bug: that slot had a fixed 100x44 box whose 2.27:1
+   aspect letterboxed the 3:1 mark. Here `width:auto` means the mark is never letterboxed —
+   it was only small. */
+.nav-brand img { height: 36px; width: auto; display: block; }
 .nav-links { display: flex; gap: 20px; font-size: 0.92rem; font-weight: 550; }
 .nav-links a { color: var(--muted); }
 .nav-links a:hover, .nav-links a[aria-current] { color: var(--accent); }
