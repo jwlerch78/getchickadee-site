@@ -150,6 +150,32 @@ Drop each in `assets/` and replace the `<div class="shot"><span>…</span></div>
 with `<div class="shot"><img src="/assets/…" alt="…"></div>`. The slot keeps its
 16:10 box either way, so nothing reflows.
 
+## The two integrations — get this right before writing any install copy
+
+Recorded 2026-08-03 after T reported the add-on and the site telling different
+onboarding stories. **They were not actually in conflict, and the reason matters
+more than the fix**: the two surfaces are talking about *two different
+integrations*, and both HACS entries carry the product name.
+
+| HACS entry | What it is | Does the user install it? |
+|---|---|---|
+| **Chickadee Voice** | the voice/Assist integration | ❌ **No** — the add-on installs and updates it. Installing it from HACS is *supported* but means you have taken over keeping it in step with the add-on |
+| **Chickadee** | the device integration (an Android tablet or Fire TV appearing in HA) | ✅ **Yes, from HACS** — and only if you run the app on a screen |
+
+So the console's empty state saying *"install it from HACS"* (the device
+integration) and the add-on README saying *"you do not add that one separately"*
+(the voice integration) are **both correct**. Reading either as a statement about
+"the integration" is what makes them look contradictory.
+
+⚠️ The trap for a future edit: "the add-on installs the integration for you" is
+true but **incomplete**, and a reader who generalises it is then surprised by the
+console telling them to install from HACS. `/voice` now names both entries
+explicitly. If you shorten that passage, you reintroduce the gap.
+
+📌 And per the console source, `BRAND.productName` resolves the device
+integration's HACS name in both editions — **if that entry is ever renamed away
+from the product name, the console string and this site both start lying.**
+
 ## Copy changes waiting on someone else to ship
 
 Not gates — just things to fold in **when the capability actually exists**, never before.
@@ -194,9 +220,18 @@ word** — it has always been his call, and nothing here changes that.
       2026-08-03: it is a real add-on repository — `repository.yaml` plus both
       channel directories (`chickadee`, `chickadee_dev`) and a `LICENSE`. The
       CTA is **already restored** in `home.html` and `voice.html`; the
-      `.pending` box is gone. ⬜ **One sub-item is still open and needs a box:**
-      nobody has clicked the button and confirmed HA actually finds the add-on.
-      Everything else here was verified over HTTP; that one cannot be.
+      `.pending` box is gone.
+
+      🔍 **Why a tester finds nothing to click (T, 2026-08-03 — not a defect).**
+      T checked `/`, `/install`, `/docs`, `/setup` and found no
+      `my.home-assistant.io` link anywhere. Correct, and fully explained: **the
+      only two pages carrying the CTA are `voice.html`, which is masked, and
+      `home.html`, which is parked.** The live holding page has never had an
+      install CTA — deliberately. So **there is nothing to click until John
+      unmasks `/voice`**, and that is a visibility change, therefore his call.
+      ⬜ The sub-item stays open: once `/voice` is live, click the button once
+      and confirm HA actually finds the add-on. Everything else here was
+      verified over HTTP; that one cannot be.
 - [x] ~~**Link `LICENSE` and `PROVENANCE.md` on `/about` and `/terms`.**~~ Done
       2026-08-03 (`97e699f`). The premise had gone stale in both directions:
       `LICENSE` now serves 200 in all three repos and `/terms` already linked
