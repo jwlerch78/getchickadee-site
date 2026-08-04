@@ -387,3 +387,42 @@ an account, Google sign-in, and metered credits. That is gone — there is no
 account and no service — and the pages were rewritten on 2026-08-01. The old
 commits are left in place rather than rewritten; the project's disclosure
 posture does not survive selectively tidying its own record.
+
+---
+
+## 📸 v2 screenshot triage (2026-08-04) — what can ship and what cannot
+
+The ported pages carry **31 images**. They split into two classes, and the split is what matters:
+
+**Class 1 — photos and non-app captures. Fine as-is.** Hardware shots (`guide-onn-stick`,
+`guide-onn-otg`, `guide-onn-webcam`, `guide-echo-show-5-hero`), the photo screensaver captures,
+the Unsplash example, store badges and icons. Nothing in the pixels names a brand.
+
+**Class 2 — app/UI screenshots. These show whatever brand the app was running.** Renaming the file
+does nothing; the brand is *inside* the image. Verified individually:
+
+| image | verdict |
+|---|---|
+| `chickadee-kiosk-voice-response.png` | ✅ HA logo + a result card, no branding |
+| `chickadee-kiosk-screensaver.png` | ✅ photo + clock + weather |
+| `chickadee-kiosk-lock-screen.png` | ✅ Lock dialog, orange accent only |
+| `chickadee-voice-hero.webp` | ✅ voice conversation, clean |
+| `_Chickadee_Sidebar.png` | ✅ icon strip only |
+| `_Chickadee_Controlcenter.png` | 🔴 **"Hey Dashie v3.9S, HA Assist"** |
+| `Chickadee_Integration_Screenshot_1.png` | 🔴 "Dashie Fire Tablet", "by Dashie", the Dashie mark ×2, "John Lerch" ×3 |
+| `Chickadee-kiosk-integration.png` | 🔴 "by Dashie", Dashie mark ×2 |
+| `chickadee-battery-management.png` | 🔴 "Hey Dashie", "Dashie Cams", **and an in-image "Start a 30-day free trial" upsell** |
+| `chickadee-kiosk-speaker-selector.png` | 🔴 speakers named `… Dashie` ×3, plus a personal account name |
+| `video-streaming-hero.png` | 🔴 shows **calendar + family location** — features Chickadee does not have |
+
+📌 **The important pattern: most Class-2 failures are about PRODUCT, not branding.**
+`video-streaming-hero` has no "Dashie" text at all and is still unusable, because it advertises a
+paid Dashie feature set. A better logo fixes none of these — **they need re-capturing from a
+Chickadee build**, which is a device task, not an editing one.
+
+⚠️ **Two also carry personal data** (a real account name, family faces, a home town). Already
+public on dashieapp.com, but worth a deliberate yes before appearing on a second site.
+
+**Not yet individually verified:** the remaining `_Chickadee_*` guide captures
+(`ConfigureHA`, `MainScreen`, `QuickFunctions`) and the `video-feeds-*` set. Expect the same split
+— the HA-side captures are usually clean, the app-side ones usually are not.
