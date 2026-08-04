@@ -577,10 +577,6 @@ const headerHTML = `
   <div class="nav-bar-left">
     <div class="logo-container">
       <a href="/"><img src="/assets/chickadee-logo.png" alt="Chickadee for Home Assistant" class="logo"></a>
-      <span class="logo-edition">
-        <img src="/v2/artwork/icon-homeassistant-blue.svg" alt="">
-        for Home Assistant
-      </span>
     </div>
     <ul>
       <li class="nav-dropdown">

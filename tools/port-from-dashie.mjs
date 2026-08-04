@@ -65,12 +65,41 @@ const TEXT = [
   // ── product name, after every path rule above has run
   [/Dashie/g, 'Chickadee'],
   [/dashie/g, 'chickadee'],
+
+  // ── carousel caption height (John, 2026-08-04: "way too tall").
+  //    `.carousel-slides` is a flex ROW, so every slide stretches to the height
+  //    of the TALLEST one. Inside each slide `.carousel-caption { flex: 1 }` then
+  //    absorbs all of that leftover height — so a slide with a short image gets a
+  //    caption box several times taller than its text. Sizing the caption to its
+  //    content fixes it without touching the carousel's sliding behaviour.
+  [/(\.carousel-caption\s*\{[^}]*?)flex:\s*1;/, '$1flex: 0 0 auto;'],
 ];
 
-/** Analytics: strip the include entirely — see README, the site claims none. */
+/**
+ * Blocks removed wholesale. Each is [label, regex] so the run reports what it
+ * took out — a silent removal is indistinguishable from a regex that stopped
+ * matching after an upstream edit.
+ *
+ * Path-agnostic on purpose: these run BEFORE the TEXT rules, so the markup still
+ * holds `./artwork/...`. Matching on the class name rather than the src keeps
+ * them working whichever side of the rewrite they run on.
+ */
 const STRIP = [
-  /\s*<script[^>]*website-analytics\.js[^>]*>\s*<\/script>/g,
-  /\s*<script[^>]*src="[^"]*analytics[^"]*"[^>]*>\s*<\/script>/g,
+  // The site claims "no analytics, no trackers" — see README.
+  ['analytics include', /\s*<script[^>]*website-analytics\.js[^>]*>\s*<\/script>/g],
+  ['analytics include', /\s*<script[^>]*src="[^"]*analytics[^"]*"[^>]*>\s*<\/script>/g],
+
+  // John, 2026-08-04: drop the Home Assistant framing furniture. Chickadee IS a
+  // Home Assistant product, so a badge announcing it is redundant here in a way
+  // it was not on dashieapp.com, where HA was one mode among several.
+  ['top-of-page HA banner', /\s*<div class="ha-banner-section">[\s\S]*?<\/div>\s*<\/div>\s*<\/div>/g],
+  ['hero "For Home Assistant" badge', /\s*<div class="hero-badge">[\s\S]*?<\/div>/g],
+  ['header logo edition badge', /\s*<span class="logo-edition">[\s\S]*?<\/span>/g],
+  // download.html builds the same badge from a DIFFERENT class (`hero-badges` >
+  // `hero-badge-tag ha`), so the rule above walked straight past it and the badge
+  // survived on that one page. Caught by grepping the rendered text rather than
+  // trusting that one rule covered "the badge" everywhere.
+  ['download-page HA badge', /\s*<div class="hero-badges">[\s\S]*?<\/div>/g],
 ];
 
 /** Nav entries with no Chickadee equivalent — reported, not silently dropped. */
@@ -80,15 +109,15 @@ function port() {
   if (existsSync(DST)) rmSync(DST, { recursive: true });
   mkdirSync(DST, { recursive: true });
 
-  const report = { pages: [], strippedAnalytics: 0, orphans: {}, residualDashie: {} };
+  const report = { pages: [], stripped: {}, orphans: {}, residualDashie: {} };
 
   for (const [src, dst] of Object.entries(PAGES)) {
     let s = readFileSync(join(SRC, src), 'utf8');
     const before = s.length;
 
-    for (const re of STRIP) {
+    for (const [label, re] of STRIP) {
       const hits = s.match(re);
-      if (hits) report.strippedAnalytics += hits.length;
+      if (hits) report.stripped[label] = (report.stripped[label] || 0) + hits.length;
       s = s.replace(re, '');
     }
     for (const [re, to] of TEXT) s = s.replace(re, to);
@@ -149,6 +178,6 @@ function port() {
 const r = port();
 console.log('ported pages:');
 for (const p of r.pages) console.log(`   ${p.dst.padEnd(24)} (${p.kb} KB source)`);
-console.log(`\nanalytics includes stripped: ${r.strippedAnalytics}`);
+console.log('\nblocks removed:', JSON.stringify(r.stripped));
 console.log('residual "Dashie" after all rules:', JSON.stringify(r.residualDashie));
 console.log('orphan nav links (no Chickadee equivalent):', JSON.stringify(r.orphans));
