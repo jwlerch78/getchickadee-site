@@ -1,0 +1,975 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chickadee for Home Assistant</title>
+  <link rel="icon" type="image/png" href="/assets/chickadee-mark.png">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-padding-top: 80px;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      line-height: 1.6;
+      background: #ffffff;
+      color: #424242;
+      min-height: 100vh;
+    }
+
+    /* Hero Section */
+    .hero {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 60px 40px 40px 40px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: linear-gradient(135deg, #18bcf2 0%, #0d8bc2 100%);
+      color: white;
+      padding: 8px 20px;
+      border-radius: 20px;
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 30px;
+    }
+
+    .hero-badge img {
+      width: 24px;
+      height: 24px;
+      filter: brightness(0) invert(1);
+    }
+
+    .hero h1 {
+      font-size: 2.6em;
+      color: #424242;
+      margin-bottom: 20px;
+      line-height: 1.2;
+    }
+
+    .hero .tagline {
+      font-size: 1.4em;
+      color: #666;
+      margin-bottom: 20px;
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .hero .description {
+      font-size: 1.1em;
+      color: #555;
+      max-width: 650px;
+      margin: 0 auto 30px auto;
+      line-height: 1.7;
+    }
+
+    /* Features preview */
+    .features-preview {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 40px;
+      background: #fafafa;
+    }
+
+    .features-preview h2 {
+      text-align: center;
+      font-size: 2em;
+      margin-bottom: 40px;
+      color: #424242;
+    }
+
+    .feature-list {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 30px;
+    }
+
+    .feature-list-bottom {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 30px;
+      margin-top: 30px;
+    }
+
+    .feature-list-bottom.centered-two {
+      grid-template-columns: repeat(2, 1fr);
+      max-width: 66%;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .feature-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 15px;
+    }
+
+    .feature-icon {
+      width: 40px;
+      height: 40px;
+      background: #18bcf2;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .feature-icon svg {
+      width: 24px;
+      height: 24px;
+      stroke: white;
+      stroke-width: 2;
+      fill: none;
+    }
+
+    .feature-icon.fill-icon svg {
+      fill: white;
+      stroke: none;
+    }
+
+    .feature-icon.upgrade {
+      background: #ffaa00;
+    }
+
+    .feature-text h3 {
+      font-size: 1.1em;
+      color: #424242;
+      margin-bottom: 5px;
+    }
+
+    .feature-text p {
+      font-size: 0.95em;
+      color: #666;
+    }
+
+    .feature-text .upgrade-tag {
+      display: inline-block;
+      background: #ffaa00;
+      color: #000;
+      font-size: 0.7em;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 4px;
+      margin-left: 8px;
+      vertical-align: middle;
+    }
+
+    /* Download Section */
+    .download-section {
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 40px 40px 60px 40px;
+      text-align: center;
+    }
+
+    .download-box {
+      background: #f9f9f9;
+      border: 2px solid #ffaa00;
+      border-radius: 16px;
+      padding: 40px;
+    }
+
+    .download-box h2 {
+      font-size: 1.8em;
+      color: #424242;
+      margin-bottom: 15px;
+    }
+
+    .download-box p {
+      color: #666;
+      margin-bottom: 25px;
+    }
+
+    .btn-download {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: #ffaa00;
+      color: #ffffff;
+      padding: 16px 40px;
+      border: none;
+      border-radius: 8px;
+      font-size: 1.1em;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-decoration: none;
+    }
+
+    .btn-download:hover {
+      background: #ffbb22;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(255, 170, 0, 0.4);
+    }
+
+    .btn-download svg {
+      width: 24px;
+      height: 24px;
+      stroke: currentColor;
+      stroke-width: 2;
+      fill: none;
+    }
+
+    /* Pricing callout */
+    .pricing-info {
+      margin-top: 30px;
+      padding-top: 25px;
+      border-top: 1px solid #e0e0e0;
+    }
+
+    .pricing-info h3 {
+      font-size: 1.2em;
+      color: #424242;
+      margin-bottom: 10px;
+    }
+
+    .pricing-info p {
+      color: #666;
+      font-size: 1em;
+      margin-bottom: 0;
+    }
+
+    .pricing-info .price {
+      color: #18bcf2;
+      font-weight: 700;
+      font-size: 1.1em;
+    }
+
+    /* ===== Feature Deep-Dive Sections ===== */
+    .feature-deep-dives {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 60px 40px 40px;
+    }
+
+    .feature-deep-dives > h2 {
+      text-align: center;
+      font-size: 2em;
+      margin-bottom: 16px;
+      color: #424242;
+    }
+
+    .feature-deep-dives > p.section-subtitle {
+      text-align: center;
+      color: #666;
+      font-size: 1.1em;
+      margin-bottom: 50px;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .feature-deep-dive {
+      border: 1px solid #e8e8e8;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      overflow: hidden;
+      transition: box-shadow 0.2s;
+    }
+
+    .feature-deep-dive:hover {
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+    }
+
+    .feature-deep-dive-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 20px 28px;
+      cursor: pointer;
+      user-select: none;
+      background: #fafafa;
+      transition: background 0.2s;
+    }
+
+    .feature-deep-dive-header:hover {
+      background: #f3f3f3;
+    }
+
+    .feature-deep-dive-header .dd-icon {
+      width: 44px;
+      height: 44px;
+      background: #18bcf2;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .feature-deep-dive-header .dd-icon svg {
+      width: 24px;
+      height: 24px;
+      stroke: white;
+      stroke-width: 2;
+      fill: none;
+    }
+
+    .feature-deep-dive-header .dd-icon.fill-icon svg {
+      fill: white;
+      stroke: none;
+    }
+
+    .feature-deep-dive-header .dd-icon.upgrade {
+      background: #ffaa00;
+    }
+
+    .feature-deep-dive-header .dd-title {
+      flex: 1;
+    }
+
+    .feature-deep-dive-header .dd-title h3 {
+      font-size: 1.2em;
+      color: #424242;
+      margin-bottom: 2px;
+    }
+
+    .feature-deep-dive-header .dd-title p {
+      font-size: 0.9em;
+      color: #888;
+      margin: 0;
+    }
+
+    .feature-deep-dive-header .dd-chevron {
+      width: 24px;
+      height: 24px;
+      transition: transform 0.3s;
+      flex-shrink: 0;
+    }
+
+    .feature-deep-dive-header .dd-chevron svg {
+      width: 24px;
+      height: 24px;
+      stroke: #aaa;
+      stroke-width: 2;
+      fill: none;
+    }
+
+    .feature-deep-dive.open .dd-chevron {
+      transform: rotate(180deg);
+    }
+
+    .feature-deep-dive-body {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease;
+    }
+
+    .feature-deep-dive.open .feature-deep-dive-body {
+      max-height: 1000px;
+    }
+
+    .feature-deep-dive-content {
+      display: flex;
+      gap: 36px;
+      padding: 28px;
+      align-items: center;
+    }
+
+    .feature-deep-dive-content.reverse {
+      flex-direction: row-reverse;
+    }
+
+    .dd-image {
+      flex: 0 0 340px;
+      max-width: 340px;
+    }
+
+    .dd-image img {
+      width: 100%;
+      height: auto;
+      border-radius: 10px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .dd-image .screenshot-placeholder {
+      width: 100%;
+      aspect-ratio: 16 / 10;
+      background: linear-gradient(135deg, #f0f0f0, #e0e0e0);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #bbb;
+      font-size: 0.85em;
+      font-style: italic;
+    }
+
+    .dd-copy {
+      flex: 1;
+    }
+
+    .dd-copy h4 {
+      font-size: 1.15em;
+      color: #424242;
+      margin-bottom: 12px;
+    }
+
+    .dd-copy p {
+      color: #555;
+      font-size: 0.95em;
+      line-height: 1.7;
+      margin-bottom: 12px;
+    }
+
+    .dd-copy ul {
+      color: #555;
+      font-size: 0.95em;
+      line-height: 1.8;
+      padding-left: 20px;
+      margin-bottom: 12px;
+    }
+
+    .dd-copy .guide-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: #18bcf2;
+      font-size: 0.9em;
+      font-weight: 500;
+      text-decoration: none;
+      margin-top: 4px;
+    }
+
+    .dd-copy .guide-link:hover {
+      text-decoration: underline;
+    }
+
+    .dd-copy .upgrade-tag {
+      display: inline-block;
+      background: #ffaa00;
+      color: #000;
+      font-size: 0.7em;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 4px;
+      margin-left: 8px;
+      vertical-align: middle;
+    }
+
+    /* Bottom CTA */
+    .bottom-cta {
+      max-width: 700px;
+      margin: 20px auto 0;
+      padding: 0 40px 60px;
+      text-align: center;
+    }
+
+    .bottom-cta .btn-download {
+      margin-top: 10px;
+    }
+
+    /* Footer */
+    .footer {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 40px;
+      text-align: center;
+      border-top: 1px solid #e0e0e0;
+      color: #999999;
+    }
+
+    .footer-links {
+      margin-top: 20px;
+    }
+
+    .footer-links a {
+      color: #666666;
+      text-decoration: none;
+      margin: 0 15px;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover {
+      color: #ffaa00;
+    }
+
+    /* Mobile Responsive */
+    @media (max-width: 768px) {
+      .hero {
+        padding: 40px 20px 30px 20px;
+      }
+
+      .hero h1 {
+        font-size: 2em;
+      }
+
+      .hero .tagline {
+        font-size: 1.1em;
+      }
+
+      .hero .description {
+        font-size: 1em;
+      }
+
+      .features-preview {
+        padding: 40px 20px;
+      }
+
+      .feature-list,
+      .feature-list-bottom {
+        grid-template-columns: 1fr;
+      }
+
+      .feature-list-bottom.centered-two {
+        max-width: 100%;
+      }
+
+      .download-section {
+        padding: 40px 20px 40px 20px;
+      }
+
+      .download-box {
+        padding: 30px 20px;
+      }
+
+      .feature-deep-dives {
+        padding: 40px 20px 20px;
+      }
+
+      .feature-deep-dive-content,
+      .feature-deep-dive-content.reverse {
+        flex-direction: column;
+      }
+
+      .dd-image {
+        flex: none;
+        max-width: 100%;
+      }
+
+      .feature-deep-dive-header {
+        padding: 16px 20px;
+      }
+
+      .feature-deep-dive-content {
+        padding: 20px;
+      }
+
+      .bottom-cta {
+        padding: 0 20px 40px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Shared Header/Navigation -->
+  <script src="/v2/components/header.js"></script>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <h1>A Smarter Smart Home</h1>
+
+    <div class="hero-badge">
+      <img src="/v2/artwork/icon-homeassistant-blue.svg" alt="Home Assistant">
+      For Home Assistant
+    </div>
+
+    <p class="tagline">
+      A free alternative to Fully Kiosk for hosting your dashboards on Android devices. Voice enable it for an even smarter smart home.
+    </p>
+
+    <p class="description">
+      Chickadee provides easy hosting of Home Assistant dashboards on Android devices.
+      Get your smart home dashboard up and running in minutes with a clean, purpose-built kiosk experience.
+      Add voice activation and say "Chickadee" to control your devices.
+    </p>
+  </section>
+
+  <!-- Features at-a-glance -->
+  <section class="features-preview">
+    <h2>What's Included</h2>
+    <div class="feature-list">
+      <!-- Row 1 -->
+      <div class="feature-item">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24">
+            <rect x="3" y="3" width="18" height="18" rx="2"/>
+            <circle cx="8.5" cy="8.5" r="1.5"/>
+            <polyline points="21 15 16 10 5 21"/>
+          </svg>
+        </div>
+        <div class="feature-text">
+          <h3>Screensaver & Photos</h3>
+          <p>Photo slideshows from multiple sources with motion-activated wake</p>
+        </div>
+      </div>
+
+      <div class="feature-item">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24">
+            <rect x="3" y="11" width="18" height="11" rx="2"/>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+          </svg>
+        </div>
+        <div class="feature-text">
+          <h3>Lock Mode</h3>
+          <p>Lock your tablet with an optional PIN to prevent unintended use</p>
+        </div>
+      </div>
+
+      <div class="feature-item">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="12" y1="8" x2="12" y2="12"/>
+            <line x1="12" y1="16" x2="12.01" y2="16"/>
+          </svg>
+        </div>
+        <div class="feature-text">
+          <h3>Free to Use</h3>
+          <p>Core functionality is completely free with no subscriptions</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="feature-list-bottom">
+      <!-- Row 2 -->
+      <div class="feature-item">
+        <div class="feature-icon upgrade">
+          <svg viewBox="0 0 24 24">
+            <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z" />
+            <path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v4M8 23h8" />
+          </svg>
+        </div>
+        <div class="feature-text">
+          <h3>Voice Control</h3>
+          <p>"Chickadee" wake word with natural language voice commands</p>
+        </div>
+      </div>
+
+      <div class="feature-item">
+        <div class="feature-icon fill-icon">
+          <svg viewBox="0 0 32 32" width="24" height="24">
+            <path d="M30.658 5.937c-0.187-0.117-0.414-0.186-0.658-0.186-0.204 0-0.396 0.048-0.566 0.135l0.007-0.003-6.351 3.174c-0.414-1.342-1.641-2.302-3.093-2.307h-15.997c-1.794 0.002-3.248 1.456-3.25 3.25v12.001c0.002 1.794 1.456 3.248 3.25 3.25h15.996c1.453-0.005 2.68-0.964 3.088-2.284l0.006-0.023 6.351 3.174c0.161 0.084 0.352 0.133 0.555 0.133 0.001 0 0.003 0 0.004 0h-0c0.69-0 1.25-0.56 1.25-1.25v-18c-0-0.447-0.234-0.839-0.587-1.060l-0.005-0.003zM20.746 22c-0 0.414-0.336 0.75-0.75 0.75h-15.996c-0.414-0-0.75-0.336-0.75-0.75v-12.001c0.001-0.414 0.336-0.749 0.75-0.75h15.996c0.414 0 0.75 0.336 0.75 0.75v12.001zM28.75 22.979l-5.504-2.752v-8.454l5.504-2.75z"/>
+          </svg>
+        </div>
+        <div class="feature-text">
+          <h3>Video Streaming</h3>
+          <p>Stream your tablet's camera as an RTSP feed and view incoming camera feeds on demand or when triggered</p>
+        </div>
+      </div>
+
+      <div class="feature-item">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24">
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+            <polyline points="9 22 9 12 15 12 15 22"/>
+          </svg>
+        </div>
+        <div class="feature-text">
+          <h3>Home Assistant Integration</h3>
+          <p>Display any dashboard with a built-in API that's backwards compatible with the Fully Kiosk integration</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="feature-list-bottom centered-two">
+      <!-- Row 3 (centered) -->
+      <div class="feature-item">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24">
+            <rect x="2" y="6" width="16" height="12" rx="2"/>
+            <path d="M22 10v4"/>
+            <polyline points="11 9 9 12 13 12 11 15"/>
+          </svg>
+        </div>
+        <div class="feature-text">
+          <h3>Battery Management</h3>
+          <p>Manage your tablet's charging without HA automations for optimal battery longevity</p>
+        </div>
+      </div>
+
+      <div class="feature-item">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24">
+            <path d="M9 18V5l12-2v13"/>
+            <circle cx="6" cy="18" r="3"/>
+            <circle cx="18" cy="16" r="3"/>
+          </svg>
+        </div>
+        <div class="feature-text">
+          <h3>Music Player</h3>
+          <p>Play music across your Chickadee tablets using multi-room audio with Music Assistant</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Primary CTA -->
+  <section class="download-section">
+    <div class="download-box">
+      <h2>Get Started</h2>
+      <p>Ready to host your Home Assistant dashboards on Android? Download Chickadee and get going.</p>
+      <a href="/v2/download" class="btn-download">
+        Download Chickadee
+      </a>
+
+      <div class="tutorial-links" style="margin-top: 20px; text-align: center;">
+        <p style="color: #666; margin-bottom: 10px; font-size: 14px;">Getting Started Guides:</p>
+        <a href="/guides/chickadee-kiosk-features" style="color: #ffaa00; margin: 0 12px; font-size: 14px;">Features Overview</a>
+        <span style="color: #ccc;">|</span>
+        <a href="/guides/voice-control-setup" style="color: #ffaa00; margin: 0 12px; font-size: 14px;">Voice Control Setup</a>
+        <span style="color: #ccc;">|</span>
+        <a href="/guides/fire-tablet-sideload" style="color: #ffaa00; margin: 0 12px; font-size: 14px;">Fire Tablet Sideloading</a>
+        <span style="color: #ccc;">|</span>
+        <a href="/guides/music-assistant-setup" style="color: #ffaa00; margin: 0 12px; font-size: 14px;">Music Assistant Setup</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Feature Deep-Dives -->
+  <section class="feature-deep-dives">
+    <h2>A Closer Look</h2>
+    <p class="section-subtitle">Tap a feature to learn more about what Chickadee brings to your smart home.</p>
+
+    <!-- 1. Screensaver & Photos -->
+    <div class="feature-deep-dive open" id="screensaver">
+      <div class="feature-deep-dive-header" onclick="toggleDeepDive(this)">
+        <div class="dd-icon">
+          <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+        </div>
+        <div class="dd-title">
+          <h3>Screensaver & Photos</h3>
+          <p>Photo slideshows from multiple sources with motion-activated wake</p>
+        </div>
+        <div class="dd-chevron"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></div>
+      </div>
+      <div class="feature-deep-dive-body">
+        <div class="feature-deep-dive-content">
+          <div class="dd-image">
+            <img src="/v2/artwork/chickadee-kiosk-screensaver.png" alt="Chickadee screensaver showing photo with clock and weather overlay">
+          </div>
+          <div class="dd-copy">
+            <h4>Beautiful when idle, ready when you need it</h4>
+            <p>When your tablet isn't in use, the screensaver takes over with a photo slideshow, a clock overlay, and current weather. Pull photos from your self-hosted <strong>Immich</strong> library, <strong>Google Drive</strong>, <strong>Unsplash</strong> for curated backgrounds, or Home Assistant's <strong>My Media</strong> for local files.</p>
+            <p>Switch between sources on the fly, choose specific albums or folders, and let Chickadee rotate through your collection automatically. Walk up and the tablet wakes instantly — Chickadee can use the camera for <strong>motion</strong> or <strong>face detection</strong> so your dashboard is ready before you even touch the screen.</p>
+            <a href="/guides/screensaver-setup" class="guide-link">Screensaver setup &rarr;</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. Voice Control -->
+    <div class="feature-deep-dive open" id="voice-control">
+      <div class="feature-deep-dive-header" onclick="toggleDeepDive(this)">
+        <div class="dd-icon upgrade">
+          <svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v4M8 23h8"/></svg>
+        </div>
+        <div class="dd-title">
+          <h3>Voice Control</h3>
+          <p>Voice commands with a custom wake word</p>
+        </div>
+        <div class="dd-chevron"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></div>
+      </div>
+      <div class="feature-deep-dive-body">
+        <div class="feature-deep-dive-content reverse">
+          <div class="dd-image">
+            <img src="/v2/artwork/chickadee-kiosk-voice-response.png" alt="Chickadee voice control responding to a question">
+          </div>
+          <div class="dd-copy">
+            <h4>Say "Chickadee" and take control</h4>
+            <p>Turn any tablet into a voice-controlled smart home hub. Chickadee's custom-trained wake word runs entirely on-device — no cloud listening, no always-on microphone streaming. When you say "Chickadee," your command is processed locally using natural language understanding, then routed to Home Assistant to execute. Chickadee also supports other wake words such as "Alexa" and "Hey Jarvis."</p>
+            <p>Control lights, run scenes, check the weather, set timers, and more. Chickadee speaks responses back, and you can choose whether responses are read aloud, displayed on screen, or both.</p>
+            <a href="/guides/voice-control-setup" class="guide-link">Voice setup guide &rarr;</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. Lock Mode -->
+    <div class="feature-deep-dive open" id="lock-mode">
+      <div class="feature-deep-dive-header" onclick="toggleDeepDive(this)">
+        <div class="dd-icon">
+          <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        </div>
+        <div class="dd-title">
+          <h3>Lock Mode</h3>
+          <p>Keep your tablet locked down for kiosk use</p>
+        </div>
+        <div class="dd-chevron"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></div>
+      </div>
+      <div class="feature-deep-dive-body">
+        <div class="feature-deep-dive-content">
+          <div class="dd-image">
+            <img src="/v2/artwork/chickadee-kiosk-lock-screen.png" alt="Chickadee Lock App dialog with PIN protection">
+          </div>
+          <div class="dd-copy">
+            <h4>Set it and forget it</h4>
+            <p>Lock Mode keeps your tablet dedicated to its dashboard. It prevents users from accidentally exiting the app, navigating to other apps, or changing settings. Protect it with an optional PIN code so only authorized users can unlock.</p>
+            <p>Combined with Android's Device Owner mode, Chickadee can fully lock the tablet to a single-app kiosk experience — perfect for wall-mounted panels and shared family displays.</p>
+            <a href="/guides/chickadee-kiosk-features#tips" class="guide-link">Lock mode guide &rarr;</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. Music Player -->
+    <div class="feature-deep-dive open" id="music-player">
+      <div class="feature-deep-dive-header" onclick="toggleDeepDive(this)">
+        <div class="dd-icon">
+          <svg viewBox="0 0 24 24"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+        </div>
+        <div class="dd-title">
+          <h3>Music Player</h3>
+          <p>Multi-room audio powered by Music Assistant</p>
+        </div>
+        <div class="dd-chevron"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></div>
+      </div>
+      <div class="feature-deep-dive-body">
+        <div class="feature-deep-dive-content reverse">
+          <div class="dd-image">
+            <img src="/v2/artwork/chickadee-kiosk-speaker-selector.png" alt="Chickadee music player with multi-room speaker selection">
+          </div>
+          <div class="dd-copy">
+            <h4>Music everywhere, controlled from anywhere</h4>
+            <p>Chickadee integrates with Music Assistant to turn your tablets into a multi-room audio system. Play music from Spotify, YouTube Music, or your local library — and sync playback across every Chickadee tablet in your home.</p>
+            <p>Control playback from the sidebar, via voice ("Chickadee, play jazz in the kitchen"), or through Home Assistant automations. Each tablet is a speaker, a controller, or both.</p>
+            <a href="/guides/music-assistant-setup" class="guide-link">Music Assistant setup &rarr;</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5. Video Streaming -->
+    <div class="feature-deep-dive open" id="video-streaming">
+      <div class="feature-deep-dive-header" onclick="toggleDeepDive(this)">
+        <div class="dd-icon">
+          <svg viewBox="0 0 24 24"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
+        </div>
+        <div class="dd-title">
+          <h3>Video Streaming</h3>
+          <p>Live camera feeds and Frigate recording playback on your dashboard</p>
+        </div>
+        <div class="dd-chevron"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></div>
+      </div>
+      <div class="feature-deep-dive-body">
+        <div class="feature-deep-dive-content">
+          <div class="dd-image">
+            <img src="/v2/artwork/video-streaming-hero.png" alt="Chickadee dashboard showing a live pool camera feed and a strip of camera thumbnails">
+          </div>
+          <div class="dd-copy">
+            <h4>Keep an eye on every room</h4>
+            <p>Bring your security cameras right onto the dashboard. Chickadee shows live feeds from any RTSP, go2rtc, or Home Assistant camera — docked in a sidebar strip or floating over your dashboard. Have a feed pop up automatically when motion is detected or a door opens, with an optional chime, and choose how each tablet in your home reacts.</p>
+            <p>For <strong>Frigate</strong> cameras, Chickadee adds a full recording timeline. Scrub back through the day, replay detected events from a thumbnail list, and jump back to live with a tap — all without leaving your dashboard. You can even turn a spare Chickadee tablet into a camera the rest of your home can watch.</p>
+            <a href="/guides/video-feeds-setup" class="guide-link">Video feeds setup &rarr;</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 6. Battery Management -->
+    <div class="feature-deep-dive open" id="battery-management">
+      <div class="feature-deep-dive-header" onclick="toggleDeepDive(this)">
+        <div class="dd-icon">
+          <svg viewBox="0 0 24 24"><rect x="2" y="6" width="16" height="12" rx="2"/><path d="M22 10v4"/><polyline points="11 9 9 12 13 12 11 15"/></svg>
+        </div>
+        <div class="dd-title">
+          <h3>Battery Management</h3>
+          <p>Built-in charge control for always-on tablets</p>
+        </div>
+        <div class="dd-chevron"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></div>
+      </div>
+      <div class="feature-deep-dive-body">
+        <div class="feature-deep-dive-content reverse">
+          <div class="dd-image">
+            <img src="/v2/artwork/chickadee-battery-management.png" alt="Chickadee control center showing battery management">
+          </div>
+          <div class="dd-copy">
+            <h4>Keep your tablet healthy, permanently plugged in</h4>
+            <p>Wall-mounted tablets live on the charger 24/7, which degrades battery life fast. Chickadee's built-in battery management solves this by automatically cycling the charge between configurable thresholds — no Home Assistant automations or smart plugs required.</p>
+            <p>Set your preferred charge range (e.g., 20%–80%) and Chickadee handles the rest. Monitor battery health and charging status right from the Control Center.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 7. Home Assistant Integration -->
+    <div class="feature-deep-dive open" id="home-assistant">
+      <div class="feature-deep-dive-header" onclick="toggleDeepDive(this)">
+        <div class="dd-icon">
+          <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        </div>
+        <div class="dd-title">
+          <h3>Home Assistant Integration</h3>
+          <p>Dashboard hosting, sidebar control, and a Fully Kiosk-compatible API</p>
+        </div>
+        <div class="dd-chevron"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></div>
+      </div>
+      <div class="feature-deep-dive-body">
+        <div class="feature-deep-dive-content">
+          <div class="dd-image">
+            <img src="/v2/artwork/Chickadee-kiosk-integration.png" alt="Chickadee integration panel in Home Assistant">
+          </div>
+          <div class="dd-copy">
+            <h4>Your dashboards, front and center</h4>
+            <p>Connect Chickadee to your Home Assistant instance and display any dashboard in a clean, full-screen kiosk view. Hide the HA sidebar and tab bar for a distraction-free experience, or keep them visible for quick navigation.</p>
+            <p>Chickadee includes a built-in REST API that's backwards compatible with Home Assistant's Fully Kiosk Browser integration. If you're migrating from Fully Kiosk, your existing automations and scripts will work out of the box — no reconfiguration needed.</p>
+            <a href="/guides/home-assistant-integration" class="guide-link">Setup guide &rarr;</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Bottom CTA -->
+  <section class="bottom-cta">
+    <p style="color: #666; font-size: 1.1em; margin-bottom: 10px;">Ready to upgrade your smart home displays?</p>
+    <a href="/v2/download" class="btn-download">
+        Download Chickadee
+      </a>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>&copy; 2026 Chickadee LLC. All rights reserved.</p>
+    <div class="footer-links">
+      <a href="/privacy">Privacy Policy</a>
+      <span class="separator">|</span>
+      <a href="/terms">Terms of Service</a>
+    </div>
+  </footer>
+
+  <!-- Deep-dive toggle script -->
+  <script>
+    function toggleDeepDive(headerEl) {
+      const section = headerEl.closest('.feature-deep-dive');
+      section.classList.toggle('open');
+    }
+
+    // Open and scroll to a deep-dive section by hash
+    function openDeepDiveFromHash(hash) {
+      if (!hash) return;
+      const target = document.querySelector(hash);
+      if (target && target.classList.contains('feature-deep-dive')) {
+        target.classList.add('open');
+        setTimeout(() => target.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
+      }
+    }
+
+    // Handle initial page load with hash
+    openDeepDiveFromHash(window.location.hash);
+
+    // Handle hash changes (e.g., clicking dropdown links while already on the page)
+    window.addEventListener('hashchange', () => openDeepDiveFromHash(window.location.hash));
+  </script>
+
+  <!-- Analytics -->
+</body>
+</html>

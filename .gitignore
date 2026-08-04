@@ -1,3 +1,15 @@
 .DS_Store
 .vercel
 node_modules/
+
+# Artwork copied from the Dashie site by tools/port-from-dashie.mjs.
+# NOT committed, for two independent reasons:
+#   1. These are Dashie product screenshots renamed to chickadee-*.png. They are
+#      Dashie-branded INSIDE the pixels, so publishing them here would look like
+#      passing Dashie's UI off as Chickadee's — the exact rebadge this project is
+#      designed against (see README, "The Dashie screenshots are deliberately not
+#      reused"). They exist locally so the ported LAYOUT renders for review.
+#   2. 55 MB of binaries would be permanent in a public repo's history.
+# Re-create at any time with: node tools/port-from-dashie.mjs
+v2/artwork/
+v2/website-assets/

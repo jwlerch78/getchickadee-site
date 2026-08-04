@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chickadee for Home Assistant - Free Android Tablet Kiosk with Voice</title>
+  <meta name="description" content="A free alternative to Fully Kiosk for hosting Home Assistant dashboards on Android tablets — full-screen dashboard, photo screensaver, motion wake, &quot;Chickadee&quot; voice control, cameras, and Music Assistant. No account, no subscription.">
+  <meta name="facebook-domain-verification" content="iph06a18vjuyjspddn14vvx2yi9zae" />
+  <link rel="icon" type="image/png" href="/assets/chickadee-mark.png">
+
+  <!-- Open Graph (Facebook, Messenger, WhatsApp, LinkedIn) -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://getchickadee.org/">
+  <meta property="og:site_name" content="Chickadee for Home Assistant">
+  <meta property="og:title" content="Chickadee for Home Assistant - Free Android Tablet Kiosk with Voice">
+  <meta property="og:description" content="A free alternative to Fully Kiosk for hosting Home Assistant dashboards on Android tablets — screensaver, motion wake, &quot;Chickadee&quot; voice, cameras, and Music Assistant. No account, no subscription.">
+  <meta property="og:image" content="https://getchickadee.org/v2/website-assets/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Chickadee displaying a Home Assistant dashboard on an Android tablet">
+
+  <!-- Twitter / X (also used by iMessage, Slack, Discord) -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Chickadee for Home Assistant - Free Android Tablet Kiosk with Voice">
+  <meta name="twitter:description" content="A free alternative to Fully Kiosk for hosting Home Assistant dashboards on Android tablets — screensaver, motion wake, &quot;Chickadee&quot; voice, cameras, and Music Assistant. No account, no subscription.">
+  <meta name="twitter:image" content="https://getchickadee.org/v2/website-assets/og-image.png">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      line-height: 1.6;
+      background: #ffffff;
+      color: #424242;
+      min-height: 100vh;
+    }
+
+    /* Home Assistant Banner */
+    .ha-banner-section {
+      background: #e3f2fd;
+      padding: 5px 40px;
+      border-bottom: 1px solid #bbdefb;
+    }
+
+    .ha-banner {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .ha-banner-icon {
+      width: 20px;
+      height: 20px;
+      flex-shrink: 0;
+      order: 1;
+    }
+
+    .ha-banner-text {
+      font-size: 14px;
+      color: #495057;
+      line-height: 1.3;
+    }
+
+    .ha-banner-text strong {
+      color: #18bcf2;
+    }
+
+    .ha-banner-text a {
+      color: #ffaa00;
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    .ha-banner-text a:hover {
+      text-decoration: underline;
+    }
+
+    /* Hero Section */
+    .hero {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px 40px 10px 40px;
+      text-align: center;
+    }
+
+    .hero h1 {
+      font-size: 3em;
+      margin-bottom: 10px;
+      color: #424242;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: linear-gradient(135deg, #18bcf2 0%, #0d8bc2 100%);
+      color: white;
+      padding: 8px 20px;
+      border-radius: 20px;
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 20px;
+    }
+
+    .hero-badge img {
+      height: 20px;
+      width: auto;
+      filter: brightness(0) invert(1);
+    }
+
+    .hero .tagline {
+      font-size: 1.3em;
+      color: #ffaa00;
+      margin-bottom: 15px;
+      font-weight: 600;
+    }
+
+    .hero-description {
+      font-size: 1.1em;
+      color: #666;
+      max-width: 700px;
+      margin: 0 auto 40px auto;
+      line-height: 1.6;
+    }
+
+    .hero-description a {
+      color: #ffaa00;
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    .hero-description a:hover {
+      text-decoration: underline;
+    }
+
+    /* Carousel Section */
+    .carousel-section {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 5px 60px 60px 60px;
+    }
+
+    .carousel-container {
+      position: relative;
+      width: 100%;
+      overflow: visible;
+    }
+
+    .carousel-inner {
+      overflow: hidden;
+      border-radius: 16px;
+      border: 1px solid #e0e0e0;
+    }
+
+    .carousel-slides {
+      display: flex;
+      transition: transform 0.5s ease-in-out;
+    }
+
+    .carousel-slide {
+      min-width: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .carousel-caption {
+      background: #f8f9fa;
+      padding: 24px 40px;
+      color: #424242;
+      border-top: 1px solid #e0e0e0;
+      order: 2;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .carousel-caption h3 {
+      font-size: 1.6em;
+      margin-bottom: 6px;
+    }
+
+    .carousel-caption p {
+      font-size: 1.05em;
+      color: #666;
+      max-width: 700px;
+      margin: 0;
+    }
+
+    .carousel-slide img {
+      width: 100%;
+      height: auto;
+      display: block;
+      min-height: 350px;
+      object-fit: cover;
+      background: #f0f0f0;
+    }
+
+    .carousel-slide .placeholder-img {
+      width: 100%;
+      min-height: 350px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.5em;
+      font-weight: 500;
+    }
+
+    .coming-soon,
+    .beta {
+      display: inline-block;
+      font-size: 0.7em;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 3px;
+      margin-left: 8px;
+      vertical-align: middle;
+    }
+
+    .coming-soon {
+      background: #ffaa00;
+      color: #000;
+    }
+
+    .beta {
+      background: #1a365d;
+      color: #fff;
+    }
+
+    .cta h2 a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .cta h2 a:hover {
+      color: #ffaa00;
+    }
+
+    .carousel-nav {
+      position: absolute;
+      bottom: 20px;
+      right: 40px;
+      display: flex;
+      gap: 8px;
+    }
+
+    .carousel-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #bdbdbd;
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .carousel-dot.active {
+      background: #ffaa00;
+      transform: scale(1.2);
+    }
+
+    .carousel-dot:hover {
+      background: #9e9e9e;
+    }
+
+    .carousel-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: transparent;
+      border: none;
+      width: 40px;
+      height: 40px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+
+    .carousel-arrow:hover {
+      transform: translateY(-50%) scale(1.15);
+    }
+
+    .carousel-arrow.prev {
+      left: -50px;
+    }
+
+    .carousel-arrow.next {
+      right: -50px;
+    }
+
+    .carousel-arrow svg {
+      width: 32px;
+      height: 32px;
+      stroke: #888;
+      stroke-width: 2.5;
+      fill: none;
+    }
+
+    .carousel-arrow:hover svg {
+      stroke: #ffaa00;
+    }
+
+    .hero-image {
+      max-width: 800px;
+      width: 100%;
+      margin: 40px auto;
+      border-radius: 12px;
+      box-shadow: 0 20px 60px rgba(255, 106, 0, 0.2);
+    }
+
+    /* Features Section */
+    .features {
+      max-width: 1200px;
+      margin: 60px auto;
+      padding: 0 40px;
+    }
+
+    .features h2 {
+      text-align: center;
+      font-size: 2.5em;
+      margin-bottom: 50px;
+      color: #424242;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 40px;
+      margin-bottom: 60px;
+    }
+
+    .feature-card {
+      background: #f9f9f9;
+      padding: 30px;
+      border-radius: 12px;
+      border: 1px solid #e0e0e0;
+      transition: all 0.3s;
+    }
+
+    .feature-card:hover {
+      background: #ffffff;
+      border-color: #ffaa00;
+      transform: translateY(-5px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    }
+
+    .feature-icon {
+      width: 48px;
+      height: 48px;
+      margin: 0 auto 20px auto;
+      stroke: #ffaa00;
+      stroke-width: 2;
+      fill: none;
+      display: block;
+    }
+
+    .feature-card h3 {
+      font-size: 1.5em;
+      margin-bottom: 15px;
+      color: #424242;
+      text-align: center;
+    }
+
+    .feature-card p {
+      color: #666666;
+      font-size: 1.1em;
+      text-align: center;
+    }
+
+    /* Platforms Section */
+    .platforms {
+      max-width: 1200px;
+      margin: 80px auto;
+      padding: 0 40px;
+      text-align: center;
+    }
+
+    .platforms h2 {
+      font-size: 2.5em;
+      margin-bottom: 30px;
+      color: #424242;
+    }
+
+    .platforms p {
+      font-size: 1.2em;
+      color: #666666;
+      margin-bottom: 40px;
+    }
+
+    .platform-list {
+      display: flex;
+      justify-content: center;
+      gap: 50px;
+      flex-wrap: wrap;
+    }
+
+    .platform-item {
+      font-size: 1.3em;
+      color: #424242;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .platform-icon {
+      width: 32px;
+      height: 32px;
+      stroke: #ffaa00;
+      stroke-width: 2;
+      fill: none;
+    }
+
+    /* CTA Section */
+    .cta {
+      max-width: 800px;
+      margin: 80px auto;
+      padding: 60px 40px;
+      text-align: center;
+      background: #f9f9f9;
+      border-radius: 12px;
+      border: 2px solid #ffaa00;
+    }
+
+    .cta h2 {
+      font-size: 2.5em;
+      margin-bottom: 20px;
+      color: #424242;
+    }
+
+    .cta p {
+      font-size: 1.2em;
+      color: #666666;
+      margin-bottom: 30px;
+    }
+
+    .btn-cta {
+      background: #ffaa00;
+      color: #ffffff;
+      padding: 16px 48px;
+      border: none;
+      border-radius: 8px;
+      font-size: 1.2em;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .btn-cta:hover {
+      background: #ffbb22;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(255, 170, 0, 0.4);
+    }
+
+    /* Footer */
+    .footer {
+      max-width: 1200px;
+      margin: 80px auto 0;
+      padding: 40px;
+      text-align: center;
+      border-top: 1px solid #e0e0e0;
+      color: #999999;
+    }
+
+    .footer-links {
+      margin-top: 20px;
+    }
+
+    .footer-links a {
+      color: #666666;
+      text-decoration: none;
+      margin: 0 15px;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover {
+      color: #ffaa00;
+    }
+
+    .footer-links .separator {
+      color: #cccccc;
+    }
+
+    /* Mobile Responsive */
+    @media (max-width: 768px) {
+      .header-wrapper {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .ha-banner-section {
+        padding: 5px 15px;
+        order: 2;
+      }
+
+      .ha-banner {
+        flex-direction: row;
+        justify-content: center;
+        text-align: center;
+        gap: 8px;
+      }
+
+      .ha-banner-text {
+        font-size: 14px;
+      }
+
+      .ha-banner-icon {
+        width: 18px;
+        height: 18px;
+      }
+
+      .hero-carousel-wrapper {
+        flex-direction: column;
+        padding: 30px 20px 40px 20px;
+        gap: 30px;
+      }
+
+      .hero {
+        flex: none;
+        text-align: center;
+      }
+
+      .hero h1 {
+        font-size: 2.2em;
+      }
+
+      .hero .tagline {
+        font-size: 1.1em;
+      }
+
+      .carousel-section {
+        max-width: 100%;
+      }
+
+      .carousel-slide img,
+      .carousel-slide .placeholder-img {
+        min-height: 220px;
+      }
+
+      .carousel-caption {
+        padding: 16px 20px;
+      }
+
+      .carousel-caption h3 {
+        font-size: 1.2em;
+      }
+
+      .carousel-caption p {
+        font-size: 0.9em;
+      }
+
+      .carousel-arrow {
+        display: none;
+      }
+
+      .carousel-nav {
+        right: 20px;
+      }
+
+      .features h2,
+      .platforms h2,
+      .cta h2 {
+        font-size: 2em;
+      }
+
+      .features-grid {
+        grid-template-columns: 1fr;
+        gap: 30px;
+      }
+
+      .platform-list {
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      .cta {
+        margin: 60px 20px;
+        padding: 40px 20px;
+      }
+    }
+
+  </style>
+</head>
+<body>
+  <!-- Header wrapper for mobile reordering -->
+  <div class="header-wrapper">
+    <!-- Home Assistant Banner -->
+    <div class="ha-banner-section">
+      <div class="ha-banner">
+        <img class="ha-banner-icon" src="/v2/artwork/icon-homeassistant-blue.svg" alt="Home Assistant">
+        <div class="ha-banner-text">
+          <strong>No account, no subscription.</strong> Install it on your tablet, point it at Home Assistant, done. <a href="/v2/download">Download</a>
+        </div>
+      </div>
+    </div>
+
+  <!-- Shared Header/Navigation -->
+  <script src="/v2/components/header.js"></script>
+  </div><!-- end header-wrapper -->
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <h1>A Smarter Smart Home</h1>
+
+    <div class="hero-badge">
+      <img src="/v2/artwork/icon-homeassistant-blue.svg" alt="Home Assistant">
+      For Home Assistant
+    </div>
+
+    <p class="tagline">
+      A free alternative to Fully Kiosk for hosting your dashboards on Android tablets. Voice enable it for an even smarter smart home.
+    </p>
+
+    <p class="hero-description">
+      Chickadee provides easy hosting of Home Assistant dashboards on Android tablets.
+      Get your smart home dashboard up and running in minutes with a clean, purpose-built
+      kiosk experience. Add voice activation and say &ldquo;Chickadee&rdquo; to control your devices.
+      <a href="/v2/download">Download Chickadee</a>
+    </p>
+  </section>
+
+  <!-- Carousel Section -->
+  <section class="carousel-section">
+    <div class="carousel-container">
+      <div class="carousel-inner">
+        <div class="carousel-slides" id="carousel-slides">
+        <!-- Slide 1: Your dashboard, full screen -->
+        <div class="carousel-slide">
+          <div class="carousel-caption">
+            <h3>Your dashboard, full screen</h3>
+            <p>Chickadee renders your existing Home Assistant dashboard edge to edge on any Android tablet &mdash; no browser chrome, no address bar, no sleeping screen. <a href="/v2/features">See how it works</a></p>
+          </div>
+          <img src="/v2/artwork/Chickadee-kiosk-integration.png" alt="Chickadee displaying a Home Assistant dashboard full screen on a wall tablet">
+        </div>
+
+        <!-- Slide 2: Screensaver & motion wake -->
+        <div class="carousel-slide">
+          <div class="carousel-caption">
+            <h3>Photos when idle, dashboard on approach</h3>
+            <p>Fall back to a photo screensaver from Immich, Unsplash, or your HA media folder &mdash; then wake to the dashboard on motion or a face. <a href="/v2/features#screensaver">Learn more</a></p>
+          </div>
+          <img src="/v2/artwork/chickadee-kiosk-screensaver.png" alt="Chickadee photo screensaver running on an idle wall panel">
+        </div>
+
+        <!-- Slide 3: Voice -->
+        <div class="carousel-slide">
+          <div class="carousel-caption">
+            <h3>Say &ldquo;Chickadee&rdquo;</h3>
+            <p>Wake word, speech to text, and spoken answers on the tablet itself &mdash; wired straight into HA Assist, or routed to your own local model. <a href="/v2/voice">Learn more</a></p>
+          </div>
+          <img src="/v2/artwork/chickadee-kiosk-voice-response.png" alt="Chickadee answering a voice question on a Home Assistant panel">
+        </div>
+
+        <!-- Slide 4: Cameras -->
+        <div class="carousel-slide">
+          <div class="carousel-caption">
+            <h3>Cameras that pop up when it matters</h3>
+            <p>Stream RTSP and Frigate feeds, auto-surface them on motion, and scrub recordings on an on-screen timeline. <a href="/v2/features#video-streaming">Learn more</a></p>
+          </div>
+          <img src="/v2/artwork/video-streaming-hero.png" alt="Chickadee showing a live camera feed over a Home Assistant dashboard">
+        </div>
+
+        <!-- Slide 5: Music Assistant -->
+        <div class="carousel-slide">
+          <div class="carousel-caption">
+            <h3>Your tablet is a speaker, too</h3>
+            <p>Use the tablet as a Music Assistant player, pick a target speaker, and control multi-room audio without leaving the dashboard. <a href="/v2/features#music-player">Learn more</a></p>
+          </div>
+          <img src="/v2/artwork/chickadee-kiosk-speaker-selector.png" alt="Chickadee speaker selector for Music Assistant playback">
+        </div>
+        </div>
+      </div>
+
+      <!-- Navigation arrows -->
+      <button class="carousel-arrow prev" onclick="moveCarousel(-1)">
+        <svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
+      <button class="carousel-arrow next" onclick="moveCarousel(1)">
+        <svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+      </button>
+
+      <!-- Dots navigation -->
+      <div class="carousel-nav" id="carousel-nav">
+        <button class="carousel-dot active" onclick="goToSlide(0)"></button>
+        <button class="carousel-dot" onclick="goToSlide(1)"></button>
+        <button class="carousel-dot" onclick="goToSlide(2)"></button>
+        <button class="carousel-dot" onclick="goToSlide(3)"></button>
+        <button class="carousel-dot" onclick="goToSlide(4)"></button>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    // Carousel functionality
+    let currentSlide = 0;
+    const totalSlides = 5;
+    let autoSlideInterval = null;
+
+    function updateCarousel() {
+      const slides = document.getElementById('carousel-slides');
+      const dots = document.querySelectorAll('.carousel-dot');
+
+      slides.style.transform = `translateX(-${currentSlide * 100}%)`;
+
+      dots.forEach((dot, index) => {
+        dot.classList.toggle('active', index === currentSlide);
+      });
+    }
+
+    function stopAutoSlide() {
+      if (autoSlideInterval) {
+        clearInterval(autoSlideInterval);
+        autoSlideInterval = null;
+      }
+    }
+
+    function startAutoSlide() {
+      stopAutoSlide();
+      autoSlideInterval = setInterval(() => {
+        currentSlide = (currentSlide + 1) % totalSlides;
+        updateCarousel();
+      }, 15000);
+    }
+
+    function moveCarousel(direction) {
+      currentSlide = (currentSlide + direction + totalSlides) % totalSlides;
+      updateCarousel();
+      startAutoSlide();
+    }
+
+    function goToSlide(index) {
+      currentSlide = index;
+      updateCarousel();
+      startAutoSlide();
+    }
+
+    // Start auto-rotation
+    startAutoSlide();
+
+    // Pause on hover
+    const container = document.querySelector('.carousel-container');
+    container.addEventListener('mouseenter', stopAutoSlide);
+    container.addEventListener('mouseleave', startAutoSlide);
+
+    // Touch swipe support
+    let touchStartX = 0;
+    let touchEndX = 0;
+
+    container.addEventListener('touchstart', (e) => {
+      touchStartX = e.changedTouches[0].screenX;
+      stopAutoSlide();
+    }, { passive: true });
+
+    container.addEventListener('touchend', (e) => {
+      touchEndX = e.changedTouches[0].screenX;
+      const swipeThreshold = 50;
+      const diff = touchStartX - touchEndX;
+
+      if (Math.abs(diff) > swipeThreshold) {
+        if (diff > 0) {
+          currentSlide = (currentSlide + 1) % totalSlides;
+        } else {
+          currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+        }
+        updateCarousel();
+      }
+      startAutoSlide();
+    }, { passive: true });
+  </script>
+
+  <!-- Platforms Section -->
+  <section class="platforms">
+    <h2>Runs on the tablet you already have</h2>
+    <p>Any Android tablet &mdash; wall-mounted, on a stand, or propped in the kitchen.</p>
+    <div class="platform-list">
+      <div class="platform-item">
+        <svg class="platform-icon" viewBox="0 0 24 24">
+          <rect x="2" y="4" width="20" height="16" rx="2" />
+          <line x1="18" y1="12" x2="18.01" y2="12" />
+        </svg>
+        Amazon Fire tablets
+      </div>
+      <div class="platform-item">
+        <svg class="platform-icon" viewBox="0 0 24 24">
+          <rect x="2" y="4" width="20" height="16" rx="2" />
+          <line x1="18" y1="12" x2="18.01" y2="12" />
+        </svg>
+        Samsung, Lenovo &amp; other Android
+      </div>
+      <div class="platform-item">
+        <svg class="platform-icon" viewBox="0 0 24 24">
+          <rect x="3" y="11" width="18" height="11" rx="2" />
+          <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+        </svg>
+        Wall-mounted kiosk panels
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="features">
+    <h2>What's Included</h2>
+    <div class="features-grid">
+      <div class="feature-card">
+        <svg class="feature-icon" viewBox="0 0 24 24">
+          <rect x="3" y="3" width="18" height="18" rx="2" />
+          <circle cx="8.5" cy="8.5" r="1.5" />
+          <polyline points="21 15 16 10 5 21" />
+        </svg>
+        <h3>Screensaver &amp; Photos</h3>
+        <p>Photo slideshows from multiple sources with motion-activated wake.</p>
+      </div>
+
+      <div class="feature-card">
+        <svg class="feature-icon" viewBox="0 0 24 24">
+          <rect x="3" y="11" width="18" height="11" rx="2" />
+          <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+        </svg>
+        <h3>Lock Mode</h3>
+        <p>Lock your tablet with an optional PIN to prevent unintended use.</p>
+      </div>
+
+      <div class="feature-card">
+        <svg class="feature-icon" viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r="10" />
+          <line x1="12" y1="8" x2="12" y2="12" />
+          <line x1="12" y1="16" x2="12.01" y2="16" />
+        </svg>
+        <h3>Free to Use</h3>
+        <p>No account and no subscription &mdash; install it and point it at Home Assistant.</p>
+      </div>
+
+      <div class="feature-card">
+        <svg class="feature-icon" viewBox="0 0 24 24">
+          <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z" />
+          <path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v4M8 23h8" />
+        </svg>
+        <h3>Voice Control</h3>
+        <p>&ldquo;Chickadee&rdquo; wake word with natural language voice commands.</p>
+      </div>
+
+      <div class="feature-card">
+        <svg class="feature-icon" viewBox="0 0 24 24">
+          <polygon points="23 7 16 12 23 17 23 7" />
+          <rect x="1" y="5" width="15" height="14" rx="2" />
+        </svg>
+        <h3>Video Streaming</h3>
+        <p>Stream your tablet's camera as an RTSP feed and view incoming feeds on demand or when triggered.</p>
+      </div>
+
+      <div class="feature-card">
+        <svg class="feature-icon" viewBox="0 0 24 24">
+          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+          <polyline points="9 22 9 12 15 12 15 22" />
+        </svg>
+        <h3>Home Assistant Integration</h3>
+        <p>Display any dashboard with a built-in API that's backwards compatible with the Fully Kiosk integration.</p>
+      </div>
+
+      <div class="feature-card">
+        <svg class="feature-icon" viewBox="0 0 24 24">
+          <rect x="2" y="6" width="16" height="12" rx="2" />
+          <path d="M22 10v4" />
+          <polyline points="11 9 9 12 13 12 11 15" />
+        </svg>
+        <h3>Battery Management</h3>
+        <p>Manage your tablet's charging without HA automations for optimal battery longevity.</p>
+      </div>
+
+      <div class="feature-card">
+        <svg class="feature-icon" viewBox="0 0 24 24">
+          <path d="M9 18V5l12-2v13" />
+          <circle cx="6" cy="18" r="3" />
+          <circle cx="18" cy="16" r="3" />
+        </svg>
+        <h3>Music Player</h3>
+        <p>Play music across your Chickadee tablets using multi-room audio with Music Assistant.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="cta">
+    <h2><a href="/v2/download">Get Started</a></h2>
+    <p>Ready to host your Home Assistant dashboards on Android? Download Chickadee and get going.</p>
+    <a href="/v2/download" class="btn-cta">Download Chickadee</a>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>&copy; 2026 Chickadee LLC. All rights reserved.</p>
+    <div class="footer-links">
+      <a href="/privacy">Privacy Policy</a>
+      <span class="separator">•</span>
+      <a href="/terms">Terms of Service</a>
+    </div>
+  </footer>
+
+  <!-- Analytics -->
+</body>
+</html>
