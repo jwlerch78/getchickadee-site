@@ -106,29 +106,41 @@ function port() {
     report.pages.push({ dst, kb: (before / 1024).toFixed(1) });
   }
 
-  // Images come across so the LAYOUT renders for review. The product screenshots
-  // are Dashie-branded INSIDE the pixels and cannot be fixed by substitution —
-  // they are must-replace before any publish. Recorded in the report, not hidden.
+  // Copy ONLY the assets the ported pages actually reference.
   //
-  // FILES ARE RENAMED TOO, with the same name substitution the text rules apply.
-  // Otherwise the pages reference `chickadee-battery-management.png` while disk
-  // holds `dashie-battery-management.png` — a broken image that no text rule can
-  // fix, because the mismatch is between the reference and the FILENAME.
-  for (const d of ['artwork', 'website-assets']) {
-    const from = join(SRC, d);
-    if (!existsSync(from)) continue;
-    cpSync(from, join(DST, d), {
-      recursive: true,
-      // rename on the way in, so reference and file agree by construction
-      filter: () => true,
-    });
-    for (const f of readdirSync(join(DST, d))) {
-      const renamed = f.replace(/Dashie/g, 'Chickadee').replace(/dashie/g, 'chickadee');
-      if (renamed !== f) {
-        renameSync(join(DST, d, f), join(DST, d, renamed));
-        report.renamedAssets = (report.renamedAssets || 0) + 1;
-      }
+  // The first version copied both source directories wholesale: 104 files, 55 MB,
+  // of which the four pages use twelve. Everything else was unused Dashie
+  // marketing art, and a public repo's history is permanent — so the bulk copy
+  // would have put 90-odd files nobody asked for beyond reach of a later delete.
+  //
+  // Names are rewritten to match the references (dashie-x.png -> chickadee-x.png),
+  // so the reverse map is applied here to find the SOURCE file. A file with no
+  // brand in its name (badge-google-play.png) maps to itself.
+  const referenced = new Set();
+  for (const dst of Object.values(PAGES)) {
+    const s = readFileSync(join(DST, dst), 'utf8');
+    for (const m of s.matchAll(/["'](\/v2\/(artwork|website-assets)\/[^"']+)["']/g)) {
+      referenced.add(m[1].replace('/v2/', ''));
     }
+  }
+
+  report.assets = { copied: 0, missing: [] };
+  for (const rel of referenced) {
+    const dir = dirname(rel);
+    const base = rel.slice(dir.length + 1);
+    const candidates = [
+      base.replace(/Chickadee/g, 'Dashie').replace(/chickadee/g, 'dashie'),
+      base,
+    ];
+    const from = candidates.map((c) => join(SRC, dir, c)).find(existsSync);
+    if (!from) {
+      report.assets.missing.push(rel);
+      continue;
+    }
+    const to = join(DST, rel);
+    mkdirSync(dirname(to), { recursive: true });
+    cpSync(from, to);
+    report.assets.copied++;
   }
 
   return report;
