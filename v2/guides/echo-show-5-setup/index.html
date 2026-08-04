@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Turn an Echo Show 5 into an HA display with voice &amp; music using LineageOS - Chickadee</title>
+  <link rel="icon" type="image/png" href=".././assets/chickadee-mark.png">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-padding-top: 80px;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      line-height: 1.6;
+      background: #ffffff;
+      color: #424242;
+      min-height: 100vh;
+    }
+
+    /* Breadcrumb */
+    .breadcrumb {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px 40px 0 40px;
+    }
+
+    .breadcrumb a {
+      color: #ffaa00;
+      text-decoration: none;
+    }
+
+    .breadcrumb a:hover {
+      text-decoration: underline;
+    }
+
+    .breadcrumb span {
+      color: #999;
+      margin: 0 8px;
+    }
+
+    /* Article */
+    .article {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 30px 40px 60px 40px;
+    }
+
+    .article-header {
+      margin-bottom: 30px;
+    }
+
+    .article-tag {
+      display: inline-block;
+      background: #18bcf2;
+      color: white;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 4px 12px;
+      border-radius: 4px;
+      margin-bottom: 15px;
+    }
+
+    .article h1 {
+      font-size: 2.2em;
+      color: #424242;
+      margin-bottom: 10px;
+    }
+
+    .article-meta {
+      color: #888;
+      font-size: 14px;
+    }
+
+    /* Article content */
+    .article-content {
+      font-size: 1.05em;
+    }
+
+    .article-content p {
+      margin-bottom: 18px;
+    }
+
+    .article-content a {
+      color: #ffaa00;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .article-content a:hover {
+      text-decoration: underline;
+    }
+
+    .article-content h2 {
+      font-size: 1.6em;
+      color: #424242;
+      margin: 40px 0 14px 0;
+      padding-bottom: 8px;
+      border-bottom: 2px solid #f0f0f0;
+    }
+
+    .article-content h3 {
+      font-size: 1.2em;
+      color: #424242;
+      margin: 24px 0 8px 0;
+    }
+
+    .article-content h4 {
+      font-size: 1.05em;
+      color: #555;
+      margin: 18px 0 6px 0;
+    }
+
+    .article-content ul,
+    .article-content ol {
+      margin: 0 0 20px 26px;
+      color: #555;
+    }
+
+    .article-content li {
+      margin-bottom: 8px;
+    }
+
+    .article-content strong {
+      color: #424242;
+    }
+
+    /* Hero shot */
+    .hero-figure {
+      background: #fafafa;
+      border: 1px solid #eeeeee;
+      border-radius: 16px;
+      padding: 28px 24px;
+      text-align: center;
+      margin: 6px 0 26px;
+    }
+
+    .hero-figure img {
+      width: 100%;
+      max-width: 480px;
+      height: auto;
+    }
+
+    /* Setup-option headings */
+    .option-h {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .option-badge {
+      display: inline-block;
+      background: #ffaa00;
+      color: #ffffff;
+      font-size: 0.6em;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: 5px;
+      white-space: nowrap;
+    }
+
+    .option-badge.bonus {
+      background: #18bcf2;
+    }
+
+    /* Setup-step blocks */
+    .setup-step {
+      background: #fafafa;
+      border-left: 4px solid #ffaa00;
+      border-radius: 6px;
+      padding: 16px 22px;
+      margin: 14px 0;
+    }
+
+    .setup-step h3 {
+      margin-top: 0;
+      margin-bottom: 6px;
+    }
+
+    .setup-step p:last-child {
+      margin-bottom: 0;
+      color: #555;
+    }
+
+    /* Code / terminal blocks */
+    .code-block {
+      background: #1e1e2e;
+      color: #e6e6e6;
+      border-radius: 8px;
+      padding: 16px 20px;
+      margin: 14px 0;
+      font-family: 'SF Mono', Menlo, Monaco, Consolas, 'Courier New', monospace;
+      font-size: 0.88em;
+      line-height: 1.55;
+      overflow-x: auto;
+      white-space: pre;
+    }
+
+    .code-block .cmt {
+      color: #8a8aa0;
+    }
+
+    p code,
+    li code {
+      background: #f0f0f0;
+      border-radius: 4px;
+      padding: 1px 6px;
+      font-family: 'SF Mono', Menlo, Monaco, Consolas, 'Courier New', monospace;
+      font-size: 0.88em;
+      color: #b5179e;
+    }
+
+    /* Info callout */
+    .info-callout {
+      background: #f4f7fb;
+      border: 1px solid #d6e2f0;
+      border-radius: 10px;
+      padding: 16px 20px;
+      margin: 18px 0;
+      color: #555;
+      font-size: 0.95em;
+    }
+
+    .info-callout strong {
+      color: #1a365d;
+    }
+
+    /* Warning callout */
+    .warn-callout {
+      background: #fff8ec;
+      border: 1px solid #f3d6a0;
+      border-radius: 10px;
+      padding: 16px 20px;
+      margin: 18px 0;
+      color: #5c4a26;
+      font-size: 0.95em;
+    }
+
+    .warn-callout strong {
+      color: #8a5a00;
+    }
+
+    /* Footer */
+    .footer {
+      max-width: 800px;
+      margin: 60px auto 0;
+      padding: 40px;
+      text-align: center;
+      border-top: 1px solid #e0e0e0;
+      color: #999999;
+    }
+
+    .footer-links {
+      margin-top: 20px;
+    }
+
+    .footer-links a {
+      color: #666666;
+      text-decoration: none;
+      margin: 0 15px;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover {
+      color: #ffaa00;
+    }
+
+    /* Mobile Responsive */
+    @media (max-width: 768px) {
+      .breadcrumb,
+      .article {
+        padding-left: 20px;
+        padding-right: 20px;
+      }
+
+      .article h1 {
+        font-size: 1.6em;
+      }
+
+      .article-content h2 {
+        font-size: 1.35em;
+      }
+
+      .setup-step {
+        padding: 16px 18px;
+      }
+
+      .code-block {
+        font-size: 0.8em;
+        padding: 14px 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Shared Header/Navigation -->
+  <script src="/v2/components/header.js"></script>
+
+  <!-- Breadcrumb -->
+  <div class="breadcrumb">
+    <a href="/v2/guides/">How To Guides</a>
+    <span>/</span>
+    <a href="#">Echo Show 5 + LineageOS</a>
+  </div>
+
+  <!-- Article -->
+  <article class="article">
+    <header class="article-header">
+      <span class="article-tag">Home Assistant</span>
+      <h1>Turn an Echo Show 5 into an HA display with voice &amp; music using LineageOS</h1>
+      <p class="article-meta">Last updated: June 2026</p>
+    </header>
+
+    <div class="article-content">
+
+      <!-- Hero shot -->
+      <!-- TODO: drop a photo of your Echo Show 5 running Chickadee at this path -->
+      <div class="hero-figure">
+        <img src="/v2/website-assets/guide-echo-show-5-hero.png"
+             alt="Amazon Echo Show 5 running the Chickadee dashboard on LineageOS">
+      </div>
+
+      <p>
+        The <strong>Amazon Echo Show 5 (2019)</strong> is a tidy little 5.5"
+        touchscreen with a great speaker and microphone &mdash; and it can be
+        found cheap secondhand. The catch is that out of the box it runs Amazon's
+        locked-down Fire OS and only does what Alexa allows. Once you replace that
+        with <strong>LineageOS</strong>, it becomes an ordinary Android device
+        &mdash; and a genuinely great compact panel for Chickadee: small footprint,
+        always-on, and a mic and speaker already built in for
+        <strong>"Chickadee" voice control</strong>.
+      </p>
+
+      <p>
+        This guide is in <strong>two parts</strong>:
+      </p>
+      <ul>
+        <li>
+          <strong>Part 1 &mdash; Put LineageOS on the Echo Show 5.</strong> This
+          is the hardware/firmware work, and it's done with excellent
+          community-maintained guides that we link to below.
+        </li>
+        <li>
+          <strong>Part 2 &mdash; Install Chickadee.</strong> Once LineageOS is
+          running, getting Chickadee on is the easy part &mdash; a couple of ADB
+          commands.
+        </li>
+      </ul>
+
+      <div class="warn-callout">
+        <strong>This is an advanced project &mdash; read this first.</strong>
+        Flashing LineageOS means <strong>unlocking the bootloader</strong> and
+        replacing the firmware, which <strong>wipes the device and voids the
+        warranty</strong>. Unlike a TV stick, this is <em>not</em> a quick,
+        trivially reversible tweak &mdash; on some units the unlock requires
+        opening the case and shorting test points, and a mistake can brick the
+        device. Only do this on an Echo Show 5 you're willing to risk, and follow
+        the community guides carefully. Chickadee isn't involved in this part and
+        can't recover a device damaged during flashing.
+      </div>
+
+      <!-- What you need -->
+      <h2 id="what-you-need">What you'll need</h2>
+      <ul>
+        <li>
+          An <strong>Echo Show 5 1st generation (2019)</strong> &mdash; codename
+          <strong><code>checkers</code></strong>. This guide is specific to that
+          model. (The 2021 2nd-gen, codename <code>cronos</code>, has its own
+          separate port &mdash; check the XDA forums if that's what you have.)
+        </li>
+        <li>
+          A computer (Mac, Windows, or Linux) with <strong>ADB and Fastboot</strong>
+          installed &mdash; the Android "platform-tools". Grab it from
+          <a href="https://developer.android.com/tools/releases/platform-tools" target="_blank" rel="noopener">developer.android.com</a>,
+          unzip it, and make sure <code>adb</code> and <code>fastboot</code> are
+          on your PATH.
+        </li>
+        <li>A USB data cable and a bit of patience.</li>
+        <li>
+          WiFi credentials for the device &mdash; you'll connect it to your
+          network after LineageOS is installed.
+        </li>
+      </ul>
+
+      <!-- ============ PART 1 ============ -->
+      <h2 id="part1" class="option-h">
+        <span class="option-badge">Part 1</span> Install LineageOS
+      </h2>
+      <p>
+        The Echo Show 5 (2019) has a mature, well-documented LineageOS port
+        thanks to the XDA community (much of it by developer <em>bengris32</em>).
+        Rather than re-publish firmware steps that change over time &mdash; and
+        that can brick a device if they're even slightly out of date &mdash; we
+        point you to the authoritative threads. Follow them top to bottom.
+      </p>
+
+      <div class="setup-step">
+        <h3>1. Unlock the bootloader &amp; install recovery (TWRP)</h3>
+        <p>
+          Start with the unlock/root/recovery thread for the 2019 model. It walks
+          through unlocking the bootloader and flashing TWRP, and includes unbrick
+          instructions if something goes sideways:
+          <a href="https://xdaforums.com/t/unlock-root-twrp-unbrick-amazon-echo-show-5-1st-gen-2019-checkers.4762900/" target="_blank" rel="noopener">[UNLOCK][ROOT][TWRP][UNBRICK] Amazon Echo Show 5 1st Gen &mdash; 2019 (checkers)</a>.
+        </p>
+      </div>
+
+      <div class="setup-step">
+        <h3>2. Flash the LineageOS ROM</h3>
+        <p>
+          Then flash the LineageOS build for <code>checkers</code> from the ROM
+          thread:
+          <a href="https://xdaforums.com/t/rom-unofficial-11-checkers-lineageos-18-1-for-the-amazon-echo-show-5-2019.4763475/" target="_blank" rel="noopener">[ROM][UNOFFICIAL][11][checkers] LineageOS 18.1 for the Amazon Echo Show 5 (2019)</a>.
+          You typically copy the ROM ZIP to the device and install it from TWRP.
+        </p>
+      </div>
+
+      <div class="info-callout">
+        <strong>Do you need Google Play?</strong> No &mdash; Chickadee is sideloaded
+        directly (Part 2), so a plain LineageOS install with no Google apps is
+        perfectly fine. If you'd <em>also</em> like the Play Store or Alexa-style
+        clock behavior on the device, there are optional community add-on guides
+        on XDA, but they're not required for Chickadee.
+      </div>
+
+      <p>
+        When you're done with Part 1, the device should boot into LineageOS and
+        connect to your WiFi like any other Android tablet. Now for the easy part.
+      </p>
+
+      <!-- ============ PART 2 ============ -->
+      <h2 id="part2" class="option-h">
+        <span class="option-badge">Part 2</span> Install Chickadee
+      </h2>
+      <p>
+        With LineageOS running, Chickadee installs just like on any Android device.
+        We'll turn on USB debugging and sideload the app over ADB.
+      </p>
+
+      <h3 id="enable-debugging">1. Enable USB debugging on LineageOS</h3>
+
+      <div class="setup-step">
+        <h3>Turn on Developer options</h3>
+        <p>
+          On the device, go to <strong>Settings → About phone</strong> (or
+          <strong>About tablet</strong>) and tap <strong>"Build number"</strong>
+          seven times. You'll see a "You are now a developer" message.
+        </p>
+      </div>
+
+      <div class="setup-step">
+        <h3>Turn on USB debugging</h3>
+        <p>
+          Go to <strong>Settings → System → Developer options</strong> and toggle
+          <strong>USB debugging</strong> ON. Plug the Echo Show 5 into your
+          computer with a USB cable, and tap <strong>"Allow"</strong> on the
+          "Allow USB debugging?" prompt that appears on the device.
+        </p>
+      </div>
+
+      <h3 id="sideload">2. Sideload the Chickadee app</h3>
+      <p>
+        From a terminal on your computer (Terminal on Mac/Linux, PowerShell on
+        Windows), confirm the device is connected, then install the
+        <strong>self-updating</strong> Chickadee build:
+      </p>
+
+      <div class="code-block"><span class="cmt"># Confirm the Echo Show 5 shows up</span>
+adb devices
+
+<span class="cmt"># Download the self-updating Chickadee app, then install it</span>
+curl -fsSL https://getchickadee.org/downloads/Chickadee-sideload-beta.apk -o Chickadee.apk
+adb install -r Chickadee.apk</div>
+
+      <p>
+        That's it &mdash; Chickadee now appears in the LineageOS app launcher. The
+        full sideloading walkthrough (including Windows tips and troubleshooting)
+        is in the
+        <a href="/v2/guides/fire-tablet-sideload">Android Sideloading guide</a> if
+        you hit any snags; the same ADB steps apply here.
+      </p>
+
+      <div class="info-callout">
+        <strong>Self-updating build.</strong> The sideloaded APK updates itself
+        automatically, so you don't need an app store on the device to stay
+        current.
+      </div>
+
+      <!-- ============ Make it dedicated ============ -->
+      <h2 id="dedicated" class="option-h">
+        <span class="option-badge bonus">Bonus</span> Make it a dedicated display
+      </h2>
+      <p>
+        Want the Echo Show 5 to boot straight into Chickadee with no LineageOS home
+        screen in the way? Set Chickadee as the <strong>home (launcher)</strong> app
+        over ADB:
+      </p>
+
+      <div class="code-block">adb shell cmd package set-home-activity com.chickadeeapp.Chickadee/.MainActivity</div>
+
+      <p>
+        Reboot and the device comes up directly in Chickadee. To get back to system
+        Settings (for example, to change WiFi), <strong>hold the BACK gesture /
+        button for about 2 seconds</strong> anywhere in Chickadee &mdash; that's your
+        escape hatch. To undo it, pick a different launcher under
+        <strong>Settings → Apps → Default apps → Home app</strong>.
+      </p>
+
+      <div class="warn-callout">
+        <strong>A note on horsepower.</strong> The Echo Show 5 (2019) has only
+        about <strong>1&nbsp;GB of RAM</strong>. It's great for a focused
+        dashboard &mdash; calendar, photos, weather, and "Chickadee" voice
+        &mdash; but it's not the device for a heavy, many-widget Home Assistant
+        dashboard with camera feeds. Keep the layout lean and it runs smoothly.
+      </div>
+
+      <div class="warn-callout">
+        <strong>Two hardware quirks on LineageOS.</strong> A couple of things
+        don't carry over from Fire OS:
+        <ul style="margin-top:10px; margin-bottom:0;">
+          <li>
+            <strong>The front camera doesn't work.</strong> The Echo Show 5's
+            camera isn't supported under the LineageOS port, so don't plan on
+            using it for video.
+          </li>
+          <li>
+            <strong>You'll need to manage screen wake yourself.</strong> Without
+            Amazon's firmware there's no built-in proximity/presence wake, so the
+            display won't turn on and off on its own. Use a
+            <strong>sleep timer</strong> to dim or blank the screen on a schedule,
+            and/or wire up the device's <strong>ambient light sensor</strong> to
+            wake it &mdash; otherwise the panel stays on 24/7.
+          </li>
+        </ul>
+      </div>
+
+      <!-- Voice -->
+      <h2 id="voice">Voice control</h2>
+      <p>
+        The Echo Show 5's built-in microphone and speaker make it a natural fit
+        for hands-free use &mdash; no USB mic or OTG adapter required. Pair it
+        with Home Assistant's voice pipeline (Whisper for speech-to-text) to drive
+        the dashboard with <strong>"Chickadee"</strong>. See the
+        <a href="/v2/guides/voice-control-setup">Voice Control guide</a> for the
+        Home Assistant side.
+      </p>
+
+      <!-- Support -->
+      <h2 id="support">Support and feedback</h2>
+      <p>
+        We're here to help and we love hearing how people are using Chickadee &mdash;
+        an Echo Show 5 reborn as a Chickadee panel is one of our favorites. Reach out
+        at <a href="mailto:support@chickadeeapp.com">support@chickadeeapp.com</a> or
+        through the website and we'll get back to you quickly.
+      </p>
+
+    </div>
+  </article>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>&copy; 2026 Chickadee LLC. All rights reserved.</p>
+    <div class="footer-links">
+      <a href="/privacy">Privacy Policy</a>
+      <span class="separator">|</span>
+      <a href="/terms">Terms of Service</a>
+    </div>
+  </footer>
+
+  <!-- Analytics -->
+</body>
+</html>

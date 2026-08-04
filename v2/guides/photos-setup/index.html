@@ -1,0 +1,997 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Photos Setup Guide - Chickadee</title>
+  <link rel="icon" type="image/png" href=".././assets/chickadee-mark.png">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      line-height: 1.6;
+      background: #ffffff;
+      color: #424242;
+      min-height: 100vh;
+    }
+
+    /* Breadcrumb */
+    .breadcrumb {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px 40px 0 40px;
+    }
+
+    .breadcrumb a {
+      color: #666;
+      text-decoration: none;
+      font-size: 14px;
+    }
+
+    .breadcrumb a:hover {
+      color: #ffaa00;
+    }
+
+    .breadcrumb span {
+      color: #999;
+      margin: 0 8px;
+    }
+
+    /* Article */
+    .article {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 30px 40px 60px 40px;
+    }
+
+    .article-header {
+      margin-bottom: 40px;
+    }
+
+    .article-tag {
+      display: inline-block;
+      background: #18bcf2;
+      color: white;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 4px 12px;
+      border-radius: 4px;
+      margin-bottom: 15px;
+    }
+
+    .article h1 {
+      font-size: 2.2em;
+      color: #424242;
+      margin-bottom: 15px;
+      line-height: 1.3;
+    }
+
+    .article-meta {
+      color: #888;
+      font-size: 14px;
+    }
+
+    .article-content h2 {
+      font-size: 1.5em;
+      color: #424242;
+      margin: 40px 0 20px 0;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #ffaa00;
+    }
+
+    .article-content h3 {
+      font-size: 1.2em;
+      color: #424242;
+      margin: 30px 0 15px 0;
+    }
+
+    .article-content h4 {
+      font-size: 1.05em;
+      color: #424242;
+      margin: 20px 0 10px 0;
+    }
+
+    .article-content p {
+      margin-bottom: 20px;
+      color: #555;
+    }
+
+    .article-content ul,
+    .article-content ol {
+      margin-bottom: 20px;
+      padding-left: 30px;
+    }
+
+    .article-content li {
+      margin-bottom: 10px;
+      color: #555;
+    }
+
+    .article-content a {
+      color: #ffaa00;
+      text-decoration: none;
+    }
+
+    .article-content a:hover {
+      text-decoration: underline;
+    }
+
+    /* Hero image */
+    .hero-image {
+      width: 100%;
+      height: auto;
+      border-radius: 12px;
+      margin: 0 0 30px 0;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      display: block;
+    }
+
+    /* Split row — text on left, image on right (50/50) */
+    .split-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 25px;
+      align-items: start;
+      margin: 0 0 20px 0;
+    }
+
+    .split-row .split-text > *:first-child {
+      margin-top: 0;
+    }
+
+    .split-row .split-text > *:last-child {
+      margin-bottom: 0;
+    }
+
+    .split-row .split-image {
+      width: 100%;
+      height: auto;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      display: block;
+    }
+
+    /* Menu screenshot — narrow, centered */
+    .menu-screenshot {
+      max-width: 420px;
+      width: 100%;
+      height: auto;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      display: block;
+      margin: 20px auto;
+    }
+
+    /* Inline code */
+    code {
+      background: #f4f4f4;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Fira Mono', 'Droid Sans Mono', monospace;
+      font-size: 0.9em;
+      color: #d63384;
+    }
+
+    /* Code blocks */
+    .code-block {
+      background: #1e1e1e;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 20px 0;
+      overflow-x: auto;
+    }
+
+    .code-block code {
+      background: transparent;
+      color: #d4d4d4;
+      padding: 0;
+      font-size: 0.85em;
+      line-height: 1.6;
+      display: block;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .code-block .comment {
+      color: #6a9955;
+    }
+
+    /* Info boxes */
+    .info-box {
+      padding: 20px;
+      border-radius: 8px;
+      margin: 20px 0;
+    }
+
+    .info-box.warning {
+      background: #fff3cd;
+      border-left: 4px solid #ffc107;
+    }
+
+    .info-box.tip {
+      background: #d1ecf1;
+      border-left: 4px solid #17a2b8;
+    }
+
+    .info-box.important {
+      background: #f8d7da;
+      border-left: 4px solid #dc3545;
+    }
+
+    .info-box h4 {
+      margin-bottom: 10px;
+      color: #424242;
+    }
+
+    .info-box p {
+      margin: 0;
+      color: #555;
+    }
+
+    /* Source cards (full sources at top) */
+    .source-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+      margin: 30px 0;
+    }
+
+    .source-card {
+      background: #f9f9f9;
+      border-radius: 12px;
+      padding: 25px;
+      border: 2px solid transparent;
+      transition: all 0.2s;
+    }
+
+    .source-card:hover {
+      border-color: #ffaa00;
+    }
+
+    .source-card.recommended {
+      border-color: #18bcf2;
+      background: #f0fafd;
+    }
+
+    .source-card .source-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .source-card .source-icon {
+      width: 40px;
+      height: 40px;
+      background: #ffaa00;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .source-card.recommended .source-icon {
+      background: #18bcf2;
+    }
+
+    .source-card .source-icon svg {
+      width: 22px;
+      height: 22px;
+      stroke: white;
+      stroke-width: 2;
+      fill: none;
+    }
+
+    .source-card h4 {
+      margin: 0;
+      font-size: 1.1em;
+      color: #424242;
+    }
+
+    .source-card .source-tag {
+      display: inline-block;
+      background: #18bcf2;
+      color: white;
+      font-size: 10px;
+      font-weight: 600;
+      padding: 2px 6px;
+      border-radius: 3px;
+      margin-left: 8px;
+    }
+
+    .source-card p {
+      margin: 0;
+      font-size: 0.95em;
+      color: #666;
+      line-height: 1.5;
+    }
+
+    .source-card .best-for {
+      margin-top: 12px;
+      font-size: 0.85em;
+      color: #888;
+      font-style: italic;
+    }
+
+    /* Coming Soon sources */
+    .coming-soon-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+      margin: 20px 0 0 0;
+    }
+
+    .coming-soon-card {
+      background: #f9f9f9;
+      border-radius: 12px;
+      padding: 25px;
+      opacity: 0.85;
+      position: relative;
+    }
+
+    .coming-soon-card .source-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .coming-soon-card .source-icon {
+      width: 40px;
+      height: 40px;
+      background: #b0b0b0;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .coming-soon-card .source-icon svg {
+      width: 22px;
+      height: 22px;
+      stroke: white;
+      stroke-width: 2;
+      fill: none;
+    }
+
+    .coming-soon-card h4 {
+      margin: 0;
+      font-size: 1.1em;
+      color: #424242;
+    }
+
+    .coming-soon-card .badge {
+      display: inline-block;
+      background: #888;
+      color: white;
+      font-size: 10px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 3px;
+      margin-left: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .coming-soon-card p {
+      margin: 0;
+      font-size: 0.95em;
+      color: #666;
+      line-height: 1.5;
+    }
+
+    /* Settings table */
+    .settings-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+    }
+
+    .settings-table th,
+    .settings-table td {
+      padding: 12px 15px;
+      text-align: left;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .settings-table th {
+      background: #f9f9f9;
+      font-weight: 600;
+      color: #424242;
+    }
+
+    .settings-table td {
+      color: #555;
+    }
+
+    .settings-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    /* Table of contents */
+    .toc {
+      background: #f9f9f9;
+      border-radius: 12px;
+      padding: 25px;
+      margin: 30px 0;
+    }
+
+    .toc h3 {
+      margin-top: 0;
+      margin-bottom: 15px;
+      color: #424242;
+    }
+
+    .toc ul {
+      margin: 0;
+      padding-left: 25px;
+    }
+
+    .toc li {
+      margin-bottom: 8px;
+    }
+
+    .toc a {
+      color: #555;
+      text-decoration: none;
+    }
+
+    .toc a:hover {
+      color: #ffaa00;
+    }
+
+    /* Step list */
+    .step-list {
+      counter-reset: step-counter;
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .step-list li {
+      counter-increment: step-counter;
+      position: relative;
+      padding-left: 50px;
+      margin-bottom: 25px;
+    }
+
+    .step-list li::before {
+      content: counter(step-counter);
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 32px;
+      height: 32px;
+      background: #ffaa00;
+      color: white;
+      font-weight: 600;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+    }
+
+    .step-list li strong {
+      color: #424242;
+    }
+
+    /* Footer */
+    .footer {
+      max-width: 800px;
+      margin: 60px auto 0;
+      padding: 40px;
+      text-align: center;
+      border-top: 1px solid #e0e0e0;
+      color: #999999;
+    }
+
+    .footer-links {
+      margin-top: 20px;
+    }
+
+    .footer-links a {
+      color: #666666;
+      text-decoration: none;
+      margin: 0 15px;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover {
+      color: #ffaa00;
+    }
+
+    /* Mobile Responsive */
+    @media (max-width: 768px) {
+
+      .breadcrumb,
+      .article {
+        padding-left: 20px;
+        padding-right: 20px;
+      }
+
+      .article h1 {
+        font-size: 1.6em;
+      }
+
+      .source-grid,
+      .coming-soon-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .split-row {
+        grid-template-columns: 1fr;
+      }
+
+      .settings-table {
+        font-size: 0.9em;
+      }
+
+      .settings-table th,
+      .settings-table td {
+        padding: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Shared Header/Navigation -->
+  <script src="/v2/components/header.js"></script>
+
+  <!-- Breadcrumb -->
+  <div class="breadcrumb">
+    <a href="/v2/guides/">How To Guides</a>
+    <span>/</span>
+    <a href="#">Photos Setup</a>
+  </div>
+
+  <!-- Article -->
+  <article class="article">
+    <header class="article-header">
+      <span class="article-tag">Chickadee</span>
+      <h1>Setting Up Photos</h1>
+      <p class="article-meta">Last updated: April 2026</p>
+    </header>
+
+    <div class="article-content">
+      <div class="split-row">
+        <div class="split-text">
+          <p>
+            Chickadee can pull photos from several sources to power your photo slideshow screensaver.
+            Whether you have a self-hosted Immich library, want curated stock photos from Unsplash,
+            or already store family pictures in Home Assistant, you can mix and match sources to
+            fit your setup. This guide walks through configuring each available source.
+          </p>
+        </div>
+        <img src="/v2/artwork/chickadee_screensaver_with_Music.png" alt="Chickadee photo screensaver with music player" class="split-image">
+      </div>
+
+      <div class="info-box tip">
+        <h4>Where Photos Appear</h4>
+        <p>
+          Photos configured here drive the photo slideshow screensaver. For screensaver
+          behavior like timeout and motion wake, see the
+          <a href="/v2/guides/screensaver-setup">Screensaver Setup Guide</a>.
+        </p>
+      </div>
+
+      <div class="toc">
+        <h3>In This Guide</h3>
+        <ul>
+          <li><a href="#getting-started">Getting Started</a></li>
+          <li><a href="#sources">Available Photo Sources</a></li>
+          <li><a href="#immich">Immich</a></li>
+          <li><a href="#ha-media">Home Assistant Media Browser</a></li>
+          <li><a href="#unsplash">Unsplash</a></li>
+          <li><a href="#slideshow">Slideshow Settings</a></li>
+          <li><a href="#coming-soon">Coming Soon</a></li>
+        </ul>
+      </div>
+
+      <h2 id="getting-started">Getting Started</h2>
+
+      <p>
+        All photo screensaver settings live under the Control Center. Here's how to get there:
+      </p>
+
+      <ol class="step-list">
+        <li>
+          <strong>Open the Chickadee sidebar</strong> by swiping from the left edge of the screen.
+        </li>
+        <li>
+          <strong>Tap "Control Center"</strong> at the bottom of the sidebar.
+        </li>
+        <li>
+          <strong>Go to Screensaver &amp; Display &rarr; Screensaver.</strong>
+        </li>
+        <li>
+          <strong>Set Screensaver Mode to "Photos".</strong> The photo slideshow options will appear below — this is where you'll pick a source and configure it.
+        </li>
+      </ol>
+
+      <img src="/v2/artwork/chickadee_screensaver_menu.png" alt="Control Center screensaver menu with Photos mode selected" class="menu-screenshot">
+
+      <h2 id="sources">Available Photo Sources</h2>
+
+      <p>
+        Chickadee supports three photo sources today, with two more on the way. Once you've
+        enabled Photos mode (above), pick your source from the photo slideshow options.
+      </p>
+
+      <div class="source-grid">
+        <!-- Immich -->
+        <div class="source-card recommended">
+          <div class="source-header">
+            <div class="source-icon">
+              <svg viewBox="0 0 24 24">
+                <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
+              </svg>
+            </div>
+            <h4>Immich <span class="source-tag">Popular</span></h4>
+          </div>
+          <p>Connect to your self-hosted Immich photo server. Display random photos from your full library or a specific album.</p>
+          <p class="best-for">Best for: Self-hosters who already use Immich</p>
+        </div>
+
+        <!-- HA Media Browser -->
+        <div class="source-card">
+          <div class="source-header">
+            <div class="source-icon">
+              <svg viewBox="0 0 24 24">
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                <polyline points="9 22 9 12 15 12 15 22"/>
+              </svg>
+            </div>
+            <h4>Home Assistant</h4>
+          </div>
+          <p>Pull photos from your Home Assistant media folder. Add photos once on your HA server and they sync to every Chickadee device.</p>
+          <p class="best-for">Best for: Existing HA users with family photos already organized</p>
+        </div>
+
+        <!-- Unsplash -->
+        <div class="source-card">
+          <div class="source-header">
+            <div class="source-icon">
+              <svg viewBox="0 0 24 24">
+                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                <circle cx="8.5" cy="8.5" r="1.5"/>
+                <polyline points="21 15 16 10 5 21"/>
+              </svg>
+            </div>
+            <h4>Unsplash</h4>
+          </div>
+          <p>Curated, high-quality stock photos. Pick a search keyword and Chickadee streams beautiful images for free. No account or setup required.</p>
+          <p class="best-for">Best for: Quick setup, public displays, mood themes</p>
+        </div>
+      </div>
+
+      <h2 id="immich">Immich</h2>
+
+      <p>
+        <a href="https://immich.app/" target="_blank">Immich</a> is a popular self-hosted photo
+        management server — think Google Photos, but on your own hardware. Chickadee connects
+        directly to your Immich instance to pull random photos from your full library or a
+        specific album.
+      </p>
+
+      <h3>Before You Start</h3>
+
+      <p>You'll need:</p>
+      <ul>
+        <li>A running Immich server reachable from your Chickadee device (same network or remotely accessible)</li>
+        <li>Your Immich server URL (e.g., <code>http://192.168.1.50:2283</code>)</li>
+        <li>Your Immich account email and password</li>
+      </ul>
+
+      <h3>Configure Immich</h3>
+
+      <ol class="step-list">
+        <li>
+          <strong>Open the photo slideshow options</strong> as described in <a href="#getting-started">Getting Started</a>.
+        </li>
+        <li>
+          <strong>Set Photo Source to "Immich".</strong>
+        </li>
+        <li>
+          <strong>Enter your Immich server URL.</strong> Chickadee will try common ports automatically (<code>2283</code>, <code>8080</code>, <code>3001</code>) if you don't specify one. For example, <code>http://192.168.1.50</code> works just as well as <code>http://192.168.1.50:2283</code>.
+        </li>
+        <li>
+          <strong>Sign in.</strong> A login screen opens — enter your Immich email and password. Chickadee captures your access token automatically and stores it locally on the device.
+        </li>
+        <li>
+          <strong>(Optional) Pick an album.</strong> Once signed in, you'll see a list of your Immich albums. Select one to limit photos to that album, or leave it on "All Photos" for random pulls from your entire library.
+        </li>
+        <li>
+          <strong>Save.</strong> Chickadee pre-fetches a small cache of photos and streams them into your slideshow.
+        </li>
+      </ol>
+
+      <div class="info-box tip">
+        <h4>Metadata Comes from Immich</h4>
+        <p>
+          Immich strips EXIF data from delivered images, so date/location overlays use the
+          metadata Chickadee pulls from the Immich API instead. This is generally more accurate
+          than EXIF anyway.
+        </p>
+      </div>
+
+      <div class="info-box warning">
+        <h4>HTTPS and Self-Signed Certs</h4>
+        <p>
+          If your Immich server uses a self-signed HTTPS certificate, Chickadee may refuse to
+          connect. Either install a trusted cert (Let's Encrypt via a reverse proxy is easiest)
+          or use plain HTTP on your local network.
+        </p>
+      </div>
+
+      <h3>Re-authenticating</h3>
+
+      <p>
+        If your Immich session expires or you change your Immich password, just go back to
+        Control Center &rarr; Screensaver &amp; Display &rarr; Screensaver &rarr; Immich and sign in again.
+        The new token replaces the old one.
+      </p>
+
+      <h2 id="ha-media">Home Assistant Media Browser</h2>
+
+      <p>
+        Chickadee pulls photos from your Home Assistant's <code>/config/media/</code> folder
+        (or <code>/media/</code> on Home Assistant OS). This central location means you add
+        photos once and every Chickadee device on your account displays them automatically.
+      </p>
+
+      <h3>Step 1: Add Photos to Home Assistant</h3>
+
+      <p>
+        You need to get your photos into Home Assistant's media folder first. There are several
+        ways to do this — pick whichever fits your workflow.
+      </p>
+
+      <h4>Option A: Samba Share (Recommended for Bulk Uploads)</h4>
+
+      <ol class="step-list">
+        <li>
+          <strong>Install the Samba share add-on</strong> from Home Assistant Settings &rarr; Add-ons &rarr; Add-on Store. Search for "Samba share" and click Install.
+        </li>
+        <li>
+          <strong>Configure a username and password</strong> in the add-on's Configuration tab, then start the add-on.
+        </li>
+        <li>
+          <strong>Connect from your computer.</strong> On Mac, open Finder and press Cmd+K, then enter <code>smb://homeassistant.local/config</code>. On Windows, open File Explorer and type <code>\\homeassistant.local\config</code> in the address bar.
+        </li>
+        <li>
+          <strong>Open the <code>media</code> folder</strong> (create it if it doesn't exist) and drag-and-drop your photos.
+        </li>
+      </ol>
+
+      <div class="info-box tip">
+        <h4>If <code>homeassistant.local</code> Doesn't Resolve</h4>
+        <p>
+          Use your HA's IP address instead, e.g., <code>smb://192.168.1.100/config</code>.
+          Find it in HA Settings &rarr; System &rarr; Network.
+        </p>
+      </div>
+
+      <h4>Option B: File Editor Add-on</h4>
+
+      <p>
+        For a few photos at a time, install the "File editor" or "Studio Code Server" add-on from the
+        Add-on Store. Use its upload button to push photos into <code>/config/media/</code>.
+      </p>
+
+      <h4>Option C: Home Assistant Media Browser UI</h4>
+
+      <p>
+        In Home Assistant, go to <strong>Media</strong> in the sidebar. You can upload images
+        directly into the Local Media library from your browser. Files land in the same
+        <code>/config/media/</code> folder.
+      </p>
+
+      <h3>Step 2: Organize with Subfolders (Optional)</h3>
+
+      <p>
+        Chickadee scans subfolders automatically, so you can organize photos however you like.
+        A typical setup looks like this:
+      </p>
+
+      <div class="code-block">
+        <code>/config/media/
+├── family/
+│   ├── birthday-2026.jpg
+│   └── summer-vacation.jpg
+├── pets/
+│   ├── max.jpg
+│   └── whiskers.jpg
+└── holidays/
+    ├── christmas-2025.jpg
+    └── thanksgiving-2025.jpg</code>
+      </div>
+
+      <h3>Step 3: Configure Chickadee</h3>
+
+      <ol class="step-list">
+        <li>
+          <strong>Open the photo slideshow options</strong> as described in <a href="#getting-started">Getting Started</a>.
+        </li>
+        <li>
+          <strong>Set Photo Source to "Home Assistant Media".</strong>
+        </li>
+        <li>
+          <strong>Choose a folder scope:</strong>
+          <ul>
+            <li><strong>All Folders</strong> — recursively includes every photo across all subfolders</li>
+            <li><strong>Root Only</strong> — only photos at the top level of <code>/config/media/</code></li>
+          </ul>
+        </li>
+        <li>
+          <strong>Photos will sync automatically.</strong> First sync may take a moment depending on library size.
+        </li>
+      </ol>
+
+      <div class="info-box tip">
+        <h4>Supported Formats</h4>
+        <p>
+          JPG, JPEG, PNG, WebP, GIF, and HEIC. HEIC files are converted to JPEG on the fly.
+          Landscape orientation gives the best fit; portrait photos display with a blurred background.
+        </p>
+      </div>
+
+      <h2 id="unsplash">Unsplash</h2>
+
+      <div class="split-row">
+        <div class="split-text">
+          <p>
+            Unsplash is the fastest source to get running — no account, no API key, no server
+            setup. Just type a keyword and Chickadee streams curated stock photos that match.
+          </p>
+        </div>
+        <img src="/v2/artwork/chickadee_unsplash_example.png" alt="Chickadee displaying an Unsplash photo" class="split-image">
+      </div>
+
+      <h3>Configure Unsplash</h3>
+
+      <ol class="step-list">
+        <li>
+          <strong>Open the photo slideshow options</strong> as described in <a href="#getting-started">Getting Started</a>.
+        </li>
+        <li>
+          <strong>Set Photo Source to "Unsplash".</strong>
+        </li>
+        <li>
+          <strong>Enter a search keyword</strong> in the query field. Examples: <code>nature</code>, <code>mountains</code>, <code>minimalist</code>, <code>ocean sunset</code>, <code>autumn forest</code>. Leave blank to default to <code>nature</code>.
+        </li>
+        <li>
+          <strong>Save.</strong> Photos start streaming immediately on the next slideshow tick.
+        </li>
+      </ol>
+
+      <div class="info-box tip">
+        <h4>Picking Good Keywords</h4>
+        <p>
+          Broader terms like <code>landscape</code> or <code>architecture</code> give the largest
+          variety. More specific terms like <code>tokyo at night</code> or <code>red maple leaves</code>
+          give a tighter mood but a smaller pool. You can change the keyword any time.
+        </p>
+      </div>
+
+      <div class="info-box warning">
+        <h4>Internet Required</h4>
+        <p>
+          Unsplash photos stream from the cloud, so your Chickadee device needs an active internet
+          connection. If you lose connectivity, the slideshow will pause until it reconnects.
+        </p>
+      </div>
+
+      <h2 id="slideshow">Slideshow Settings</h2>
+
+      <p>
+        These settings apply to whichever source you've picked. You'll find them alongside the
+        source options under Control Center &rarr; Screensaver &amp; Display &rarr; Screensaver.
+      </p>
+
+      <table class="settings-table">
+        <thead>
+          <tr>
+            <th>Setting</th>
+            <th>Options</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Slide Duration</td>
+            <td>5, 15, 30, 60 seconds</td>
+            <td>How long each photo displays before the next one</td>
+          </tr>
+          <tr>
+            <td>Transition</td>
+            <td>Fade, Slide, None</td>
+            <td>Animation style between photos</td>
+          </tr>
+          <tr>
+            <td>Shuffle</td>
+            <td>On / Off</td>
+            <td>Randomize order instead of sequential. On by default.</td>
+          </tr>
+          <tr>
+            <td>Show Info</td>
+            <td>On / Off</td>
+            <td>Overlay photo date and location (when available)</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2 id="coming-soon">Coming Soon</h2>
+
+      <p>
+        Two more photo sources are in active development. They'll appear in your Photos
+        settings once released — no app update required if you're on the latest version.
+      </p>
+
+      <div class="coming-soon-grid">
+        <div class="coming-soon-card">
+          <div class="source-header">
+            <div class="source-icon">
+              <svg viewBox="0 0 24 24">
+                <path d="M12 2l3 6 6 .5-4.5 4.5 1.5 6.5L12 16l-6 3.5 1.5-6.5L3 8.5 9 8z"/>
+              </svg>
+            </div>
+            <h4>Google Drive <span class="badge">Coming Soon</span></h4>
+          </div>
+          <p>
+            Connect your Google account and Chickadee will pull photos from a dedicated
+            "Chickadee Photos" folder in your Google Drive. Drop photos in from any device
+            and they sync automatically to your displays.
+          </p>
+        </div>
+
+        <div class="coming-soon-card">
+          <div class="source-header">
+            <div class="source-icon">
+              <svg viewBox="0 0 24 24">
+                <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/>
+              </svg>
+            </div>
+            <h4>Chickadee Cloud <span class="badge">Coming Soon</span></h4>
+          </div>
+          <p>
+            Upload photos directly from the Chickadee app to your Chickadee Cloud storage.
+            Photos sync to every device on your account, with no server or third-party
+            service to manage.
+          </p>
+        </div>
+      </div>
+
+      <h2>Need Help?</h2>
+
+      <p>
+        If you have questions or run into issues setting up photos:
+      </p>
+      <ul>
+        <li><a href="/v2/guides/screensaver-setup">Screensaver Setup Guide</a></li>
+        <li><a href="/v2/guides/home-assistant-integration">Home Assistant Integration Guide</a></li>
+        <li><a href="/v2/contact">Contact Support</a></li>
+      </ul>
+    </div>
+  </article>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>&copy; 2026 Chickadee LLC. All rights reserved.</p>
+    <div class="footer-links">
+      <a href="/privacy">Privacy Policy</a>
+      <span class="separator">|</span>
+      <a href="/terms">Terms of Service</a>
+    </div>
+  </footer>
+
+  <!-- Analytics -->
+</body>
+</html>

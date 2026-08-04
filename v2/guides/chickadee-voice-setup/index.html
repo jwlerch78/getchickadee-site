@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Setting Up Chickadee Voice on Home Assistant - Chickadee</title>
+  <link rel="icon" type="image/png" href=".././assets/chickadee-mark.png">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      line-height: 1.6;
+      background: #ffffff;
+      color: #424242;
+      min-height: 100vh;
+    }
+
+    /* Breadcrumb */
+    .breadcrumb {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px 40px 0 40px;
+    }
+
+    .breadcrumb a {
+      color: #666;
+      text-decoration: none;
+      font-size: 14px;
+    }
+
+    .breadcrumb a:hover {
+      color: #ffaa00;
+    }
+
+    .breadcrumb span {
+      color: #999;
+      margin: 0 8px;
+    }
+
+    /* Article */
+    .article {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 30px 40px 60px 40px;
+    }
+
+    .article-header {
+      margin-bottom: 40px;
+    }
+
+    .article-tag {
+      display: inline-block;
+      background: #7b2ff7;
+      color: white;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 4px 12px;
+      border-radius: 4px;
+      margin-bottom: 15px;
+    }
+
+    .article h1 {
+      font-size: 2.2em;
+      color: #424242;
+      margin-bottom: 15px;
+      line-height: 1.3;
+    }
+
+    .article-meta {
+      color: #888;
+      font-size: 14px;
+    }
+
+    .article-content h2 {
+      font-size: 1.5em;
+      color: #424242;
+      margin: 40px 0 20px 0;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #ffaa00;
+    }
+
+    .article-content h3 {
+      font-size: 1.2em;
+      color: #424242;
+      margin: 30px 0 15px 0;
+    }
+
+    .article-content p {
+      margin-bottom: 20px;
+      color: #555;
+    }
+
+    .article-content ul,
+    .article-content ol {
+      margin-bottom: 20px;
+      padding-left: 30px;
+    }
+
+    .article-content li {
+      margin-bottom: 10px;
+      color: #555;
+    }
+
+    .article-content a {
+      color: #ffaa00;
+      text-decoration: none;
+    }
+
+    .article-content a:hover {
+      text-decoration: underline;
+    }
+
+    /* Inline code */
+    code {
+      background: #f4f4f4;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Fira Mono', 'Droid Sans Mono', monospace;
+      font-size: 0.9em;
+      color: #d63384;
+    }
+
+    /* Info boxes */
+    .info-box {
+      padding: 20px;
+      border-radius: 8px;
+      margin: 20px 0;
+    }
+
+    .info-box.warning {
+      background: #fff3cd;
+      border-left: 4px solid #ffc107;
+    }
+
+    .info-box.tip {
+      background: #d1ecf1;
+      border-left: 4px solid #17a2b8;
+    }
+
+    .info-box.important {
+      background: #f8d7da;
+      border-left: 4px solid #dc3545;
+    }
+
+    .info-box.privacy {
+      background: #f0ebff;
+      border-left: 4px solid #7b2ff7;
+    }
+
+    .info-box h4 {
+      margin-bottom: 10px;
+      color: #424242;
+    }
+
+    .info-box p {
+      margin: 0;
+      color: #555;
+    }
+
+    /* Steps */
+    .step {
+      display: flex;
+      gap: 20px;
+      margin: 30px 0;
+      padding: 25px;
+      background: #f9f9f9;
+      border-radius: 12px;
+    }
+
+    .step-number {
+      width: 40px;
+      height: 40px;
+      background: #ffaa00;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 700;
+      font-size: 1.2em;
+      flex-shrink: 0;
+    }
+
+    .step-content h4 {
+      font-size: 1.1em;
+      color: #424242;
+      margin-bottom: 10px;
+    }
+
+    .step-content p {
+      margin-bottom: 10px;
+      color: #555;
+    }
+
+    .step-content p:last-child {
+      margin-bottom: 0;
+    }
+
+    /* Requirements list */
+    .requirements {
+      background: #f9f9f9;
+      border-radius: 12px;
+      padding: 25px;
+      margin: 20px 0;
+    }
+
+    .requirements h3 {
+      margin-top: 0;
+      margin-bottom: 15px;
+    }
+
+    .requirements ul {
+      margin: 0;
+      padding-left: 25px;
+    }
+
+    /* Settings reference table */
+    .settings-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+      font-size: 0.95em;
+    }
+
+    .settings-table th,
+    .settings-table td {
+      text-align: left;
+      padding: 12px 14px;
+      border-bottom: 1px solid #eee;
+      vertical-align: top;
+    }
+
+    .settings-table th {
+      background: #faf8ff;
+      color: #424242;
+      font-weight: 600;
+    }
+
+    .settings-table td:first-child {
+      font-weight: 600;
+      color: #424242;
+      white-space: nowrap;
+    }
+
+    .pill {
+      display: inline-block;
+      font-size: 0.7em;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      padding: 2px 8px;
+      border-radius: 4px;
+      vertical-align: middle;
+    }
+
+    .pill.green { background: #d6f5e0; color: #1c7a3e; }
+    .pill.orange { background: #ffe9c7; color: #9a6000; }
+
+    /* Footer */
+    .footer {
+      max-width: 800px;
+      margin: 60px auto 0;
+      padding: 40px;
+      text-align: center;
+      border-top: 1px solid #e0e0e0;
+      color: #999999;
+    }
+
+    .footer-links {
+      margin-top: 20px;
+    }
+
+    .footer-links a {
+      color: #666666;
+      text-decoration: none;
+      margin: 0 15px;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover {
+      color: #ffaa00;
+    }
+
+    /* Mobile Responsive */
+    @media (max-width: 768px) {
+      .breadcrumb,
+      .article {
+        padding-left: 20px;
+        padding-right: 20px;
+      }
+
+      .article h1 {
+        font-size: 1.6em;
+      }
+
+      .step {
+        flex-direction: column;
+        gap: 15px;
+      }
+
+      .settings-table {
+        font-size: 0.85em;
+      }
+
+      .settings-table th,
+      .settings-table td {
+        padding: 8px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Shared Header/Navigation -->
+  <script src="/v2/components/header.js"></script>
+
+  <!-- Breadcrumb -->
+  <div class="breadcrumb">
+    <a href="/v2/guides/">How To Guides</a>
+    <span>/</span>
+    <a href="#">Chickadee Voice Setup</a>
+  </div>
+
+  <!-- Article -->
+  <article class="article">
+    <header class="article-header">
+      <span class="article-tag">Chickadee Voice</span>
+      <h1>Setting Up Chickadee Voice on Home Assistant</h1>
+      <p class="article-meta">Last updated: June 2026</p>
+    </header>
+
+    <div class="article-content">
+      <p>
+        <strong>Chickadee Voice</strong> brings premium voice and AI to your Chickadee tablets and Home Assistant
+        voice satellites &mdash; with the brain running in Chickadee's cloud or on your own local model. This guide walks you
+        through installing the two Home Assistant pieces you need, signing in, and configuring everything from the
+        <strong>Chickadee Console</strong>.
+      </p>
+
+      <div class="info-box tip">
+        <h4>Beta program</h4>
+        <p>
+          Chickadee Voice is currently in a limited beta. Your Chickadee account must be enabled for the beta before
+          the Voice &amp; AI controls appear in the Console. <a href="/alpha-access">Request beta access here</a>.
+        </p>
+      </div>
+
+      <div class="requirements">
+        <h3>What you'll need</h3>
+        <ul>
+          <li>A Home Assistant instance (HAOS or supervised) you can install add-ons on</li>
+          <li><a href="https://hacs.xyz/" target="_blank" rel="noopener">HACS</a> installed (for the Chickadee integration)</li>
+          <li>A Chickadee account enabled for the beta</li>
+          <li>One or more Chickadee tablets, and/or an HA voice satellite</li>
+          <li><em>(Optional)</em> A local LLM endpoint if you want to run the AI on your own hardware</li>
+        </ul>
+      </div>
+
+      <h2>The pieces, and what each does</h2>
+      <p>
+        Chickadee Voice on Home Assistant uses two components that work together:
+      </p>
+      <ul>
+        <li><strong>The Chickadee Console add-on</strong> &mdash; runs inside Home Assistant, signs in to your Chickadee account,
+          and is your control panel. It's the login and credential hub for the whole household.</li>
+        <li><strong>The Chickadee integration</strong> &mdash; the runtime gateway. It lets your tablets and satellites reach
+          Chickadee Voice over your existing Home Assistant URL (on your LAN <em>or</em> remotely), and provides the
+          voice entities for HA satellites.</li>
+      </ul>
+
+      <h2>Part 1: Install the Chickadee Console add-on</h2>
+
+      <div class="step">
+        <div class="step-number">1</div>
+        <div class="step-content">
+          <h4>Open the Add-on Store</h4>
+          <p>In Home Assistant, go to <strong>Settings &rarr; Add-ons &rarr; Add-on Store</strong>.</p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-number">2</div>
+        <div class="step-content">
+          <h4>Add the Chickadee repository (if needed)</h4>
+          <p>
+            If "Chickadee Console" isn't listed, click the three-dot menu in the top right &rarr; <strong>Repositories</strong>,
+            paste the Chickadee add-on repository URL, and click <strong>Add</strong>. The add-on will then appear in the store.
+          </p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-number">3</div>
+        <div class="step-content">
+          <h4>Install and start</h4>
+          <p>
+            Open <strong>Chickadee Console</strong>, click <strong>Install</strong>, then <strong>Start</strong>.
+            Turn on <strong>Start on boot</strong> and <strong>Show in sidebar</strong> so it's always available.
+          </p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-number">4</div>
+        <div class="step-content">
+          <h4>Open the Console and sign in</h4>
+          <p>
+            Click <strong>Open Web UI</strong> (or the <strong>Chickadee Console</strong> entry in the HA sidebar) and sign in
+            with your Chickadee account. This account holds your household's credits and is what the whole house shares.
+          </p>
+        </div>
+      </div>
+
+      <div class="info-box tip">
+        <h4>Add-on configuration</h4>
+        <p>
+          In the add-on's <strong>Configuration</strong> tab you can set the environment (leave it on the default unless
+          we tell you otherwise) and the log level. Most people never need to change these.
+        </p>
+      </div>
+
+      <h2>Part 2: Install the Chickadee integration</h2>
+
+      <p>
+        The integration is what lets your tablets and satellites actually <em>use</em> Chickadee Voice. The easiest way
+        to install it is through HACS.
+      </p>
+
+      <div class="step">
+        <div class="step-number">1</div>
+        <div class="step-content">
+          <h4>Open the install link from the Console</h4>
+          <p>
+            In the Chickadee Console, look for the <strong>Install the Chickadee integration</strong> button (a HACS one-click
+            link). Click it to open the Chickadee repository directly in HACS, then click <strong>Download</strong>.
+          </p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-number">2</div>
+        <div class="step-content">
+          <h4>Or add it in HACS manually</h4>
+          <p>
+            Alternatively, open <strong>HACS</strong>, search for <strong>Chickadee</strong>, and click <strong>Download</strong>.
+          </p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-number">3</div>
+        <div class="step-content">
+          <h4>Restart Home Assistant</h4>
+          <p>
+            After downloading, restart Home Assistant so the integration loads. It will set itself up automatically; if HA
+            prompts you to configure a discovered <strong>Chickadee</strong> device, confirm it.
+          </p>
+        </div>
+      </div>
+
+      <div class="info-box important">
+        <h4>Why both pieces?</h4>
+        <p>
+          The add-on holds your login and credits; the integration is reachable over your Home Assistant URL, so it works
+          on your LAN and through remote access (Nabu Casa / reverse proxy) with no extra setup. You need both for
+          Chickadee Voice to reach your devices.
+        </p>
+      </div>
+
+      <h2>Part 3: Choose your Assistant</h2>
+
+      <p>
+        Everything from here happens in the Console. Open <strong>Chickadee Console &rarr; Voice &amp; AI</strong>. The top-level
+        choice is <strong>Assistant</strong>, with two options:
+      </p>
+      <ul>
+        <li><strong>Home Assistant</strong> &mdash; routes voice through a Home Assistant Assist pipeline you select. HA handles
+          speech, the agent, and the response. Free, no Chickadee credits used.</li>
+        <li><strong>Chickadee Voice</strong> &mdash; Chickadee orchestrates the whole thing. This is what unlocks premium speech
+          recognition, AI models (cloud or local), built-in tools, and personality voices.</li>
+      </ul>
+
+      <p>
+        Select <strong>Chickadee Voice</strong>. You'll see a one-time privacy summary &mdash; read it, then continue.
+        Choosing Chickadee Voice reveals three groups: <strong>AI Model</strong>, <strong>Voice</strong>, and
+        <strong>Tools</strong>.
+      </p>
+
+      <div class="info-box privacy">
+        <h4>Local vs. cloud, color-coded</h4>
+        <p>
+          As you configure each component, Chickadee marks it <span class="pill green">Local</span> or
+          <span class="pill orange">Cloud</span>. Anything cloud is called out at the moment you pick it, so "local model"
+          never quietly pairs with cloud speech. To go fully private, choose a local model <em>and</em> local speech
+          <em>and</em> local voice.
+        </p>
+      </div>
+
+      <h3>AI Model</h3>
+      <p>
+        Pick which brain answers open-ended questions:
+      </p>
+      <ul>
+        <li><strong>Claude</strong> or <strong>Gemini</strong> &mdash; Chickadee's cloud models, tier-labeled so you can see which
+          are economical and which are premium. <span class="pill orange">Cloud</span></li>
+        <li><strong>My Local LLM</strong> &mdash; point Chickadee at your own model. You'll enter an endpoint URL and pick a model
+          from the supported (&ldquo;blessed&rdquo;) list, or choose &ldquo;custom.&rdquo; Chickadee validates the endpoint and warns you if the
+          model isn't on the supported list. <span class="pill green">Local</span></li>
+      </ul>
+
+      <div class="info-box warning">
+        <h4>Local-model hardware matters</h4>
+        <p>
+          A reliable local model wants a capable, always-on host &mdash; roughly a 20B-class model on 16&nbsp;GB+ of VRAM, kept warm.
+          Smaller boxes (a Raspberry Pi, HA Green/Yellow) can't run a usable model for voice. If you're unsure, start with a
+          cloud model and switch to local once your hardware is set up.
+        </p>
+      </div>
+
+      <h3>Voice</h3>
+      <p>
+        Choose how Chickadee speaks back. This is independent of the model, so "local model + premium personality voice" is a
+        perfectly valid combo.
+      </p>
+      <ul>
+        <li><strong>Local / native voice</strong> &mdash; free, on-device or HA-side text-to-speech. <span class="pill green">Local</span></li>
+        <li><strong>Chickadee personality voice</strong> &mdash; premium character voices your family picks. Draws on credits.
+          <span class="pill orange">Cloud</span></li>
+      </ul>
+
+      <h3>Tools</h3>
+      <p>
+        Turn individual knowledge tools on or off: <strong>Web search</strong>, <strong>Sports</strong>,
+        <strong>Weather</strong>, <strong>Places</strong>, and more. These let Chickadee answer real-world questions with live,
+        accurate data instead of guessing.
+      </p>
+
+      <h3>HA Voice Agent</h3>
+      <p>
+        When Home Assistant is connected, set the <strong>HA Voice Agent</strong> &mdash; the Home Assistant conversation agent
+        that Chickadee routes device commands to. Leave it on the default <code>conversation.home_assistant</code> (Home
+        Assistant's fast, free, built-in agent) unless you have a specific reason to change it. Chickadee handles general and
+        world-knowledge questions itself; device control goes here.
+      </p>
+
+      <h3>AI defaults reference</h3>
+      <p>These live under Voice &amp; AI and apply to every device on your account:</p>
+      <table class="settings-table">
+        <tr><th>Setting</th><th>What it does</th></tr>
+        <tr><td>Web search</td><td>Lets the AI search the web for answers it doesn't already have.</td></tr>
+        <tr><td>Retrieve pictures</td><td>Lets the AI reference your family photos in responses.</td></tr>
+        <tr><td>Conversation memory</td><td>Remembers the last few turns so follow-ups make sense. Set how long it's kept.</td></tr>
+        <tr><td>Keep transcripts</td><td>Saves voice transcripts and replies so you can review them in Usage.</td></tr>
+      </table>
+
+      <h2>Part 4: Set up personalities</h2>
+
+      <p>
+        Personalities shape how Chickadee talks &mdash; tone, character, and which voice it uses. They're shared across your
+        whole household. In the Console, open the <strong>Personalities</strong> section under Voice &amp; AI.
+      </p>
+
+      <div class="step">
+        <div class="step-number">1</div>
+        <div class="step-content">
+          <h4>Start from a built-in template</h4>
+          <p>
+            Browse the built-in personalities (Chickadee is the default). You can add a <strong>Family notes</strong> override to
+            any template &mdash; private context about your household that helps responses feel personal &mdash; without editing the
+            template itself.
+          </p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-number">2</div>
+        <div class="step-content">
+          <h4>Or create a custom personality</h4>
+          <p>
+            Click <strong>New Personality</strong> and fill in the name, overview, adjectives, topics, and a few example
+            phrases. Add family notes for household context.
+          </p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-number">3</div>
+        <div class="step-content">
+          <h4>Pick a voice</h4>
+          <p>
+            Choose the voice for this personality. <strong>Preferred</strong> lets a device override it; <strong>Fixed</strong>
+            locks the personality to that voice everywhere.
+          </p>
+        </div>
+      </div>
+
+      <h2>Part 5: Turn on household sharing (optional)</h2>
+
+      <p>
+        Household sharing lets <em>anonymous</em> Chickadee tablets (no Chickadee login) and HA voice satellites on your network use
+        Chickadee Voice through <em>your</em> account &mdash; one login powering a whole house of devices.
+      </p>
+
+      <div class="step">
+        <div class="step-number">1</div>
+        <div class="step-content">
+          <h4>Open Account &amp; Credits</h4>
+          <p>In the Console, go to <strong>Account &amp; Credits</strong>. This section appears when you're signed in through the add-on.</p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-number">2</div>
+        <div class="step-content">
+          <h4>Enable Household Chickadee Cloud Sharing</h4>
+          <p>
+            Toggle <strong>Household sharing</strong> on. It's off by default. Once on, kiosk tablets and satellites in your
+            home can use Chickadee Voice without their own login.
+          </p>
+        </div>
+      </div>
+
+      <div class="info-box important">
+        <h4>Sharing uses your credits</h4>
+        <p>
+          Every device that uses Chickadee Voice through household sharing draws on <strong>your</strong> account's credit
+          balance. That's the point &mdash; one account funds the household &mdash; but it's why the toggle is off by default and
+          shows a disclaimer.
+        </p>
+      </div>
+
+      <h2>Part 6: Test it</h2>
+
+      <p>
+        You can test without saying a word out loud. In the Console, open the <strong>AI Chat</strong> tab under Voice &amp; AI.
+        Pick a personality and model, type a question, and send it. You'll see the response along with the model used, token
+        usage, and latency &mdash; a quick way to confirm everything is wired up.
+      </p>
+
+      <p>Then try it by voice on a device:</p>
+      <ul>
+        <li>"Chickadee, what's the weather this weekend?" &mdash; should answer with live weather.</li>
+        <li>"Chickadee, turn on the living room lights." &mdash; should run locally through Home Assistant.</li>
+        <li>"Chickadee, what was the score of the game?" &mdash; should pull live sports data.</li>
+      </ul>
+
+      <div class="info-box tip">
+        <h4>One config, every device</h4>
+        <p>
+          Everything you set here is account-level. Add a second tablet or satellite and it adopts the same Assistant, model,
+          voice, tools, and personality automatically &mdash; no per-device setup.
+        </p>
+      </div>
+
+      <h2>Troubleshooting</h2>
+
+      <h3>The Voice &amp; AI page is missing in the Console</h3>
+      <ul>
+        <li>Your account may not be enabled for the beta yet &mdash; <a href="/alpha-access">request access</a> or check back after we confirm.</li>
+        <li>Make sure you're signed in to the right Chickadee account in the add-on.</li>
+      </ul>
+
+      <h3>A kiosk tablet can't use Chickadee Voice</h3>
+      <ul>
+        <li>Confirm the add-on is signed in and <strong>household sharing</strong> is on.</li>
+        <li>Confirm the Chickadee integration is installed and Home Assistant has been restarted.</li>
+        <li>Check that the tablet can reach your Home Assistant URL.</li>
+      </ul>
+
+      <h3>Device commands go to the AI instead of running locally</h3>
+      <ul>
+        <li>Set the <strong>HA Voice Agent</strong> to <code>conversation.home_assistant</code> so device control uses HA's fast local agent.</li>
+      </ul>
+
+      <h3>Responses are slow with a local model</h3>
+      <ul>
+        <li>Your host may be too small, or the model is cold-loading. Use a capable, always-on host and keep the model warm, or switch to a cloud model.</li>
+      </ul>
+
+      <div class="info-box important">
+        <h4>Need more help?</h4>
+        <p>
+          Still stuck? <a href="/v2/contact">Contact us</a> with details about your setup and any error messages.
+          Beta participants: please share what you're seeing &mdash; it directly helps us improve the product.
+        </p>
+      </div>
+    </div>
+  </article>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>&copy; 2026 Chickadee LLC. All rights reserved.</p>
+    <div class="footer-links">
+      <a href="/privacy">Privacy Policy</a>
+      <span class="separator">|</span>
+      <a href="/terms">Terms of Service</a>
+    </div>
+  </footer>
+
+  <!-- Analytics -->
+</body>
+</html>

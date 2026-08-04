@@ -21,6 +21,15 @@ import { join, dirname } from 'node:path';
 const SRC = '/Users/johnlerch/projects/dashieapp-website';
 const DST = '/Users/johnlerch/projects/getchickadee-site/v2';
 
+/**
+ * Guides NOT ported, with the reason. Absent from this list = ported.
+ * A named exclusion beats a hand-maintained include list: a new guide upstream
+ * gets carried across by default rather than silently missed.
+ */
+const SKIP_GUIDES = {
+  'dashie-lite-features': 'Dashie Lite is a Dashie product TIER. Chickadee has no tiers.',
+};
+
 /** source page -> ported page. Legal pages are deliberately absent. */
 const PAGES = {
   'index.html': 'index.html',
@@ -28,7 +37,17 @@ const PAGES = {
   'voice-ai.html': 'voice.html',
   'dashie-kiosk-download.html': 'download.html',
   'components/header.js': 'components/header.js',
+  'contact/index.html': 'contact/index.html',
+  'guides/index.html': 'guides/index.html',
 };
+
+// Guides are discovered, not listed. Directory names carrying the brand are
+// renamed the same way their inbound links are, or the links would 404.
+for (const g of readdirSync(join(SRC, 'guides'), { withFileTypes: true })) {
+  if (!g.isDirectory() || SKIP_GUIDES[g.name]) continue;
+  const renamed = g.name.replace(/dashie/g, 'chickadee');
+  PAGES[`guides/${g.name}/index.html`] = `guides/${renamed}/index.html`;
+}
 
 /** Applied in order. */
 const TEXT = [
@@ -46,6 +65,10 @@ const TEXT = [
   [/\/voice-ai(?=["'#\s>])/g, '/v2/voice'],
   [/\/privacy-policy\.html/g, '/privacy'],
   [/\/terms-of-service\.html/g, '/terms'],
+  // Guides and contact move under /v2/ too. Matching the opening quote covers
+  // both the href ("/guides/") and the getActiveClass argument ('/guides').
+  [/(["'])\/guides/g, '$1/v2/guides'],
+  [/(["'])\/contact/g, '$1/v2/contact'],
   [/https?:\/\/(www\.)?dashieapp\.com/g, 'https://getchickadee.org'],
 
   // ── marks. The bird icon stands in for the square Dashie mark; the wordmark
@@ -58,9 +81,13 @@ const TEXT = [
   //    BOTH the `./x/` and `/x/` forms: two separate rules would run in sequence
   //    and the second would match the `/v2/artwork/` the first just produced,
   //    yielding `/v2/v2/artwork/`.
-  [/(?:\.\/|\/)artwork\//g, '/v2/artwork/'],
-  [/(?:\.\/|\/)website-assets\//g, '/v2/website-assets/'],
-  [/(?:\.\/|\/)components\//g, '/v2/components/'],
+  //    The guides sit two levels deep and reach assets with `../../artwork/`, so
+  //    every relative depth has to normalise to the SAME absolute path — absolute
+  //    is depth-independent, which is the only form that works from both the site
+  //    root and guides/<name>/.
+  [/(?:\/|(?:\.{1,2}\/)+)artwork\//g, '/v2/artwork/'],
+  [/(?:\/|(?:\.{1,2}\/)+)website-assets\//g, '/v2/website-assets/'],
+  [/(?:\/|(?:\.{1,2}\/)+)components\//g, '/v2/components/'],
 
   // ── product name, after every path rule above has run
   [/Dashie/g, 'Chickadee'],
@@ -100,6 +127,16 @@ const STRIP = [
   // survived on that one page. Caught by grepping the rendered text rather than
   // trusting that one rule covered "the badge" everywhere.
   ['download-page HA badge', /\s*<div class="hero-badges">[\s\S]*?<\/div>/g],
+
+  // John, 2026-08-04: drop Blog (no Chickadee blog) and the Download nav ITEM
+  // (it is already a button top-right, so the menu entry is a duplicate).
+  // ⚠️ These run BEFORE the TEXT rules, so they must match the SOURCE hrefs
+  // (`/dashie-kiosk-download`), not the rewritten `/v2/download`.
+  // ⚠️ The `<li>` wrapper is what distinguishes the nav ENTRY from the
+  //    `btn-login` Download BUTTON, which stays. Matching on the href alone
+  //    would remove both.
+  ['nav: Blog', /\s*<li><a href="\/blog\/"[^>]*>Blog<\/a><\/li>/g],
+  ['nav: Download entry', /\s*<li><a href="\/dashie-kiosk-download"[^>]*>Download<\/a><\/li>/g],
 ];
 
 /** Nav entries with no Chickadee equivalent — reported, not silently dropped. */

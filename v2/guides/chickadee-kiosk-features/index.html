@@ -1,0 +1,1334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chickadee - Complete Guide for Home Assistant Users</title>
+  <link rel="icon" type="image/png" href=".././assets/chickadee-mark.png">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      line-height: 1.6;
+      background: #ffffff;
+      color: #424242;
+      min-height: 100vh;
+    }
+
+    /* Breadcrumb */
+    .breadcrumb {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px 40px 0 40px;
+    }
+
+    .breadcrumb a {
+      color: #666;
+      text-decoration: none;
+      font-size: 14px;
+    }
+
+    .breadcrumb a:hover {
+      color: #ffaa00;
+    }
+
+    .breadcrumb span {
+      color: #999;
+      margin: 0 8px;
+    }
+
+    /* Article */
+    .article {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 30px 40px 60px 40px;
+    }
+
+    .article-header {
+      margin-bottom: 40px;
+    }
+
+    .article-tag {
+      display: inline-block;
+      background: #18bcf2;
+      color: white;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 4px 12px;
+      border-radius: 4px;
+      margin-bottom: 15px;
+    }
+
+    .article h1 {
+      font-size: 2.2em;
+      color: #424242;
+      margin-bottom: 15px;
+      line-height: 1.3;
+    }
+
+    .article-meta {
+      color: #888;
+      font-size: 14px;
+    }
+
+    .article-content h2 {
+      font-size: 1.5em;
+      color: #424242;
+      margin: 40px 0 20px 0;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #ffaa00;
+    }
+
+    .article-content h3 {
+      font-size: 1.2em;
+      color: #424242;
+      margin: 30px 0 15px 0;
+    }
+
+    .article-content p {
+      margin-bottom: 20px;
+      color: #555;
+    }
+
+    .article-content ul,
+    .article-content ol {
+      margin-bottom: 20px;
+      padding-left: 30px;
+    }
+
+    .article-content li {
+      margin-bottom: 10px;
+      color: #555;
+    }
+
+    .article-content a {
+      color: #ffaa00;
+      text-decoration: none;
+    }
+
+    .article-content a:hover {
+      text-decoration: underline;
+    }
+
+    /* Inline code */
+    code {
+      background: #f4f4f4;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Fira Mono', 'Droid Sans Mono', monospace;
+      font-size: 0.9em;
+      color: #d63384;
+    }
+
+    /* Code blocks */
+    .code-block {
+      background: #1e1e1e;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 20px 0;
+      overflow-x: auto;
+    }
+
+    .code-block code {
+      background: transparent;
+      color: #d4d4d4;
+      padding: 0;
+      font-size: 0.85em;
+      line-height: 1.6;
+      display: block;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .code-block .comment {
+      color: #6a9955;
+    }
+
+    /* Info boxes */
+    .info-box {
+      padding: 20px;
+      border-radius: 8px;
+      margin: 20px 0;
+    }
+
+    .info-box.warning {
+      background: #fff3cd;
+      border-left: 4px solid #ffc107;
+    }
+
+    .info-box.tip {
+      background: #d1ecf1;
+      border-left: 4px solid #17a2b8;
+    }
+
+    .info-box.important {
+      background: #f8d7da;
+      border-left: 4px solid #dc3545;
+    }
+
+    .info-box h4 {
+      margin-bottom: 10px;
+      color: #424242;
+    }
+
+    .info-box p {
+      margin: 0;
+      color: #555;
+    }
+
+    /* Feature cards */
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      margin: 30px 0;
+    }
+
+    .feature-card {
+      background: #f9f9f9;
+      border-radius: 12px;
+      padding: 25px;
+    }
+
+    .feature-card h4 {
+      font-size: 1.1em;
+      color: #424242;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .feature-card h4 .icon {
+      width: 32px;
+      height: 32px;
+      background: #ffaa00;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .feature-card h4 .icon svg {
+      width: 18px;
+      height: 18px;
+      stroke: white;
+      stroke-width: 2;
+      fill: none;
+    }
+
+    .feature-card p {
+      margin: 0;
+      font-size: 0.95em;
+      color: #666;
+    }
+
+    /* Sidebar diagram */
+    .sidebar-diagram {
+      background: #f9f9f9;
+      border-radius: 12px;
+      padding: 30px;
+      margin: 30px 0;
+    }
+
+    .sidebar-preview {
+      display: flex;
+      gap: 20px;
+      align-items: flex-start;
+    }
+
+    .sidebar-mock {
+      width: 80px;
+      background: #333;
+      border-radius: 8px;
+      padding: 15px 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      align-items: center;
+      flex-shrink: 0;
+    }
+
+    .sidebar-mock .icon {
+      width: 40px;
+      height: 40px;
+      background: #555;
+      border-radius: 8px;
+    }
+
+    .sidebar-mock .icon.active {
+      background: #ffaa00;
+    }
+
+    .sidebar-description {
+      flex: 1;
+    }
+
+    .sidebar-description h4 {
+      margin-bottom: 10px;
+      color: #424242;
+    }
+
+    .sidebar-description ul {
+      padding-left: 20px;
+      margin: 0;
+    }
+
+    .sidebar-description li {
+      margin-bottom: 8px;
+      color: #555;
+      font-size: 0.95em;
+    }
+
+    /* Settings table */
+    .settings-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+    }
+
+    .settings-table th,
+    .settings-table td {
+      padding: 12px 15px;
+      text-align: left;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .settings-table th {
+      background: #f9f9f9;
+      font-weight: 600;
+      color: #424242;
+    }
+
+    .settings-table td {
+      color: #555;
+    }
+
+    .settings-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    /* Footer */
+    .footer {
+      max-width: 800px;
+      margin: 60px auto 0;
+      padding: 40px;
+      text-align: center;
+      border-top: 1px solid #e0e0e0;
+      color: #999999;
+    }
+
+    .footer-links {
+      margin-top: 20px;
+    }
+
+    .footer-links a {
+      color: #666666;
+      text-decoration: none;
+      margin: 0 15px;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover {
+      color: #ffaa00;
+    }
+
+    /* Table of contents */
+    .toc {
+      background: #f9f9f9;
+      border-radius: 12px;
+      padding: 25px;
+      margin: 30px 0;
+    }
+
+    .toc h3,
+    .toc-content h3 {
+      margin-top: 0;
+      margin-bottom: 15px;
+      color: #424242;
+    }
+
+    .toc ul,
+    .toc-content ul {
+      margin: 0;
+      padding-left: 25px;
+    }
+
+    .toc li {
+      margin-bottom: 8px;
+    }
+
+    .toc a {
+      color: #555;
+      text-decoration: none;
+    }
+
+    .toc a:hover {
+      color: #ffaa00;
+    }
+
+    /* TOC with image inside */
+    .toc-with-image {
+      display: flex;
+      gap: 25px;
+      align-items: flex-start;
+    }
+
+    .toc-with-image .toc-content {
+      flex: 1;
+    }
+
+    .toc-with-image .toc-image {
+      flex: 0 0 auto;
+    }
+
+    .toc-with-image .toc-image img {
+      height: 280px;
+      width: auto;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Full-width screenshot image in content */
+    .screenshot-image {
+      margin: 25px 0;
+    }
+
+    .screenshot-image img {
+      width: 100%;
+      height: auto;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    /* Sidebar section with image */
+    .sidebar-section {
+      display: flex;
+      gap: 25px;
+      align-items: flex-start;
+      margin: 30px 0;
+    }
+
+    .sidebar-section.centered {
+      align-items: center;
+    }
+
+    .sidebar-section.centered .sidebar-section-image img {
+      height: 320px;
+    }
+
+    .sidebar-section-content {
+      flex: 1;
+    }
+
+    .sidebar-section-content h3 {
+      margin-top: 0;
+    }
+
+    .sidebar-section-image {
+      flex: 0 0 auto;
+    }
+
+    .sidebar-section-image img {
+      height: 200px;
+      width: auto;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Mobile Responsive */
+    @media (max-width: 768px) {
+
+      .breadcrumb,
+      .article {
+        padding-left: 20px;
+        padding-right: 20px;
+      }
+
+      .article h1 {
+        font-size: 1.6em;
+      }
+
+      .sidebar-preview {
+        flex-direction: column;
+      }
+
+      .sidebar-mock {
+        flex-direction: row;
+        width: 100%;
+        justify-content: center;
+      }
+
+      .settings-table {
+        font-size: 0.9em;
+      }
+
+      .settings-table th,
+      .settings-table td {
+        padding: 10px;
+      }
+
+      .toc-with-image {
+        flex-direction: column;
+      }
+
+      .toc-with-image .toc-image {
+        order: -1;
+        text-align: center;
+        width: 100%;
+      }
+
+      .toc-with-image .toc-image img {
+        height: 200px;
+        width: auto;
+      }
+
+      .sidebar-section {
+        flex-direction: column;
+      }
+
+      .sidebar-section-image {
+        order: -1;
+        text-align: center;
+      }
+
+      .sidebar-section-image img {
+        max-width: 200px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Shared Header/Navigation -->
+  <script src="/v2/components/header.js"></script>
+
+  <!-- Breadcrumb -->
+  <div class="breadcrumb">
+    <a href="/v2/guides/">How To Guides</a>
+    <span>/</span>
+    <a href="#">Complete Guide</a>
+  </div>
+
+  <!-- Article -->
+  <article class="article">
+    <header class="article-header">
+      <span class="article-tag">Home Assistant</span>
+      <h1>Chickadee - Complete Guide for Home Assistant Users</h1>
+      <p class="article-meta">Last updated: February 2026</p>
+    </header>
+
+    <div class="article-content">
+      <p>
+        Chickadee is a free, lightweight Android app designed for hosting Home Assistant dashboards.
+        It provides a clean, full-screen experience with a compact sidebar for quick controls,
+        a Control Center for managing all settings, and optional voice control with the "Chickadee" wake word.
+      </p>
+
+      <div class="toc">
+        <div class="toc-with-image">
+          <div class="toc-content">
+            <h3>In This Guide</h3>
+            <ul>
+              <li><a href="#getting-started">Getting Started</a></li>
+              <li><a href="#sidebar">The Sidebar</a></li>
+              <li><a href="#control-center">Control Center</a></li>
+              <li><a href="#voice-control">Voice Control (Upgrade)</a></li>
+              <li><a href="#chickadee-integration">Chickadee Integration</a></li>
+              <li><a href="#music-assistant">Music Assistant Integration</a></li>
+              <li><a href="#tips">Tips & Tricks</a>
+                <ul>
+                  <li><a href="#device-owner">Setting Up Device Owner</a></li>
+                </ul>
+              </li>
+              <li><a href="#api">Using the API</a></li>
+            </ul>
+          </div>
+          <div class="toc-image">
+            <img src="/v2/website-assets/_Chickadee_MainScreen.png" alt="Chickadee main screen with Home Assistant dashboard">
+          </div>
+        </div>
+      </div>
+
+      <h2 id="getting-started">Getting Started</h2>
+
+      <h3>Configuring Your Home Assistant URL</h3>
+      <p>
+        When you first launch Chickadee, you'll configure your Home Assistant connection. There are 2 options:
+      </p>
+      <ol>
+        <li><strong>Enter the URL for your dashboard</strong> including parameters to hide unwanted items</li>
+        <li><strong>Auto-detect:</strong> Chickadee scans for your HA instance on the local network. If it finds it, just add your dashboard name (the one in the URL with a "-" in it) and tap Save & Load. If it doesn't find it, enter your HA base URL manually.</li>
+      </ol>
+
+      <div class="screenshot-image">
+        <img src="/v2/website-assets/_Chickadee_ConfigureHA.png" alt="Chickadee Home Assistant configuration screen">
+      </div>
+
+      <p>
+        The configuration screen also includes several display and integration options:
+      </p>
+      <ul>
+        <li><strong>Hide Sidebar</strong> — Removes the Home Assistant sidebar from your dashboard for a cleaner view</li>
+        <li><strong>Hide Header/Tabs</strong> — Removes the header and tab navigation for a full-screen dashboard experience</li>
+        <li><strong>Enable API</strong> — Turns on the REST API so you can control your tablet from Home Assistant (see <a href="#api">Using the API</a>)</li>
+      </ul>
+
+      <p>
+        After saving your URL, you'll be taken to a Home Assistant login screen.
+        Once logged in, your dashboard will display full-screen.
+      </p>
+
+      <h3>Permissions</h3>
+      <p>
+        Chickadee will request the following Android permissions. You can grant or skip each one and change them later in Android Settings.
+      </p>
+      <ul>
+        <li><strong>Camera</strong> — Used for motion detection wake and optional RTSP video streaming</li>
+        <li><strong>Microphone</strong> — Required for "Chickadee" voice control (optional feature)</li>
+        <li><strong>Notifications</strong> — Required for background services:
+          <ul>
+            <li>Keeping the REST API server running for Home Assistant integration</li>
+            <li>Dashboard recovery if Android forces an unintended closure of the app</li>
+            <li>Return-to-dashboard alerts when navigating away</li>
+          </ul>
+        </li>
+        <li><strong>Screen Brightness</strong> — Allows Chickadee to control screen brightness for auto-brightness and voice commands like "dim the screen"</li>
+      </ul>
+
+      <h2 id="sidebar">The Sidebar</h2>
+
+      <p>
+        The sidebar sits along the left edge of the screen as a compact icon strip, giving you instant access to
+        essential controls without leaving your dashboard. Swipe from the left edge to reveal it, or pin it to
+        keep it visible.
+      </p>
+
+      <div class="sidebar-section">
+        <div class="sidebar-section-content">
+          <h3>Controls</h3>
+          <p>The sidebar provides quick access to:</p>
+          <ul>
+            <li><strong>Music</strong> — Play/pause controls and speaker selection for Music Assistant integration</li>
+            <li><strong>Audio</strong> — Volume slider and mute toggle</li>
+            <li><strong>Brightness</strong> — Quick brightness adjustment</li>
+          </ul>
+        </div>
+        <div class="sidebar-section-image">
+          <img src="/v2/website-assets/_Chickadee_Sidebar.png" alt="Chickadee sidebar with controls">
+        </div>
+      </div>
+
+      <div class="sidebar-section centered">
+        <div class="sidebar-section-content">
+          <h3>Quick Functions</h3>
+          <p>
+            Tap the menu icon at the bottom of the sidebar to open the Quick Functions popup. From here you can:
+          </p>
+          <ul>
+            <li><strong>Control Center</strong> — Open the full settings and configuration interface</li>
+            <li><strong>Exit</strong> — Exit the Chickadee app</li>
+            <li><strong>Reload</strong> — Reload your Home Assistant dashboard</li>
+            <li><strong>Sleep</strong> — Put the screen to sleep immediately</li>
+            <li><strong>Lock</strong> — Enable kiosk lock mode to prevent app exit</li>
+            <li><strong>Pin Sidebar</strong> — Keep the sidebar visible instead of auto-hiding</li>
+          </ul>
+        </div>
+        <div class="sidebar-section-image">
+          <img src="/v2/website-assets/_Chickadee_QuickFunctions.png" alt="Chickadee Quick Functions popup">
+        </div>
+      </div>
+
+      <h2 id="control-center">Control Center</h2>
+
+      <p>
+        The Control Center is your hub for all Chickadee settings and configuration. Access it by tapping
+        <strong>Control Center</strong> in the Quick Functions popup on the sidebar.
+      </p>
+
+      <div class="screenshot-image">
+        <img src="/v2/website-assets/_Chickadee_Controlcenter.png" alt="Chickadee Control Center overlay">
+      </div>
+
+      <div class="feature-grid">
+        <div class="feature-card">
+          <h4>
+            <div class="icon"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
+            Home Assistant
+          </h4>
+          <p>Configure your HA dashboard URL, toggle sidebar and header visibility, and enable the REST API for remote control.</p>
+        </div>
+        <div class="feature-card">
+          <h4>
+            <div class="icon"><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8"/><path d="M12 17v4"/></svg></div>
+            Display & Screensaver
+          </h4>
+          <p>Set up screensaver modes (dim, black, photos, URL, or third-party app), configure sleep timers, auto-brightness, and motion detection wake settings.</p>
+        </div>
+        <div class="feature-card">
+          <h4>
+            <div class="icon"><svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg></div>
+            Voice & AI
+          </h4>
+          <p>Enable "Chickadee" wake word, choose your voice handler, configure response behavior, and manage wake word models.</p>
+        </div>
+        <div class="feature-card">
+          <h4>
+            <div class="icon"><svg viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg></div>
+            Audio & Video
+          </h4>
+          <p>Control default volume levels, configure RTSP video streaming, and set up Music Assistant speaker options.</p>
+        </div>
+        <div class="feature-card">
+          <h4>
+            <div class="icon"><svg viewBox="0 0 24 24"><rect x="2" y="6" width="16" height="12" rx="2"/><path d="M22 10v4"/><polyline points="11 9 9 12 13 12 11 15"/></svg></div>
+            Power Management
+          </h4>
+          <p>Configure charging thresholds to manage battery health on always-plugged-in tablets. See <a href="#power-management">details below</a>.</p>
+        </div>
+        <div class="feature-card">
+          <h4>
+            <div class="icon"><svg viewBox="0 0 24 24"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg></div>
+            System & Advanced
+          </h4>
+          <p>Access performance settings, refresh schedules, diagnostic tools, start-on-boot configuration, and device information.</p>
+        </div>
+      </div>
+
+      <h2 id="voice-control">Voice Control (Upgrade)</h2>
+
+      <p>
+        Voice control with "Chickadee" wake word detection is available as a $14.99 upgrade.
+        Once enabled, you can control your Home Assistant devices hands-free.
+      </p>
+
+      <p>Voice control features:</p>
+      <ul>
+        <li><strong>Local wake word detection</strong> - "Chickadee" is processed on-device for speed</li>
+        <li><strong>Home Assistant integration</strong> - Uses HA's Assist pipeline for command processing</li>
+        <li><strong>Visual feedback</strong> - On-screen indicators show listening and processing states</li>
+      </ul>
+
+      <p>
+        For setup instructions, see our <a href="/v2/guides/voice-control-setup">Voice Control Setup Guide</a>.
+      </p>
+
+      <h2 id="chickadee-integration">Chickadee Integration</h2>
+
+      <p>
+        Chickadee has a custom HACS integration for Home Assistant that gives you full control over your
+        tablets from the HA dashboard. With the integration installed, you can control your tablet's
+        screen, camera, audio, screensaver, and more — all from Home Assistant automations and the
+        dashboard UI.
+      </p>
+
+      <p>
+        The integration provides entities for battery status, screen state, and brightness, and supports
+        services for all API commands. It also enables streaming your tablet's camera feed as a camera
+        entity in Home Assistant.
+      </p>
+
+      <p>
+        For installation and setup instructions, see our
+        <a href="/v2/guides/home-assistant-integration">Chickadee Integration Setup Guide</a>.
+      </p>
+
+      <h2 id="music-assistant">Music Assistant Integration</h2>
+
+      <p>
+        Chickadee integrates with <a href="https://music-assistant.io/" target="_blank">Music Assistant</a>
+        to turn your tablets into speakers for whole-home audio. With Music Assistant configured,
+        you can play music on any Chickadee tablet, group speakers together, and control playback
+        directly from the sidebar.
+      </p>
+
+      <p>
+        Music playback controls appear in the sidebar for quick access, and you can select which
+        speaker or speaker group to use. The Control Center provides additional options for
+        default speaker selection and Music Assistant configuration.
+      </p>
+
+      <p>
+        For setup instructions, see our
+        <a href="/v2/guides/music-assistant-setup">Music Assistant Setup Guide</a>.
+      </p>
+
+      <h2 id="tips">Tips & Tricks</h2>
+
+      <h3>Lock App (Kiosk Mode)</h3>
+      <p>
+        The <strong>"Lock App"</strong> toggle in the sidebar enables full kiosk lockdown mode:
+      </p>
+      <ul>
+        <li>Hides the navigation bar and status bar for a clean, full-screen display</li>
+        <li>Prevents the power button and volume buttons from exposing the settings menu</li>
+        <li>Blocks the notification shade from being pulled down (prevents access to Quick Settings)</li>
+        <li>Keeps users focused on your Home Assistant dashboard</li>
+      </ul>
+      <p>
+        On most tablets, when you first enable this setting, Android will show a confirmation dialog asking you to allow
+        screen pinning. Once confirmed, the feature works automatically on future toggles.
+      </p>
+
+      <div class="info-box tip">
+        <h4>Exiting Lock App Mode</h4>
+        <p>
+          To exit, open the Chickadee sidebar and click "Unlock App". If you get stuck,
+          hold the <strong>Back</strong> and <strong>Recent Apps</strong> buttons simultaneously
+          for a few seconds to exit screen pinning.
+        </p>
+      </div>
+
+      <div class="info-box tip">
+        <h4>PIN Recovery</h4>
+        <p>
+          If you forget your PIN, you are able to set a recovery email address that can send it to you.
+          If you do not enter a recovery address then the PIN can be reset with a long press on the Chickadee logo in the sidebar (5 seconds).
+        </p>
+      </div>
+
+      <h3 id="device-owner">Setting Up Device Owner</h3>
+      <p>
+        For the best kiosk experience, you can set Chickadee as the <strong>device owner</strong> using ADB. This is optional but provides two key benefits:
+      </p>
+      <ul>
+        <li><strong>Silent screen pinning</strong> — Eliminates the "App is pinned" notification toast that normally appears when you enable Lock App mode</li>
+        <li><strong>Remote device reboot</strong> — Enables the <code>rebootDevice</code> API command to reboot the tablet without requiring root access</li>
+        <li><strong>Reliable camera motion detection with the screen off</strong> — On aggressive devices (e.g. Honor/MagicOS) that revoke camera access or kill the app while the screen is off, device owner status keeps Chickadee's camera/motion service resident</li>
+      </ul>
+
+      <h4>Requirements</h4>
+      <ul>
+        <li>A computer with <a href="https://developer.android.com/tools/adb">ADB</a> installed</li>
+        <li>USB debugging enabled on the tablet</li>
+        <li><strong>No other accounts on the device</strong> — Android requires all accounts (Google, Samsung, etc.) to be removed before setting a device owner. You can re-add them afterward.</li>
+      </ul>
+
+      <h4>Setting Device Owner</h4>
+      <p>Connect your tablet via USB and run:</p>
+      <div class="code-block">
+        <code>adb shell dpm set-device-owner com.chickadeeapp.Chickadee/com.chickadeeapp.Chickadee.halite.ChickadeeDeviceAdminReceiver</code>
+      </div>
+      <p>
+        Once set, Lock App mode will activate silently without any Android system prompts or notifications.
+      </p>
+      <div class="info-box tip">
+        <p>
+          <strong>Beta / sideload builds:</strong> the package name carries a <code>.sideload</code> suffix, so use the matching component —
+          <code>com.chickadeeapp.Chickadee.sideload/com.chickadeeapp.Chickadee.halite.ChickadeeDeviceAdminReceiver</code>.
+          If <code>set-device-owner</code> reports "ComponentName not found," you've used the wrong package name for your installed build.
+        </p>
+      </div>
+
+      <div class="info-box tip">
+        <h4>Removing Device Owner</h4>
+        <p>
+          If you need to remove device owner status later, you can do so from Chickadee's Control Center under Advanced settings, or by running:
+        </p>
+        <div class="code-block" style="margin-top: 10px;">
+          <code>adb shell dpm remove-active-admin com.chickadeeapp.Chickadee/com.chickadeeapp.Chickadee.halite.ChickadeeDeviceAdminReceiver</code>
+        </div>
+      </div>
+
+      <h3 id="power-management">Power Management</h3>
+      <p>
+        Tablets mounted as permanent dashboards are typically plugged in 24/7, which can degrade battery health
+        over time. Chickadee includes built-in power management to address this without requiring Home Assistant
+        automations or smart plugs.
+      </p>
+      <p>In the Control Center under Power Management, you can:</p>
+      <ul>
+        <li><strong>Set a charge limit</strong> — Stop charging when the battery reaches a target level (e.g., 80%)</li>
+        <li><strong>Set a resume threshold</strong> — Resume charging when the battery drops below a set level (e.g., 20%)</li>
+        <li><strong>View battery health status</strong> — Monitor charging cycles and battery condition</li>
+      </ul>
+      <p>
+        This keeps your tablet's battery cycling within a healthy range automatically, extending its lifespan significantly.
+      </p>
+
+      <h3>Auto-Launch Options</h3>
+      <p>
+        There are two ways to make Chickadee launch automatically when your tablet starts:
+      </p>
+
+      <h4>Option 1: Set as Default Launcher (Recommended for Standard Android)</h4>
+      <p>
+        On most Android tablets (not Fire tablets), you can set Chickadee as your default home/launcher app.
+        This is the simplest approach and doesn't require any ADB commands.
+      </p>
+      <ol>
+        <li>Open your tablet's <strong>Settings</strong></li>
+        <li>Go to <strong>Apps</strong> (or "Apps & notifications")</li>
+        <li>Tap <strong>Default apps</strong> (or "Choose default apps")</li>
+        <li>Select <strong>Home app</strong> (or "Launcher")</li>
+        <li>Choose <strong>Chickadee</strong></li>
+      </ol>
+      <p>
+        Once set as the launcher, Chickadee will automatically start when the tablet boots and when you press the home button.
+      </p>
+
+      <div class="info-box tip">
+        <h4>Note about "Start on Boot" setting</h4>
+        <p>
+          If you set Chickadee as your default launcher, you do <strong>not</strong> need to enable the "Start on Boot" toggle in the sidebar.
+          The launcher setting takes precedence and handles auto-launch automatically.
+        </p>
+      </div>
+
+      <h4>Option 2: Fire Tablet Setup (ADB Commands Required)</h4>
+      <p>
+        Fire tablets have a locked-down launcher that can't be changed through settings.
+        Use these ADB commands to enable auto-launch. Connect your tablet via USB and run:
+      </p>
+
+      <div class="code-block">
+        <code><span class="comment"># Grant overlay permission (required for background activity starts)</span><br>
+adb shell appops set com.chickadeeapp.Chickadee SYSTEM_ALERT_WINDOW allow<br><br>
+<span class="comment"># Disable lock screen ads (Amazon Special Offers)</span><br>
+adb shell settings put global LOCKSCREEN_AD_ENABLED 0<br><br>
+<span class="comment"># Disable lock screen entirely (no swipe to unlock)</span><br>
+adb shell locksettings set-disabled true</code>
+      </div>
+
+      <p>
+        After running these commands, enable <strong>"Start on Boot"</strong> in the Chickadee sidebar under System settings.
+      </p>
+
+      <div class="info-box tip">
+        <h4>Note</h4>
+        <p>
+          Even with these settings enabled, Fire tablets require approximately 60 seconds after power on to complete their system loading process before Chickadee will start.
+        </p>
+      </div>
+
+      <h3>Performance & Diagnostics</h3>
+      <p>
+        In the Advanced Menu in Settings there is a section for managing device performance and diagnosing issues.
+        Home Assistant dashboards often have graphical displays that accumulate memory over time, which can lead to dashboard crashes if the Webview displaying the dashboard is not refreshed periodically.
+        By default, Chickadee will refresh your dashboard at 3am each night or if your screensaver has been active for 2 hours.
+        It will also refresh your dashboard if the RAM utilization gets too high (memory pressure refresh).
+        These parameters can be adjusted here.
+      </p>
+
+      <h4 id="diagnostics">Sending a Diagnostic Report</h4>
+      <p>
+        If you hit an issue and we ask for details, the fastest way to help us debug is to send a diagnostic report.
+        In the Advanced Menu under <strong>Performance &amp; Diagnostics</strong>, tap <strong>Send Diagnostics</strong>
+        (or <strong>Copy</strong> to put the report on your clipboard so you can paste it into an email).
+      </p>
+      <p>The report is a single bundle that captures everything we need in one shot:</p>
+      <ul>
+        <li><strong>Device &amp; app info</strong> — model, Android version, WebView version, Chickadee build</li>
+        <li><strong>Setup &amp; permissions</strong> — battery-optimization exemption, Device Owner / Device Admin status, overlay, exact-alarm, brightness (write-settings), camera and notification permissions</li>
+        <li><strong>Camera &amp; motion</strong> — RTSP streaming settings, encoder capabilities, and motion/face wake mode</li>
+        <li><strong>Display, memory, and dashboard analysis</strong></li>
+        <li><strong>Event history</strong> — the on-device log (survives restarts and reboots), so overnight issues are captured even if you send the report the next morning</li>
+      </ul>
+      <div class="info-box tip">
+        <p>
+          Diagnostic reports are used only for troubleshooting and contain no account credentials or personal dashboard data.
+          The <strong>Setup &amp; Permissions</strong> section is especially useful when diagnosing devices with aggressive
+          power management (for example HONOR/MagicOS or Xiaomi), since it tells us at a glance which keep-alive permissions are in place.
+        </p>
+      </div>
+
+      <h2 id="api">Using the API</h2>
+
+      <p>
+        Chickadee includes a REST API that runs on port <code>2323</code>.
+        It is compatible with Fully Kiosk's integration, but supports more functionality including the brightness settings, PIN control, and RTSP video streaming.
+        A Chickadee HACS integration will be available soon.
+      </p>
+
+      <h3>Enabling the API</h3>
+      <p>
+        In the sidebar under <strong>Home Assistant</strong>, toggle on "Enable API".
+        You can optionally set a password for authentication. Once enabled, the API is accessible at:
+      </p>
+
+      <div class="code-block">
+        <code>http://&lt;device-ip&gt;:2323/?cmd=&lt;command&gt;&amp;password=&lt;your-password&gt;</code>
+      </div>
+
+      <h3>Connecting to Home Assistant</h3>
+      <p>
+        To add Chickadee to Home Assistant using the Fully Kiosk integration, until Chickadee's Integration is available:
+      </p>
+      <ol>
+        <li>Go to <strong>Settings → Devices & Services → Add Integration</strong></li>
+        <li>Search for "Fully Kiosk Browser"</li>
+        <li>Enter your device's IP address</li>
+        <li>Set the port to <code>2323</code></li>
+        <li>Enter your API password (leave blank if none set)</li>
+      </ol>
+
+      <h3>Supported Commands</h3>
+      <p>
+        Chickadee supports the most commonly-used Fully Kiosk API commands:
+      </p>
+
+      <table class="settings-table">
+        <thead>
+          <tr>
+            <th>Command</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>deviceInfo</code></td>
+            <td>Returns device state (battery, screen, network, etc.) - polled by HA every 30-60s</td>
+          </tr>
+          <tr>
+            <td><code>listSettings</code></td>
+            <td>Returns all configurable settings - required by HA Fully Kiosk integration during setup</td>
+          </tr>
+          <tr>
+            <td><code>screenOn</code></td>
+            <td>Turn screen on</td>
+          </tr>
+          <tr>
+            <td><code>screenOff</code></td>
+            <td>Turn screen off</td>
+          </tr>
+          <tr>
+            <td><code>setStringSetting</code></td>
+            <td>Set configuration (supports <code>screenBrightness</code> 0-255, <code>startUrl</code>, <code>motionWakeMode</code>, <code>textScaling</code> 50-200%)</td>
+          </tr>
+          <tr>
+            <td><code>setBooleanSetting</code>*</td>
+            <td>Set boolean configuration (supports <code>hideSidebar</code>, <code>hideHeader</code>, <code>keepScreenOn</code>, <code>startOnBoot</code>, <code>autoBrightness</code>, <code>rtspEnabled</code>, <code>rtspSoftwareEncoding</code>)</td>
+          </tr>
+          <tr>
+            <td><code>setAudioVolume</code></td>
+            <td>Set volume (level 0-100, stream 1-5)</td>
+          </tr>
+          <tr>
+            <td><code>textToSpeech</code></td>
+            <td>Speak text using Android TTS</td>
+          </tr>
+          <tr>
+            <td><code>stopTextToSpeech</code></td>
+            <td>Stop TTS playback</td>
+          </tr>
+          <tr>
+            <td><code>loadUrl</code></td>
+            <td>Navigate to a specific URL</td>
+          </tr>
+          <tr>
+            <td><code>loadStartUrl</code></td>
+            <td>Reload the configured start URL</td>
+          </tr>
+          <tr>
+            <td><code>restartApp</code></td>
+            <td>Restart Chickadee</td>
+          </tr>
+          <tr>
+            <td><code>rebootDevice</code>*</td>
+            <td>Reboot the Android device (requires <a href="#device-owner">device owner</a> — no root needed)</td>
+          </tr>
+          <tr>
+            <td><code>toForeground</code></td>
+            <td>Bring app to foreground</td>
+          </tr>
+          <tr>
+            <td><code>refreshWebView</code>*</td>
+            <td>Refresh the WebView (reload HA dashboard)</td>
+          </tr>
+          <tr>
+            <td><code>startScreensaver</code></td>
+            <td>Dim the screen (enter screensaver mode)</td>
+          </tr>
+          <tr>
+            <td><code>stopScreensaver</code></td>
+            <td>Wake the screen (exit screensaver mode)</td>
+          </tr>
+          <tr>
+            <td><code>setScreensaverMode</code>*</td>
+            <td>Set screensaver type: dim, black, url, or photos</td>
+          </tr>
+          <tr>
+            <td><code>setPhotoSource</code>*</td>
+            <td>Set photo source: ha_media, local, google, or immich</td>
+          </tr>
+          <tr>
+            <td><code>setHaMediaFolder</code>*</td>
+            <td>Set Home Assistant media folder path for photo screensaver</td>
+          </tr>
+          <tr>
+            <td><code>triggerMotion</code></td>
+            <td>Simulate motion detection (resets sleep timer)</td>
+          </tr>
+          <tr>
+            <td><code>playSound</code></td>
+            <td>Play audio from a URL</td>
+          </tr>
+          <tr>
+            <td><code>stopSound</code></td>
+            <td>Stop audio playback</td>
+          </tr>
+          <tr>
+            <td><code>pauseSound</code>*</td>
+            <td>Pause current audio playback</td>
+          </tr>
+          <tr>
+            <td><code>resumeSound</code>*</td>
+            <td>Resume paused audio</td>
+          </tr>
+          <tr>
+            <td><code>seekSound</code>*</td>
+            <td>Seek audio to position (requires <code>position</code> in seconds)</td>
+          </tr>
+          <tr>
+            <td><code>muteAudio</code>*</td>
+            <td>Mute all audio</td>
+          </tr>
+          <tr>
+            <td><code>unmuteAudio</code>*</td>
+            <td>Unmute audio</td>
+          </tr>
+          <tr>
+            <td><code>getCamshot</code></td>
+            <td>Capture image from camera (returns JPEG)</td>
+          </tr>
+          <tr>
+            <td><code>startRtspStream</code>*</td>
+            <td>Start RTSP camera stream on port 8554</td>
+          </tr>
+          <tr>
+            <td><code>stopRtspStream</code>*</td>
+            <td>Stop RTSP camera stream</td>
+          </tr>
+          <tr>
+            <td><code>getRtspStatus</code>*</td>
+            <td>Get RTSP stream status (running, resolution, clients)</td>
+          </tr>
+          <tr>
+            <td><code>getRtspConfig</code>*</td>
+            <td>Get RTSP configuration settings</td>
+          </tr>
+          <tr>
+            <td><code>setRtspResolution</code>*</td>
+            <td>Set RTSP resolution (e.g., 1280x720)</td>
+          </tr>
+          <tr>
+            <td><code>setRtspFps</code>*</td>
+            <td>Set RTSP frame rate (1-30)</td>
+          </tr>
+          <tr>
+            <td><code>setRtspBitrate</code>*</td>
+            <td>Set RTSP bitrate in bps</td>
+          </tr>
+          <tr>
+            <td><code>startApplication</code></td>
+            <td>Launch another app by package name</td>
+          </tr>
+          <tr>
+            <td><code>setOverlayMessage</code></td>
+            <td>Show a toast/overlay message</td>
+          </tr>
+          <tr>
+            <td><code>setDarkMode</code>*</td>
+            <td>Enable/disable dark mode (true/false)</td>
+          </tr>
+          <tr>
+            <td><code>getDarkMode</code>*</td>
+            <td>Get current dark mode state</td>
+          </tr>
+          <tr>
+            <td><code>setPin</code>*</td>
+            <td>Set PIN for kiosk lock</td>
+          </tr>
+          <tr>
+            <td><code>clearPin</code>*</td>
+            <td>Remove PIN protection</td>
+          </tr>
+          <tr>
+            <td><code>getPinStatus</code>*</td>
+            <td>Check if PIN is configured</td>
+          </tr>
+          <tr>
+            <td><code>lockKiosk</code></td>
+            <td>Lock kiosk mode (hide sidebar controls)</td>
+          </tr>
+          <tr>
+            <td><code>unlockKiosk</code></td>
+            <td>Unlock kiosk mode (show sidebar controls)</td>
+          </tr>
+          <tr>
+            <td><code>clearCache</code></td>
+            <td>Clear WebView cache</td>
+          </tr>
+          <tr>
+            <td><code>clearWebstorage</code></td>
+            <td>Clear WebView local storage</td>
+          </tr>
+        </tbody>
+      </table>
+      <p class="footnote">* Not supported by Fully Kiosk's integration</p>
+
+      <h3>Example API Calls</h3>
+      <p>
+        You can test the API directly from your browser or with curl:
+      </p>
+
+      <div class="code-block">
+        <code><span class="comment"># Get device info</span><br>
+curl "http://192.168.1.100:2323/?cmd=deviceInfo&amp;type=json&amp;password=mypass"<br><br>
+<span class="comment"># Turn screen on</span><br>
+curl "http://192.168.1.100:2323/?cmd=screenOn&amp;password=mypass"<br><br>
+<span class="comment"># Set brightness to 50%</span><br>
+curl "http://192.168.1.100:2323/?cmd=setStringSetting&amp;key=screenBrightness&amp;value=128&amp;password=mypass"<br><br>
+<span class="comment"># Enable auto-brightness</span><br>
+curl "http://192.168.1.100:2323/?cmd=setBooleanSetting&amp;key=autoBrightness&amp;value=true&amp;password=mypass"<br><br>
+<span class="comment"># Set motion wake mode to camera</span><br>
+curl "http://192.168.1.100:2323/?cmd=setStringSetting&amp;key=motionWakeMode&amp;value=camera&amp;password=mypass"<br><br>
+<span class="comment"># Set WebView text scaling to 125%</span><br>
+curl "http://192.168.1.100:2323/?cmd=setStringSetting&amp;key=textScaling&amp;value=125&amp;password=mypass"<br><br>
+<span class="comment"># Set screensaver to photos mode</span><br>
+curl "http://192.168.1.100:2323/?cmd=setScreensaverMode&amp;mode=photos&amp;password=mypass"<br><br>
+<span class="comment"># Set photo source to Immich</span><br>
+curl "http://192.168.1.100:2323/?cmd=setPhotoSource&amp;source=immich&amp;password=mypass"<br><br>
+<span class="comment"># Speak a message</span><br>
+curl "http://192.168.1.100:2323/?cmd=textToSpeech&amp;text=Hello%20world&amp;password=mypass"<br><br>
+<span class="comment"># Refresh the dashboard</span><br>
+curl "http://192.168.1.100:2323/?cmd=refreshWebView&amp;password=mypass"<br><br>
+<span class="comment"># Mute audio</span><br>
+curl "http://192.168.1.100:2323/?cmd=muteAudio&amp;password=mypass"<br><br>
+<span class="comment"># Reboot the device (requires device owner)</span><br>
+curl "http://192.168.1.100:2323/?cmd=rebootDevice&amp;password=mypass"<br><br>
+<span class="comment"># Check motion/face detection status (included in deviceInfo)</span><br>
+curl "http://192.168.1.100:2323/?cmd=deviceInfo&amp;type=json&amp;password=mypass" | jq '.motionDetected, .faceDetected'<br><br>
+<span class="comment"># Pause/resume sound</span><br>
+curl "http://192.168.1.100:2323/?cmd=pauseSound&amp;password=mypass"<br>
+curl "http://192.168.1.100:2323/?cmd=resumeSound&amp;password=mypass"</code>
+      </div>
+
+      <div class="info-box tip">
+        <h4>deviceInfo Response</h4>
+        <p>
+          The <code>deviceInfo</code> command returns comprehensive device information. Home Assistant polls this automatically every 30-60 seconds when using the Fully Kiosk integration.
+        </p>
+        <p><strong>Key fields include:</strong></p>
+        <ul>
+          <li><strong>Device:</strong> deviceID, deviceName, deviceModel, androidVersion, isFireTablet</li>
+          <li><strong>Battery:</strong> batteryLevel, plugged, plugSource</li>
+          <li><strong>Screen:</strong> screenOn, screenBrightness, ambientLight, isInScreensaver</li>
+          <li><strong>Lock States:</strong> kioskLocked, lockAppExit, lockSettings, hasPinSet</li>
+          <li><strong>Display:</strong> isDarkMode, supportsDarkMode, textScaling</li>
+          <li><strong>Screensaver:</strong> screensaverMode (dim/black/url/photos), photoSource, haMediaFolder</li>
+          <li><strong>Motion &amp; Face:</strong> motionDetected, faceDetected, motionWakeMode (disabled/brightness/camera)</li>
+          <li><strong>Settings:</strong> hideSidebar, hideHeader, keepScreenOn, startOnBoot, autoBrightness</li>
+          <li><strong>RTSP:</strong> rtspEnabled, rtspSoftwareEncoding</li>
+          <li><strong>URLs:</strong> currentPage, startUrl</li>
+          <li><strong>Network:</strong> ip4, Mac, wifiSignalLevel, ssid</li>
+          <li><strong>Storage:</strong> internalTotal, internalFree, externalTotal, externalFree</li>
+        </ul>
+      </div>
+
+      <h3 id="config-keys">Configuration Keys Reference</h3>
+
+      <p><strong>setStringSetting keys:</strong></p>
+      <table class="settings-table">
+        <thead>
+          <tr>
+            <th>Key</th>
+            <th>Values</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>screenBrightness</code></td>
+            <td>0-255</td>
+            <td>Screen brightness level</td>
+          </tr>
+          <tr>
+            <td><code>startUrl</code></td>
+            <td>URL string</td>
+            <td>Dashboard URL to load on start</td>
+          </tr>
+          <tr>
+            <td><code>motionWakeMode</code></td>
+            <td>disabled, brightness, camera</td>
+            <td>How motion detection wakes screen</td>
+          </tr>
+          <tr>
+            <td><code>textScaling</code></td>
+            <td>50-200</td>
+            <td>WebView zoom percentage</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p><strong>setBooleanSetting keys:</strong></p>
+      <table class="settings-table">
+        <thead>
+          <tr>
+            <th>Key</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>hideSidebar</code></td>
+            <td>Hide the Home Assistant sidebar</td>
+          </tr>
+          <tr>
+            <td><code>hideHeader</code></td>
+            <td>Hide the Home Assistant header/tabs</td>
+          </tr>
+          <tr>
+            <td><code>keepScreenOn</code></td>
+            <td>Keep screen on while app is active</td>
+          </tr>
+          <tr>
+            <td><code>startOnBoot</code></td>
+            <td>Auto-start app on device boot</td>
+          </tr>
+          <tr>
+            <td><code>autoBrightness</code></td>
+            <td>Enable auto brightness based on light sensor</td>
+          </tr>
+          <tr>
+            <td><code>rtspEnabled</code></td>
+            <td>Enable RTSP camera streaming</td>
+          </tr>
+          <tr>
+            <td><code>rtspSoftwareEncoding</code></td>
+            <td>Use software encoding for RTSP (slower but more compatible)</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2>Need Help?</h2>
+
+      <p>
+        If you have questions or run into issues, we're here to help:
+      </p>
+      <ul>
+        <li><a href="/v2/guides/fire-tablet-sideload">Fire Tablet Installation Guide</a></li>
+        <li><a href="/v2/guides/voice-control-setup">Voice Control Setup Guide</a></li>
+        <li><a href="/v2/contact">Contact Support</a></li>
+      </ul>
+    </div>
+  </article>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>&copy; 2026 Chickadee LLC. All rights reserved.</p>
+    <div class="footer-links">
+      <a href="/privacy">Privacy Policy</a>
+      <span class="separator">|</span>
+      <a href="/terms">Terms of Service</a>
+    </div>
+  </footer>
+
+  <!-- Analytics -->
+</body>
+</html>

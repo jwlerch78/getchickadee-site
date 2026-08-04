@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Screensaver Setup Guide - Chickadee</title>
+  <link rel="icon" type="image/png" href=".././assets/chickadee-mark.png">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      line-height: 1.6;
+      background: #ffffff;
+      color: #424242;
+      min-height: 100vh;
+    }
+
+    /* Breadcrumb */
+    .breadcrumb {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px 40px 0 40px;
+    }
+
+    .breadcrumb a {
+      color: #666;
+      text-decoration: none;
+      font-size: 14px;
+    }
+
+    .breadcrumb a:hover {
+      color: #ffaa00;
+    }
+
+    .breadcrumb span {
+      color: #999;
+      margin: 0 8px;
+    }
+
+    /* Article */
+    .article {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 30px 40px 60px 40px;
+    }
+
+    .article-header {
+      margin-bottom: 40px;
+    }
+
+    .article-tag {
+      display: inline-block;
+      background: #18bcf2;
+      color: white;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 4px 12px;
+      border-radius: 4px;
+      margin-bottom: 15px;
+    }
+
+    .article h1 {
+      font-size: 2.2em;
+      color: #424242;
+      margin-bottom: 15px;
+      line-height: 1.3;
+    }
+
+    .article-meta {
+      color: #888;
+      font-size: 14px;
+    }
+
+    .article-content h2 {
+      font-size: 1.5em;
+      color: #424242;
+      margin: 40px 0 20px 0;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #ffaa00;
+    }
+
+    .article-content h3 {
+      font-size: 1.2em;
+      color: #424242;
+      margin: 30px 0 15px 0;
+    }
+
+    .article-content h4 {
+      font-size: 1.05em;
+      color: #424242;
+      margin: 20px 0 10px 0;
+    }
+
+    .article-content p {
+      margin-bottom: 20px;
+      color: #555;
+    }
+
+    .article-content ul,
+    .article-content ol {
+      margin-bottom: 20px;
+      padding-left: 30px;
+    }
+
+    .article-content li {
+      margin-bottom: 10px;
+      color: #555;
+    }
+
+    .article-content a {
+      color: #ffaa00;
+      text-decoration: none;
+    }
+
+    .article-content a:hover {
+      text-decoration: underline;
+    }
+
+    /* Inline code */
+    code {
+      background: #f4f4f4;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Fira Mono', 'Droid Sans Mono', monospace;
+      font-size: 0.9em;
+      color: #d63384;
+    }
+
+    /* Code blocks */
+    .code-block {
+      background: #1e1e1e;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 20px 0;
+      overflow-x: auto;
+    }
+
+    .code-block code {
+      background: transparent;
+      color: #d4d4d4;
+      padding: 0;
+      font-size: 0.85em;
+      line-height: 1.6;
+      display: block;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .code-block .comment {
+      color: #6a9955;
+    }
+
+    /* Info boxes */
+    .info-box {
+      padding: 20px;
+      border-radius: 8px;
+      margin: 20px 0;
+    }
+
+    .info-box.warning {
+      background: #fff3cd;
+      border-left: 4px solid #ffc107;
+    }
+
+    .info-box.tip {
+      background: #d1ecf1;
+      border-left: 4px solid #17a2b8;
+    }
+
+    .info-box.important {
+      background: #f8d7da;
+      border-left: 4px solid #dc3545;
+    }
+
+    .info-box h4 {
+      margin-bottom: 10px;
+      color: #424242;
+    }
+
+    .info-box p {
+      margin: 0;
+      color: #555;
+    }
+
+    /* Feature cards */
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      margin: 30px 0;
+    }
+
+    .feature-card {
+      background: #f9f9f9;
+      border-radius: 12px;
+      padding: 25px;
+    }
+
+    .feature-card h4 {
+      font-size: 1.1em;
+      color: #424242;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .feature-card h4 .icon {
+      width: 32px;
+      height: 32px;
+      background: #ffaa00;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .feature-card h4 .icon svg {
+      width: 18px;
+      height: 18px;
+      stroke: white;
+      stroke-width: 2;
+      fill: none;
+    }
+
+    .feature-card p {
+      margin: 0;
+      font-size: 0.95em;
+      color: #666;
+    }
+
+    /* Mode cards - larger feature cards for screensaver modes */
+    .mode-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+      margin: 30px 0;
+    }
+
+    .mode-card {
+      background: #f9f9f9;
+      border-radius: 12px;
+      padding: 25px;
+      border: 2px solid transparent;
+      transition: all 0.2s;
+    }
+
+    .mode-card:hover {
+      border-color: #ffaa00;
+    }
+
+    .mode-card.recommended {
+      border-color: #18bcf2;
+      background: #f0fafd;
+    }
+
+    .mode-card .mode-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .mode-card .mode-icon {
+      width: 40px;
+      height: 40px;
+      background: #ffaa00;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .mode-card.recommended .mode-icon {
+      background: #18bcf2;
+    }
+
+    .mode-card .mode-icon svg {
+      width: 22px;
+      height: 22px;
+      stroke: white;
+      stroke-width: 2;
+      fill: none;
+    }
+
+    .mode-card h4 {
+      margin: 0;
+      font-size: 1.1em;
+      color: #424242;
+    }
+
+    .mode-card .mode-tag {
+      display: inline-block;
+      background: #18bcf2;
+      color: white;
+      font-size: 10px;
+      font-weight: 600;
+      padding: 2px 6px;
+      border-radius: 3px;
+      margin-left: 8px;
+    }
+
+    .mode-card p {
+      margin: 0;
+      font-size: 0.95em;
+      color: #666;
+      line-height: 1.5;
+    }
+
+    .mode-card .best-for {
+      margin-top: 12px;
+      font-size: 0.85em;
+      color: #888;
+      font-style: italic;
+    }
+
+    /* Settings table */
+    .settings-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+    }
+
+    .settings-table th,
+    .settings-table td {
+      padding: 12px 15px;
+      text-align: left;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .settings-table th {
+      background: #f9f9f9;
+      font-weight: 600;
+      color: #424242;
+    }
+
+    .settings-table td {
+      color: #555;
+    }
+
+    .settings-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    /* Table of contents */
+    .toc {
+      background: #f9f9f9;
+      border-radius: 12px;
+      padding: 25px;
+      margin: 30px 0;
+    }
+
+    .toc h3,
+    .toc-content h3 {
+      margin-top: 0;
+      margin-bottom: 15px;
+      color: #424242;
+    }
+
+    .toc ul,
+    .toc-content ul {
+      margin: 0;
+      padding-left: 25px;
+    }
+
+    .toc li {
+      margin-bottom: 8px;
+    }
+
+    .toc a {
+      color: #555;
+      text-decoration: none;
+    }
+
+    .toc a:hover {
+      color: #ffaa00;
+    }
+
+    /* Step list */
+    .step-list {
+      counter-reset: step-counter;
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .step-list li {
+      counter-increment: step-counter;
+      position: relative;
+      padding-left: 50px;
+      margin-bottom: 25px;
+    }
+
+    .step-list li::before {
+      content: counter(step-counter);
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 32px;
+      height: 32px;
+      background: #ffaa00;
+      color: white;
+      font-weight: 600;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+    }
+
+    .step-list li strong {
+      color: #424242;
+    }
+
+    /* Footer */
+    .footer {
+      max-width: 800px;
+      margin: 60px auto 0;
+      padding: 40px;
+      text-align: center;
+      border-top: 1px solid #e0e0e0;
+      color: #999999;
+    }
+
+    .footer-links {
+      margin-top: 20px;
+    }
+
+    .footer-links a {
+      color: #666666;
+      text-decoration: none;
+      margin: 0 15px;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover {
+      color: #ffaa00;
+    }
+
+    /* Mobile Responsive */
+    @media (max-width: 768px) {
+
+      .breadcrumb,
+      .article {
+        padding-left: 20px;
+        padding-right: 20px;
+      }
+
+      .article h1 {
+        font-size: 1.6em;
+      }
+
+      .mode-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .settings-table {
+        font-size: 0.9em;
+      }
+
+      .settings-table th,
+      .settings-table td {
+        padding: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Shared Header/Navigation -->
+  <script src="/v2/components/header.js"></script>
+
+  <!-- Breadcrumb -->
+  <div class="breadcrumb">
+    <a href="/v2/guides/">How To Guides</a>
+    <span>/</span>
+    <a href="#">Screensaver Setup</a>
+  </div>
+
+  <!-- Article -->
+  <article class="article">
+    <header class="article-header">
+      <span class="article-tag">Chickadee</span>
+      <h1>Setting Up Your Screensaver</h1>
+      <p class="article-meta">Last updated: January 2025</p>
+    </header>
+
+    <div class="article-content">
+      <p>
+        Chickadee includes a flexible screensaver system designed to protect your screen, save power,
+        and optionally display beautiful photos. This guide covers all available screensaver modes,
+        how to set up a photo slideshow, and how to use third-party screensaver apps.
+      </p>
+
+      <div class="toc">
+        <h3>In This Guide</h3>
+        <ul>
+          <li><a href="#modes">Screensaver Modes</a></li>
+          <li><a href="#timeout">Setting the Timeout</a></li>
+          <li><a href="#photos">Photo Slideshow Setup</a></li>
+          <li><a href="#third-party">Using Third-Party Apps</a></li>
+          <li><a href="#motion-wake">Motion Wake Settings</a></li>
+          <li><a href="#api-control">Controlling via Home Assistant</a></li>
+        </ul>
+      </div>
+
+      <h2 id="modes">Screensaver Modes</h2>
+
+      <p>
+        Chickadee offers five screensaver modes to fit different needs. Access these settings by
+        swiping from the left edge to open the sidebar, then tap <strong>Screen</strong>.
+      </p>
+
+      <div class="mode-grid">
+        <!-- Dim Mode -->
+        <div class="mode-card">
+          <div class="mode-header">
+            <div class="mode-icon">
+              <svg viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="5"/>
+                <line x1="12" y1="1" x2="12" y2="3"/>
+                <line x1="12" y1="21" x2="12" y2="23"/>
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+                <line x1="1" y1="12" x2="3" y2="12"/>
+                <line x1="21" y1="12" x2="23" y2="12"/>
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+              </svg>
+            </div>
+            <h4>Dim</h4>
+          </div>
+          <p>Reduces screen brightness to a low level. The dashboard remains visible but dimmed to save power and reduce burn-in.</p>
+          <p class="best-for">Best for: Quick glances at dashboard info</p>
+        </div>
+
+        <!-- Black Mode -->
+        <div class="mode-card">
+          <div class="mode-header">
+            <div class="mode-icon">
+              <svg viewBox="0 0 24 24">
+                <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+                <line x1="8" y1="21" x2="16" y2="21"/>
+                <line x1="12" y1="17" x2="12" y2="21"/>
+              </svg>
+            </div>
+            <h4>Black</h4>
+          </div>
+          <p>Screen goes completely black. Optionally displays a clock overlay. Maximum power savings and screen protection.</p>
+          <p class="best-for">Best for: Overnight or extended idle periods</p>
+        </div>
+
+        <!-- URL Mode -->
+        <div class="mode-card">
+          <div class="mode-header">
+            <div class="mode-icon">
+              <svg viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="10"/>
+                <line x1="2" y1="12" x2="22" y2="12"/>
+                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+              </svg>
+            </div>
+            <h4>URL</h4>
+          </div>
+          <p>Displays a webpage as your screensaver. Default shows a clock with weather. You can set any custom URL you prefer.</p>
+          <p class="best-for">Best for: Custom displays, flip clocks, visualizations</p>
+        </div>
+
+        <!-- Photos Mode -->
+        <div class="mode-card recommended">
+          <div class="mode-header">
+            <div class="mode-icon">
+              <svg viewBox="0 0 24 24">
+                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                <circle cx="8.5" cy="8.5" r="1.5"/>
+                <polyline points="21 15 16 10 5 21"/>
+              </svg>
+            </div>
+            <h4>Photos <span class="mode-tag">Popular</span></h4>
+          </div>
+          <p>Photo slideshow with smooth transitions. Display family photos synced from your Home Assistant media library.</p>
+          <p class="best-for">Best for: Family displays, digital photo frames</p>
+        </div>
+
+        <!-- App Mode -->
+        <div class="mode-card">
+          <div class="mode-header">
+            <div class="mode-icon">
+              <svg viewBox="0 0 24 24">
+                <rect x="3" y="3" width="7" height="7"/>
+                <rect x="14" y="3" width="7" height="7"/>
+                <rect x="14" y="14" width="7" height="7"/>
+                <rect x="3" y="14" width="7" height="7"/>
+              </svg>
+            </div>
+            <h4>App</h4>
+          </div>
+          <p>Launch a third-party screensaver app like ImmichFrame. Say "Chickadee" to return to your dashboard anytime.</p>
+          <p class="best-for">Best for: Users with preferred screensaver apps</p>
+        </div>
+      </div>
+
+      <h2 id="timeout">Setting the Timeout</h2>
+
+      <p>
+        The screensaver timeout determines how long the screen stays active before the screensaver activates.
+        You can choose from preset options or set a custom duration.
+      </p>
+
+      <h3>Available Timeout Options</h3>
+
+      <table class="settings-table">
+        <thead>
+          <tr>
+            <th>Option</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Disabled</td>
+            <td>Screensaver never activates automatically</td>
+          </tr>
+          <tr>
+            <td>30 seconds</td>
+            <td>Quick timeout for interactive kiosks</td>
+          </tr>
+          <tr>
+            <td>1 minute</td>
+            <td>Short timeout</td>
+          </tr>
+          <tr>
+            <td>2 minutes</td>
+            <td>Standard timeout (recommended)</td>
+          </tr>
+          <tr>
+            <td>5 minutes</td>
+            <td>Longer timeout for active use</td>
+          </tr>
+          <tr>
+            <td>10 minutes</td>
+            <td>Extended timeout</td>
+          </tr>
+          <tr>
+            <td>30 minutes</td>
+            <td>Long timeout for occasional checking</td>
+          </tr>
+          <tr>
+            <td>Custom</td>
+            <td>Enter any duration you prefer</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2 id="photos">Photo Slideshow Setup</h2>
+
+      <p>
+        The photo slideshow mode turns your tablet into a digital photo frame. Chickadee can pull
+        photos from several sources — a self-hosted Immich server, curated stock photos from
+        Unsplash, or your Home Assistant media library — with Google Drive and Chickadee Cloud
+        coming soon.
+      </p>
+
+      <p>
+        Once photos are flowing, you can customize slide duration, transitions, shuffle, and
+        overlays (clock, date, weather, photo info) from the same screensaver menu.
+      </p>
+
+      <div class="info-box tip">
+        <h4>Full Photo Setup Guide</h4>
+        <p>
+          For step-by-step walkthroughs of each photo source — including how to connect an
+          Immich server, configure Unsplash keywords, and upload photos to Home Assistant — see
+          the <a href="/v2/guides/photos-setup">Photos Setup Guide</a>.
+        </p>
+      </div>
+
+      <h2 id="third-party">Using Third-Party Apps</h2>
+
+      <p>
+        Chickadee can launch any Android app as your screensaver. This is especially useful if
+        you already have a favorite screensaver app like <strong>ImmichFrame</strong> for displaying
+        photos from an Immich server.
+      </p>
+
+      <h3>Setting Up a Third-Party Screensaver App</h3>
+
+      <ol class="step-list">
+        <li>
+          <strong>Install your preferred screensaver app</strong> from the Play Store or sideload it. Popular options include ImmichFrame, Fotoo, and various clock/weather apps.
+        </li>
+        <li>
+          <strong>Configure the app</strong> according to its own setup instructions (connect to your photo server, set display preferences, etc.).
+        </li>
+        <li>
+          <strong>Open Chickadee settings</strong> &rarr; Screen &rarr; Screensaver Mode &rarr; App.
+        </li>
+        <li>
+          <strong>Tap "Select App"</strong> and choose your screensaver app from the list of installed apps.
+        </li>
+      </ol>
+
+      <h3>How It Works</h3>
+
+      <p>
+        When the screensaver timeout is reached, Chickadee launches your selected app in the foreground.
+        The app runs normally with full touch interaction.
+      </p>
+
+      <div class="info-box tip">
+        <h4>Voice Wake from Any App</h4>
+        <p>
+          Unlike other kiosk solutions, Chickadee's "Chickadee" voice wake works even when a
+          third-party app is running. Just say "Chickadee" to return to your Home Assistant dashboard
+          at any time.
+        </p>
+      </div>
+
+      <h3>Popular Third-Party Apps</h3>
+
+      <div class="feature-grid">
+        <div class="feature-card">
+          <h4>
+            <div class="icon">
+              <svg viewBox="0 0 24 24">
+                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                <circle cx="8.5" cy="8.5" r="1.5"/>
+                <polyline points="21 15 16 10 5 21"/>
+              </svg>
+            </div>
+            ImmichFrame
+          </h4>
+          <p>Display photos from your self-hosted Immich server. Great for privacy-focused photo management.</p>
+        </div>
+        <div class="feature-card">
+          <h4>
+            <div class="icon">
+              <svg viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="10"/>
+                <polyline points="12 6 12 12 16 14"/>
+              </svg>
+            </div>
+            Clock Apps
+          </h4>
+          <p>Flip clocks, digital clocks, or analog designs. Many free options available on Play Store.</p>
+        </div>
+      </div>
+
+      <h2 id="motion-wake">Motion Wake Settings</h2>
+
+      <p>
+        Chickadee can automatically wake the screen when it detects motion, making it convenient
+        for wall-mounted displays. You can choose between camera-based detection (recommended) or
+        brightness sensor detection.
+      </p>
+
+      <h3>Motion Detection Modes</h3>
+
+      <table class="settings-table">
+        <thead>
+          <tr>
+            <th>Mode</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Disabled</td>
+            <td>Touch or voice wake only</td>
+          </tr>
+          <tr>
+            <td>Camera Motion</td>
+            <td>Uses front camera to detect movement (recommended). Most accurate and efficient.</td>
+          </tr>
+          <tr>
+            <td>Brightness Sensor</td>
+            <td>Uses light sensor to detect changes. Legacy option, less reliable.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>Camera Sensitivity</h3>
+
+      <p>
+        When using camera motion detection, you can adjust the sensitivity to match your environment:
+      </p>
+
+      <ul>
+        <li><strong>Higher sensitivity (lower values)</strong> - Detects subtle movement. May trigger from lighting changes.</li>
+        <li><strong>Lower sensitivity (higher values)</strong> - Only triggers on obvious movement. Better for bright or variable lighting.</li>
+      </ul>
+
+      <p>
+        The default sensitivity of 5% works well for most environments. Adjust if you experience
+        false triggers or if motion isn't being detected reliably.
+      </p>
+
+      <div class="info-box warning">
+        <h4>Camera Permission Required</h4>
+        <p>
+          Camera motion detection requires camera permission. When you first enable this feature,
+          Android will prompt you to grant access. If denied, the brightness sensor will be used instead.
+        </p>
+      </div>
+
+      <h2 id="api-control">Controlling via Home Assistant</h2>
+
+      <p>
+        If you've enabled the Fully Kiosk API in Chickadee, you can control the screensaver
+        remotely through Home Assistant automations.
+      </p>
+
+      <h3>API Commands</h3>
+
+      <div class="code-block">
+        <code><span class="comment"># Start screensaver (activate according to current mode)</span>
+curl "http://&lt;device-ip&gt;:2323/?cmd=startScreensaver&amp;password=&lt;pass&gt;"
+
+<span class="comment"># Stop screensaver (wake screen)</span>
+curl "http://&lt;device-ip&gt;:2323/?cmd=stopScreensaver&amp;password=&lt;pass&gt;"
+
+<span class="comment"># Simulate motion (resets sleep timer)</span>
+curl "http://&lt;device-ip&gt;:2323/?cmd=triggerMotion&amp;password=&lt;pass&gt;"</code>
+      </div>
+
+      <h3>Example Home Assistant Automation</h3>
+
+      <p>
+        Automatically start the screensaver when everyone leaves home:
+      </p>
+
+      <div class="code-block">
+        <code><span class="comment"># In automations.yaml</span>
+- alias: "Screensaver when away"
+  trigger:
+    - platform: state
+      entity_id: group.family
+      to: "not_home"
+  action:
+    - service: rest_command.chickadee_screensaver_start
+
+<span class="comment"># In configuration.yaml</span>
+rest_command:
+  chickadee_screensaver_start:
+    url: "http://192.168.1.100:2323/?cmd=startScreensaver&amp;password=mypass"</code>
+      </div>
+
+      <p>
+        For full API documentation, see the <a href="/v2/guides/chickadee-kiosk-features#api">Chickadee Complete Guide</a>.
+      </p>
+
+      <h2>Need Help?</h2>
+
+      <p>
+        If you have questions or run into issues with screensaver setup:
+      </p>
+      <ul>
+        <li><a href="/v2/guides/chickadee-kiosk-features">Chickadee Complete Guide</a></li>
+        <li><a href="/v2/guides/fire-tablet-sideload">Fire Tablet Installation Guide</a></li>
+        <li><a href="/v2/contact">Contact Support</a></li>
+      </ul>
+    </div>
+  </article>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>&copy; 2026 Chickadee LLC. All rights reserved.</p>
+    <div class="footer-links">
+      <a href="/privacy">Privacy Policy</a>
+      <span class="separator">|</span>
+      <a href="/terms">Terms of Service</a>
+    </div>
+  </footer>
+
+  <!-- Analytics -->
+</body>
+</html>

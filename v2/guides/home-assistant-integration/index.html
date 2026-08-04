@@ -1,0 +1,1550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Set up Chickadee in Home Assistant - Chickadee</title>
+  <link rel="icon" type="image/png" href=".././assets/chickadee-mark.png">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      line-height: 1.6;
+      background: #ffffff;
+      color: #424242;
+      min-height: 100vh;
+    }
+
+    /* Breadcrumb */
+    .breadcrumb {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px 40px 0 40px;
+    }
+
+    .breadcrumb a {
+      color: #666;
+      text-decoration: none;
+      font-size: 14px;
+    }
+
+    .breadcrumb a:hover {
+      color: #ffaa00;
+    }
+
+    .breadcrumb span {
+      color: #999;
+      margin: 0 8px;
+    }
+
+    /* Article */
+    .article {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 30px 40px 60px 40px;
+    }
+
+    .article-header {
+      margin-bottom: 40px;
+    }
+
+    .article-tag {
+      display: inline-block;
+      background: #18bcf2;
+      color: white;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 4px 12px;
+      border-radius: 4px;
+      margin-bottom: 15px;
+    }
+
+    .article h1 {
+      font-size: 2.2em;
+      color: #424242;
+      margin-bottom: 15px;
+      line-height: 1.3;
+    }
+
+    .article-meta {
+      color: #888;
+      font-size: 14px;
+    }
+
+    .article-content h2 {
+      font-size: 1.5em;
+      color: #424242;
+      margin: 40px 0 20px 0;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #ffaa00;
+    }
+
+    .article-content h3 {
+      font-size: 1.2em;
+      color: #424242;
+      margin: 30px 0 15px 0;
+    }
+
+    .article-content p {
+      margin-bottom: 20px;
+      color: #555;
+    }
+
+    .article-content ul,
+    .article-content ol {
+      margin-bottom: 20px;
+      padding-left: 30px;
+    }
+
+    .article-content li {
+      margin-bottom: 10px;
+      color: #555;
+    }
+
+    .article-content a {
+      color: #ffaa00;
+      text-decoration: none;
+    }
+
+    .article-content a:hover {
+      text-decoration: underline;
+    }
+
+    /* Code blocks */
+    .code-block {
+      background: #1e1e1e;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 20px 0;
+      overflow-x: auto;
+    }
+
+    .code-block code {
+      color: #d4d4d4;
+      font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Fira Mono', 'Droid Sans Mono', monospace;
+      font-size: 14px;
+      line-height: 1.5;
+      white-space: pre;
+      background: transparent;
+    }
+
+    .code-block .comment {
+      color: #6a9955;
+    }
+
+    .code-block .key {
+      color: #9cdcfe;
+    }
+
+    .code-block .string {
+      color: #ce9178;
+    }
+
+    .code-block .keyword {
+      color: #569cd6;
+    }
+
+    /* Inline code */
+    code {
+      background: #f4f4f4;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Fira Mono', 'Droid Sans Mono', monospace;
+      font-size: 0.9em;
+      color: #d63384;
+    }
+
+    /* Full-width screenshot image in content */
+    .screenshot-image {
+      margin: 25px 0;
+    }
+
+    .screenshot-image img {
+      width: 100%;
+      height: auto;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    /* Info boxes */
+    .info-box {
+      padding: 20px;
+      border-radius: 8px;
+      margin: 20px 0;
+    }
+
+    .info-box.warning {
+      background: #fff3cd;
+      border-left: 4px solid #ffc107;
+    }
+
+    .info-box.tip {
+      background: #d1ecf1;
+      border-left: 4px solid #17a2b8;
+    }
+
+    .info-box.important {
+      background: #f8d7da;
+      border-left: 4px solid #dc3545;
+    }
+
+    .info-box h4 {
+      margin-bottom: 10px;
+      color: #424242;
+    }
+
+    .info-box p {
+      margin: 0;
+      color: #555;
+    }
+
+    /* Steps */
+    .step {
+      display: flex;
+      gap: 20px;
+      margin: 30px 0;
+      padding: 25px;
+      background: #f9f9f9;
+      border-radius: 12px;
+    }
+
+    .step-number {
+      width: 40px;
+      height: 40px;
+      background: #ffaa00;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 700;
+      font-size: 1.2em;
+      flex-shrink: 0;
+    }
+
+    .step-content h4 {
+      font-size: 1.1em;
+      color: #424242;
+      margin-bottom: 10px;
+    }
+
+    .step-content p {
+      margin-bottom: 10px;
+      color: #555;
+    }
+
+    .step-content p:last-child {
+      margin-bottom: 0;
+    }
+
+    /* Requirements list */
+    .requirements {
+      background: #f9f9f9;
+      border-radius: 12px;
+      padding: 25px;
+      margin: 20px 0;
+    }
+
+    .requirements h3 {
+      margin-top: 0;
+      margin-bottom: 15px;
+    }
+
+    .requirements ul {
+      margin: 0;
+      padding-left: 25px;
+    }
+
+    /* Architecture diagram */
+    .architecture {
+      background: #f9f9f9;
+      border-radius: 12px;
+      padding: 30px;
+      margin: 20px 0;
+      text-align: center;
+    }
+
+    .architecture-flow {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 20px 0;
+    }
+
+    .architecture-box {
+      background: white;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 15px 20px;
+      font-weight: 500;
+    }
+
+    .architecture-box.highlight {
+      border-color: #ffaa00;
+      background: #fff8e6;
+    }
+
+    .architecture-arrow {
+      color: #888;
+      font-size: 1.5em;
+    }
+
+    /* Entity table */
+    .entity-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+      font-size: 14px;
+    }
+
+    .entity-table th,
+    .entity-table td {
+      padding: 12px 15px;
+      text-align: left;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .entity-table th {
+      background: #f9f9f9;
+      font-weight: 600;
+      color: #424242;
+    }
+
+    .entity-table tr:hover {
+      background: #f9f9f9;
+    }
+
+    .entity-table code {
+      font-size: 12px;
+    }
+
+    /* Footer */
+    .footer {
+      max-width: 800px;
+      margin: 60px auto 0;
+      padding: 40px;
+      text-align: center;
+      border-top: 1px solid #e0e0e0;
+      color: #999999;
+    }
+
+    .footer-links {
+      margin-top: 20px;
+    }
+
+    .footer-links a {
+      color: #666666;
+      text-decoration: none;
+      margin: 0 15px;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover {
+      color: #ffaa00;
+    }
+
+    /* Mobile Responsive */
+    @media (max-width: 768px) {
+
+      .breadcrumb,
+      .article {
+        padding-left: 20px;
+        padding-right: 20px;
+      }
+
+      .article h1 {
+        font-size: 1.6em;
+      }
+
+      .step {
+        flex-direction: column;
+        gap: 15px;
+      }
+
+      .code-block {
+        padding: 15px;
+      }
+
+      .code-block code {
+        font-size: 12px;
+      }
+
+      .architecture-flow {
+        flex-direction: column;
+      }
+
+      .architecture-arrow {
+        transform: rotate(90deg);
+      }
+
+      .entity-table {
+        font-size: 12px;
+      }
+
+      .entity-table th,
+      .entity-table td {
+        padding: 8px 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Shared Header/Navigation -->
+  <script src="/v2/components/header.js"></script>
+
+  <!-- Breadcrumb -->
+  <div class="breadcrumb">
+    <a href="/v2/guides/">How To Guides</a>
+    <span>/</span>
+    <a href="#">Set up Chickadee in Home Assistant</a>
+  </div>
+
+  <!-- Article -->
+  <article class="article">
+    <header class="article-header">
+      <span class="article-tag">Chickadee</span>
+      <h1>Set up Chickadee in Home Assistant</h1>
+      <p class="article-meta">Last updated: June 2026 • Integration v1.4.8 • Console app v0.1.120</p>
+    </header>
+
+    <div class="article-content">
+      <p>
+        Chickadee has two pieces that plug into Home Assistant. Most users want both.
+      </p>
+
+      <ul>
+        <li>
+          <strong>Chickadee Integration</strong> — registers each of your Chickadee tablets in HA as a device with
+          sensors and switches (battery, RAM, brightness, screen on/off, lock, camera stream, screensaver, and more).
+          This is the core piece that makes Chickadee controllable from HA dashboards and automations.
+        </li>
+        <li>
+          <strong>Chickadee Console app</strong> — hosts the Chickadee management UI right inside HA, so you can manage
+          your family, calendars, photos, AI personality, and per-device settings without leaving HA. Optional, but
+          most users want it. (Requires Home Assistant OS or Supervised — Container/Core installs can't run apps.)
+        </li>
+      </ul>
+
+      <p>
+        This guide walks through both, in order. You can stop after Part 3 if you only want HA controls
+        and don't need the Console.
+      </p>
+
+      <div class="info-box tip">
+        <h4>What You Can Do</h4>
+        <p>
+          Control screen brightness and power, toggle dark mode, start photo screensavers,
+          stream the camera to HA, use text-to-speech for announcements, lock/unlock the device,
+          monitor battery and sensors, and build automations - like dimming at night,
+          announcing doorbells, or enabling the camera when you leave home.
+        </p>
+      </div>
+
+      <div class="screenshot-image">
+        <img src="/v2/website-assets/Chickadee_Integration_Screenshot_1.png" alt="Chickadee Integration in Home Assistant showing device controls and sensors">
+      </div>
+
+      <div class="requirements">
+        <h3>Prerequisites</h3>
+        <p><strong>For the Integration (Parts 1–3):</strong></p>
+        <ul>
+          <li>Home Assistant 2023.5 or later</li>
+          <li>Chickadee installed on your Android device (version 2.21.0B or later)</li>
+          <li>Both Home Assistant and Chickadee on the same local network</li>
+          <li><a href="https://hacs.xyz/" target="_blank">HACS</a> installed (recommended) or access to Home Assistant's config folder</li>
+        </ul>
+        <p style="margin-top: 12px;"><strong>For the Console app (Part 4):</strong></p>
+        <ul>
+          <li>Home Assistant OS or Home Assistant Supervised (apps require Supervisor — Container and Core installs can't run apps)</li>
+          <li>A Chickadee account — sign up at <a href="https://getchickadee.org" target="_blank">chickadeeapp.com</a></li>
+        </ul>
+      </div>
+
+      <h2>How It Works</h2>
+
+      <div class="architecture">
+        <p>The integration communicates directly with your Chickadee device:</p>
+        <div class="architecture-flow">
+          <div class="architecture-box highlight">Home Assistant<br><small>Chickadee Integration</small></div>
+          <span class="architecture-arrow">↔</span>
+          <div class="architecture-box">REST API<br><small>Port 2323</small></div>
+          <span class="architecture-arrow">↔</span>
+          <div class="architecture-box">Chickadee<br><small>Android Device</small></div>
+        </div>
+        <p><small>Chickadee runs a local REST API that Home Assistant polls for status and uses to send commands.</small></p>
+      </div>
+
+      <h2>Part 1: Enable the API on Chickadee</h2>
+
+      <p>
+        First, you need to enable the REST API on your Chickadee device. This API allows Home Assistant
+        to communicate with your device.
+      </p>
+
+      <div class="step">
+        <div class="step-number">1</div>
+        <div class="step-content">
+          <h4>Open the Sidebar</h4>
+          <p>
+            On your Chickadee device, swipe from the left edge of the screen or tap the menu icon
+            to open the sidebar.
+          </p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-number">2</div>
+        <div class="step-content">
+          <h4>Find the Home Assistant Section</h4>
+          <p>
+            Scroll down in the sidebar and tap on <strong>HOME ASSISTANT</strong> to expand that section.
+          </p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-number">3</div>
+        <div class="step-content">
+          <h4>Enable the API</h4>
+          <p>
+            Toggle <strong>Enable API</strong> to ON. This starts the REST API server on port 2323.
+          </p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-number">4</div>
+        <div class="step-content">
+          <h4>Set an API Password (Optional)</h4>
+          <p>
+            After enabling the API, a password field will appear. Setting a password is recommended
+            for security, but optional for testing on a trusted home network.
+          </p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-number">5</div>
+        <div class="step-content">
+          <h4>Note Your Device's IP Address</h4>
+          <p>
+            Look for the device's IP address in the sidebar or check your router's connected devices list.
+            You'll need this IP to add the device to Home Assistant.
+          </p>
+        </div>
+      </div>
+
+      <div class="info-box warning">
+        <h4>Firewall Note</h4>
+        <p>
+          If your Android device has a firewall app, make sure port 2323 is allowed for incoming connections.
+          Most home networks don't require any additional configuration.
+        </p>
+      </div>
+
+      <h2>Part 2: Install the Integration in Home Assistant</h2>
+
+      <p>
+        The Chickadee integration needs to be installed as a custom component in Home Assistant.
+        We recommend using HACS for the easiest installation and automatic updates.
+      </p>
+
+      <h3>Option A: Using HACS (Recommended)</h3>
+
+      <p>
+        <a href="https://hacs.xyz/" target="_blank">HACS (Home Assistant Community Store)</a> makes it easy to install
+        and update custom integrations. If you don't have HACS installed yet,
+        <a href="https://hacs.xyz/docs/use/" target="_blank">follow the HACS installation guide</a> first.
+      </p>
+
+      <div class="step">
+        <div class="step-number">1</div>
+        <div class="step-content">
+          <h4>Open HACS</h4>
+          <p>
+            In Home Assistant, click on <strong>HACS</strong> in the sidebar, then select <strong>Integrations</strong>.
+          </p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-number">2</div>
+        <div class="step-content">
+          <h4>Add Custom Repository</h4>
+          <p>
+            Click the three-dot menu (⋮) in the top right corner and select <strong>Custom repositories</strong>.
+          </p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-number">3</div>
+        <div class="step-content">
+          <h4>Enter Repository URL</h4>
+          <p>
+            In the dialog that appears:<br>
+            • <strong>Repository:</strong> <code>https://github.com/jwlerch78/chickadee-ha-integration</code><br>
+            • <strong>Category:</strong> Select <strong>Integration</strong><br>
+            Click <strong>Add</strong>.
+          </p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-number">4</div>
+        <div class="step-content">
+          <h4>Install Chickadee</h4>
+          <p>
+            Close the custom repositories dialog. Click <strong>+ Explore & Download Repositories</strong>.
+            Search for "Chickadee" and click on it. Click <strong>Download</strong> in the bottom right.
+          </p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-number">5</div>
+        <div class="step-content">
+          <h4>Restart Home Assistant</h4>
+          <p>
+            Go to <strong>Settings → System → Restart</strong> and click <strong>Restart</strong>.
+            Wait for Home Assistant to come back online.
+          </p>
+        </div>
+      </div>
+
+      <div class="info-box tip">
+        <h4>Future Updates</h4>
+        <p>
+          Once installed via HACS, you'll receive notifications when updates are available.
+          Just click "Update" in HACS to get the latest features and fixes.
+        </p>
+      </div>
+
+      <h3>Option B: Manual Installation</h3>
+
+      <p>
+        If you prefer not to use HACS, you can install the integration manually.
+        You'll need access to your Home Assistant config folder via Samba share, SSH, or the File Editor app.
+      </p>
+
+      <div class="step">
+        <div class="step-number">1</div>
+        <div class="step-content">
+          <h4>Download the Integration</h4>
+          <p>
+            Download the Chickadee integration from
+            <a href="https://github.com/jwlerch78/chickadee-ha-integration" target="_blank">GitHub</a>.
+            Click the green "Code" button and select "Download ZIP".
+          </p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-number">2</div>
+        <div class="step-content">
+          <h4>Copy to Home Assistant</h4>
+          <p>
+            Extract the ZIP file. Copy the <code>custom_components/chickadee</code> folder to your
+            Home Assistant config folder at <code>config/custom_components/chickadee</code>.
+            Create the <code>custom_components</code> folder if it doesn't exist.
+          </p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-number">3</div>
+        <div class="step-content">
+          <h4>Restart Home Assistant</h4>
+          <p>
+            Go to <strong>Settings → System → Restart</strong> and click <strong>Restart</strong>.
+            Wait for Home Assistant to come back online.
+          </p>
+        </div>
+      </div>
+
+      <div class="info-box warning">
+        <h4>Manual Updates</h4>
+        <p>
+          With manual installation, you'll need to check GitHub periodically for updates
+          and repeat this process to get new versions. We recommend HACS for easier maintenance.
+        </p>
+      </div>
+
+      <h2>Part 3: Add Your Chickadee Device</h2>
+
+      <p>
+        Now that the integration is installed, you can add your Chickadee device to Home Assistant.
+      </p>
+
+      <div class="step">
+        <div class="step-number">1</div>
+        <div class="step-content">
+          <h4>Open Integrations</h4>
+          <p>
+            In Home Assistant, go to <strong>Settings → Devices & Services</strong>.
+          </p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-number">2</div>
+        <div class="step-content">
+          <h4>Add the Integration</h4>
+          <p>
+            Click <strong>+ Add Integration</strong> in the bottom right corner.
+            Search for "Chickadee" and select it.
+          </p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-number">3</div>
+        <div class="step-content">
+          <h4>Enter Device Details</h4>
+          <p>
+            Enter your Chickadee device's IP address and port (default: 2323).
+            If you set a password, enter it as well.
+          </p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-number">4</div>
+        <div class="step-content">
+          <h4>Complete Setup</h4>
+          <p>
+            Click <strong>Submit</strong>. If successful, you'll see your device appear
+            in the Chickadee integration with its entities.
+          </p>
+        </div>
+      </div>
+
+      <div class="info-box tip">
+        <h4>Auto-Discovery</h4>
+        <p>
+          Chickadee broadcasts its presence on your network using mDNS/Zeroconf. Home Assistant may
+          automatically discover your device and show a notification to add it. If you see this
+          notification, just click "Configure" to add the device.
+        </p>
+      </div>
+
+      <h2>Part 4: Install the Chickadee Console App (Optional)</h2>
+
+      <p>
+        The Chickadee Console app puts the full Chickadee management UI inside Home Assistant.
+        From the Console you can manage your family, calendars, photos, AI personality, voice
+        settings, and per-device preferences — all without leaving HA. You'll also see live device
+        history charts (battery, RAM, Wi-Fi) and per-device control panels.
+      </p>
+
+      <div class="info-box warning">
+        <h4>Apps need Home Assistant OS or Supervised</h4>
+        <p>
+          The Console app runs as a Home Assistant app (previously called add-ons). Apps require the
+          Home Assistant Supervisor, which is included in <strong>Home Assistant OS</strong> and
+          <strong>Home Assistant Supervised</strong>. If you're running <strong>HA Container</strong> or
+          <strong>HA Core</strong>, apps aren't available — you can still use the integration above and
+          manage your Chickadee account at <a href="https://getchickadee.org/console" target="_blank">chickadeeapp.com/console</a> in your browser.
+        </p>
+      </div>
+
+      <div class="step">
+        <div class="step-number">1</div>
+        <div class="step-content">
+          <h4>Open the App Store</h4>
+          <p>
+            In Home Assistant, go to <strong>Settings → Apps</strong> (formerly "Add-ons"). Click the
+            <strong>App Store</strong> button at the bottom right.
+          </p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-number">2</div>
+        <div class="step-content">
+          <h4>Add the Chickadee Repository</h4>
+          <p>
+            Click the three-dot menu (⋮) in the top right of the App Store and select
+            <strong>Repositories</strong>. Paste this URL:
+          </p>
+          <p><code>https://github.com/jwlerch78/chickadee-ha-app</code></p>
+          <p>
+            Click <strong>Add</strong>, then close the dialog. A new "Chickadee" section appears at the
+            bottom of the App Store with the Chickadee Console card.
+          </p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-number">3</div>
+        <div class="step-content">
+          <h4>Install Chickadee Console</h4>
+          <p>
+            Click the <strong>Chickadee Console</strong> card, then click <strong>Install</strong>.
+            The first install pulls a Node.js base image and takes 3–5 minutes on a Raspberry Pi
+            (faster on x86 hardware). The progress spinner won't show a percentage — just wait until
+            it's done.
+          </p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-number">4</div>
+        <div class="step-content">
+          <h4>Configure and Start</h4>
+          <p>
+            Once installed, go to the <strong>Configuration</strong> tab. Confirm
+            <code>supabase_env: production</code> (the default) so the Console connects to
+            live Chickadee. Save, then switch to the <strong>Info</strong> tab.
+          </p>
+          <p>
+            Toggle <strong>Show in sidebar</strong> on so you can reach the Console from HA's
+            main sidebar. Then click <strong>Start</strong>.
+          </p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-number">5</div>
+        <div class="step-content">
+          <h4>Sign In</h4>
+          <p>
+            Click <strong>Open Web UI</strong> (or click "Chickadee Console" in the HA sidebar).
+            The Console will show a sign-in screen with a short code. Open
+            <a href="https://getchickadee.org/link" target="_blank">chickadeeapp.com/link</a> on your phone
+            or laptop, enter the code, and approve. You're in.
+          </p>
+        </div>
+      </div>
+
+      <div class="info-box tip">
+        <h4>First-Time Console Tips</h4>
+        <p>
+          • Devices you added in Part 3 will appear in the <strong>Devices</strong> section automatically.<br>
+          • Click any device card for live metrics, history charts (battery, RAM, Wi-Fi), and per-device settings.<br>
+          • The Console auto-updates — when we ship a new version, just click <strong>Update</strong> on the
+          Chickadee Console card in Settings → Apps.
+        </p>
+      </div>
+
+      <h2>Available Entities</h2>
+
+      <p>
+        Once your device is added, Home Assistant creates a comprehensive set of entities you can use
+        in dashboards, automations, and scripts. These are organized into Controls (things you can change)
+        and Sensors (things you can monitor).
+      </p>
+
+      <h3>Switches</h3>
+
+      <table class="entity-table">
+        <thead>
+          <tr>
+            <th>Entity</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>switch.chickadee_screen</code></td>
+            <td>Turn screen on/off</td>
+          </tr>
+          <tr>
+            <td><code>switch.chickadee_screensaver</code></td>
+            <td>Start/stop the screensaver</td>
+          </tr>
+          <tr>
+            <td><code>switch.chickadee_lock</code></td>
+            <td>Lock/unlock kiosk mode (hides settings)</td>
+          </tr>
+          <tr>
+            <td><code>switch.chickadee_dark_mode</code></td>
+            <td>Toggle system dark mode</td>
+          </tr>
+          <tr>
+            <td><code>switch.chickadee_hide_sidebar</code></td>
+            <td>Hide/show the sidebar menu</td>
+          </tr>
+          <tr>
+            <td><code>switch.chickadee_hide_tabs</code></td>
+            <td>Hide/show the header tabs</td>
+          </tr>
+          <tr>
+            <td><code>switch.chickadee_keep_screen_on</code></td>
+            <td>Prevent screen from turning off</td>
+          </tr>
+          <tr>
+            <td><code>switch.chickadee_auto_brightness</code></td>
+            <td>Enable automatic brightness adjustment</td>
+          </tr>
+          <tr>
+            <td><code>switch.chickadee_start_on_boot</code></td>
+            <td>Launch app when device boots</td>
+          </tr>
+          <tr>
+            <td><code>switch.chickadee_rtsp_stream</code></td>
+            <td>Enable/disable RTSP camera stream</td>
+          </tr>
+          <tr>
+            <td><code>switch.chickadee_software_encoding</code></td>
+            <td>Use software encoding for RTSP (vs hardware)</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>Numbers</h3>
+
+      <table class="entity-table">
+        <thead>
+          <tr>
+            <th>Entity</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>number.chickadee_brightness</code></td>
+            <td>Set screen brightness (0-255)</td>
+          </tr>
+          <tr>
+            <td><code>number.chickadee_volume</code></td>
+            <td>Set audio volume (0-100)</td>
+          </tr>
+          <tr>
+            <td><code>number.chickadee_zoom</code></td>
+            <td>WebView text/zoom scaling (50-200%)</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>Selects</h3>
+
+      <table class="entity-table">
+        <thead>
+          <tr>
+            <th>Entity</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>select.chickadee_screensaver_mode</code></td>
+            <td>Screensaver type: Dim, Black, URL, Photos, or App</td>
+          </tr>
+          <tr>
+            <td><code>select.chickadee_photo_folder</code></td>
+            <td>HA Media folder for screensaver photos</td>
+          </tr>
+          <tr>
+            <td><code>select.chickadee_motion_wake_mode</code></td>
+            <td>Motion detection mode: Disabled, Brightness Sensor, or Camera</td>
+          </tr>
+          <tr>
+            <td><code>select.chickadee_screen_off_behavior</code></td>
+            <td>Screen off method: Black Overlay (fast wake, keeps connections alive) or Power Off Screen (real hardware off)</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>Text Inputs</h3>
+
+      <table class="entity-table">
+        <thead>
+          <tr>
+            <th>Entity</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>text.chickadee_dashboard_url</code></td>
+            <td>Set the Home Assistant dashboard URL</td>
+          </tr>
+          <tr>
+            <td><code>text.chickadee_pin</code></td>
+            <td>Set a 4-digit unlock PIN</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>Buttons</h3>
+
+      <table class="entity-table">
+        <thead>
+          <tr>
+            <th>Entity</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>button.chickadee_reload</code></td>
+            <td>Refresh the dashboard</td>
+          </tr>
+          <tr>
+            <td><code>button.chickadee_foreground</code></td>
+            <td>Bring app to foreground</td>
+          </tr>
+          <tr>
+            <td><code>button.chickadee_restart</code></td>
+            <td>Restart the Chickadee app</td>
+          </tr>
+          <tr>
+            <td><code>button.chickadee_clear_cache</code></td>
+            <td>Clear the WebView cache</td>
+          </tr>
+          <tr>
+            <td><code>button.chickadee_refresh_webview</code></td>
+            <td>Refresh the WebView</td>
+          </tr>
+          <tr>
+            <td><code>button.chickadee_clear_storage</code></td>
+            <td>Clear WebView local storage</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>Sensors</h3>
+
+      <table class="entity-table">
+        <thead>
+          <tr>
+            <th>Entity</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>sensor.chickadee_battery</code></td>
+            <td>Battery level (0-100%)</td>
+          </tr>
+          <tr>
+            <td><code>sensor.chickadee_ambient_light</code></td>
+            <td>Light sensor reading in lux</td>
+          </tr>
+          <tr>
+            <td><code>sensor.chickadee_wifi_signal</code></td>
+            <td>WiFi signal strength (0-100%)</td>
+          </tr>
+          <tr>
+            <td><code>sensor.chickadee_storage_free</code></td>
+            <td>Available storage space</td>
+          </tr>
+          <tr>
+            <td><code>sensor.chickadee_current_page</code></td>
+            <td>Currently displayed URL</td>
+          </tr>
+          <tr>
+            <td><code>sensor.chickadee_device_id</code></td>
+            <td>Unique device identifier</td>
+          </tr>
+          <tr>
+            <td><code>sensor.chickadee_android_version</code></td>
+            <td>Android OS version</td>
+          </tr>
+          <tr>
+            <td><code>sensor.chickadee_app_version</code></td>
+            <td>Chickadee app version</td>
+          </tr>
+          <tr>
+            <td><code>sensor.chickadee_ram_usage</code></td>
+            <td>RAM usage percentage</td>
+          </tr>
+          <tr>
+            <td><code>sensor.chickadee_camera_frame_rate</code></td>
+            <td>RTSP stream frame rate</td>
+          </tr>
+          <tr>
+            <td><code>sensor.chickadee_camera_resolution</code></td>
+            <td>RTSP stream resolution</td>
+          </tr>
+          <tr>
+            <td><code>sensor.chickadee_camera_stream_url</code></td>
+            <td>RTSP stream URL when active</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>Binary Sensors</h3>
+
+      <table class="entity-table">
+        <thead>
+          <tr>
+            <th>Entity</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>binary_sensor.chickadee_plugged_in</code></td>
+            <td>Whether device is charging</td>
+          </tr>
+          <tr>
+            <td><code>binary_sensor.chickadee_screensaver_active</code></td>
+            <td>Whether screensaver is running</td>
+          </tr>
+          <tr>
+            <td><code>binary_sensor.chickadee_pin_set</code></td>
+            <td>Whether unlock PIN is configured</td>
+          </tr>
+          <tr>
+            <td><code>binary_sensor.chickadee_device_admin</code></td>
+            <td>Whether device admin/owner is active</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2>RTSP Camera Streaming</h2>
+
+      <p>
+        Chickadee can stream video from your device's front camera as an RTSP feed, turning your tablet
+        into a security camera or video intercom. This works great for monitoring a room or as a doorbell
+        camera integration.
+      </p>
+
+      <div class="info-box tip">
+        <h4>Use Cases</h4>
+        <p>
+          Use the camera stream to check in on pets, monitor a baby's room, see who's at the door,
+          or add a video feed to your Home Assistant dashboard. The stream can be viewed in any
+          RTSP-compatible player or added directly to HA as a camera entity.
+        </p>
+      </div>
+
+      <h3>Enabling Camera Streaming</h3>
+
+      <div class="step">
+        <div class="step-number">1</div>
+        <div class="step-content">
+          <h4>Enable in Sidebar</h4>
+          <p>
+            On your Chickadee device, open the sidebar and find the <strong>CAMERA</strong> section.
+            Toggle <strong>Enable RTSP Stream</strong> to ON.
+          </p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-number">2</div>
+        <div class="step-content">
+          <h4>Configure Stream Settings</h4>
+          <p>
+            Adjust the resolution, FPS, and bitrate based on your needs:<br>
+            • <strong>Resolution:</strong> 480p (default), 720p, or 1080p<br>
+            • <strong>FPS:</strong> 15-30 frames per second<br>
+            • <strong>Bitrate:</strong> 1-5 Mbps (higher = better quality, more bandwidth)
+          </p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-number">3</div>
+        <div class="step-content">
+          <h4>Note the Stream URL</h4>
+          <p>
+            The sidebar will show your RTSP stream URL, typically:<br>
+            <code>rtsp://DEVICE_IP:8554/camera</code><br>
+            You'll use this URL to add the camera to Home Assistant.
+          </p>
+        </div>
+      </div>
+
+      <h3>Adding to Home Assistant</h3>
+
+      <p>Add the camera stream to Home Assistant using the Generic Camera integration:</p>
+
+      <div class="step">
+        <div class="step-number">1</div>
+        <div class="step-content">
+          <h4>Add Generic Camera</h4>
+          <p>
+            Go to <strong>Settings → Devices & Services → Add Integration</strong> and search for
+            <strong>Generic Camera</strong>.
+          </p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-number">2</div>
+        <div class="step-content">
+          <h4>Configure Stream URL</h4>
+          <p>
+            Enter the RTSP stream URL from your Chickadee device:<br>
+            • <strong>Stream Source:</strong> <code>rtsp://192.168.x.x:8554/camera</code><br>
+            • <strong>Still Image URL:</strong> Leave blank (or use the camshot API endpoint)<br>
+            Give it a friendly name like "Kitchen Chickadee Camera".
+          </p>
+        </div>
+      </div>
+
+      <div class="info-box warning">
+        <h4>Performance Note</h4>
+        <p>
+          Running the camera stream uses additional battery and processing power. For wall-mounted
+          tablets that are always plugged in, this isn't a concern. For battery-powered devices,
+          consider only enabling the stream when needed via automation.
+        </p>
+      </div>
+
+      <h3>Camera API Commands</h3>
+
+      <p>You can also control the camera stream via the REST API or Home Assistant services:</p>
+
+      <table class="entity-table">
+        <thead>
+          <tr>
+            <th>Command</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>startRtspStream</code></td>
+            <td>Start the RTSP camera stream</td>
+          </tr>
+          <tr>
+            <td><code>stopRtspStream</code></td>
+            <td>Stop the RTSP camera stream</td>
+          </tr>
+          <tr>
+            <td><code>getRtspStatus</code></td>
+            <td>Get stream status, URL, and connected client count</td>
+          </tr>
+          <tr>
+            <td><code>getCamshot</code></td>
+            <td>Capture a single JPEG image from the camera</td>
+          </tr>
+          <tr>
+            <td><code>setRtspResolution</code></td>
+            <td>Set resolution (width/height) - requires stream restart</td>
+          </tr>
+          <tr>
+            <td><code>setRtspFps</code></td>
+            <td>Set frame rate (10-30) - requires stream restart</td>
+          </tr>
+          <tr>
+            <td><code>setRtspBitrate</code></td>
+            <td>Set bitrate in bps - requires stream restart</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2>Services</h2>
+
+      <p>
+        Beyond entities, Chickadee exposes several services you can call from automations
+        and scripts for text-to-speech, audio playback, and on-screen notifications.
+      </p>
+
+      <h3>Text-to-Speech</h3>
+
+      <p>Make your Chickadee device speak announcements using Android's built-in TTS engine:</p>
+
+      <div class="code-block"><code><span class="key">service</span>: <span class="string">rest_command.chickadee_tts</span>
+<span class="key">data</span>:
+  <span class="key">text</span>: <span class="string">"Dinner is ready!"</span></code></div>
+
+      <p>
+        To set this up, add a REST command to your <code>configuration.yaml</code>:
+      </p>
+
+      <div class="code-block"><code><span class="key">rest_command</span>:
+  <span class="key">chickadee_tts</span>:
+    <span class="key">url</span>: <span class="string">"http://DEVICE_IP:2323/?cmd=textToSpeech&text={{ text }}&password=YOUR_PASSWORD"</span>
+    <span class="key">method</span>: <span class="string">GET</span>
+  <span class="key">chickadee_stop_tts</span>:
+    <span class="key">url</span>: <span class="string">"http://DEVICE_IP:2323/?cmd=stopTextToSpeech&password=YOUR_PASSWORD"</span>
+    <span class="key">method</span>: <span class="string">GET</span></code></div>
+
+      <h3>Audio Playback</h3>
+
+      <p>Play audio files or streams through the device speakers:</p>
+
+      <div class="code-block"><code><span class="key">rest_command</span>:
+  <span class="key">chickadee_play_sound</span>:
+    <span class="key">url</span>: <span class="string">"http://DEVICE_IP:2323/?cmd=playSound&url={{ url }}&password=YOUR_PASSWORD"</span>
+    <span class="key">method</span>: <span class="string">GET</span>
+  <span class="key">chickadee_stop_sound</span>:
+    <span class="key">url</span>: <span class="string">"http://DEVICE_IP:2323/?cmd=stopSound&password=YOUR_PASSWORD"</span>
+    <span class="key">method</span>: <span class="string">GET</span></code></div>
+
+      <h3>On-Screen Messages</h3>
+
+      <p>Display toast notifications on the device screen:</p>
+
+      <div class="code-block"><code><span class="key">rest_command</span>:
+  <span class="key">chickadee_message</span>:
+    <span class="key">url</span>: <span class="string">"http://DEVICE_IP:2323/?cmd=setOverlayMessage&text={{ text }}&duration={{ duration | default(3000) }}&password=YOUR_PASSWORD"</span>
+    <span class="key">method</span>: <span class="string">GET</span></code></div>
+
+      <p>Then call it in automations:</p>
+
+      <div class="code-block"><code><span class="key">service</span>: <span class="string">rest_command.chickadee_message</span>
+<span class="key">data</span>:
+  <span class="key">text</span>: <span class="string">"Front door opened"</span>
+  <span class="key">duration</span>: <span class="string">5000</span></code></div>
+
+      <h3>Screen Off Method (REST API)</h3>
+
+      <p>
+        You can also control the screen off method directly via REST commands. This is useful
+        if you want a single automation call that both changes the method <em>and</em> turns off the screen:
+      </p>
+
+      <div class="code-block"><code><span class="key">rest_command</span>:
+  <span class="comment"># Change the default screen off method (persists across calls)</span>
+  <span class="key">chickadee_set_screen_off_method</span>:
+    <span class="key">url</span>: <span class="string">"http://DEVICE_IP:2323/?cmd=setScreenOffMethod&method={{ method }}&password=YOUR_PASSWORD"</span>
+    <span class="key">method</span>: <span class="string">GET</span>
+  <span class="comment"># Turn off with a one-time method override (doesn't change default)</span>
+  <span class="key">chickadee_screen_off</span>:
+    <span class="key">url</span>: <span class="string">"http://DEVICE_IP:2323/?cmd=screenOff&method={{ method }}&password=YOUR_PASSWORD"</span>
+    <span class="key">method</span>: <span class="string">GET</span></code></div>
+
+      <p>Valid <code>method</code> values: <code>overlay</code> (Black Overlay) or <code>hardware</code> (Power Off Screen).
+         Omitting <code>method</code> from <code>screenOff</code> uses the current default.</p>
+
+      <h2>Example Automations</h2>
+
+      <h3>Dim Screen at Night</h3>
+
+      <p>Automatically reduce brightness when it gets dark:</p>
+
+      <div class="code-block"><code><span class="key">alias</span>: <span class="string">"Chickadee - Dim at Night"</span>
+<span class="key">trigger</span>:
+  - <span class="key">platform</span>: <span class="string">sun</span>
+    <span class="key">event</span>: <span class="string">sunset</span>
+<span class="key">action</span>:
+  - <span class="key">service</span>: <span class="string">number.set_value</span>
+    <span class="key">target</span>:
+      <span class="key">entity_id</span>: <span class="string">number.chickadee_brightness</span>
+    <span class="key">data</span>:
+      <span class="key">value</span>: <span class="string">30</span></code></div>
+
+      <h3>Turn Off Screen When Away</h3>
+
+      <p>Turn off the Chickadee screen when everyone leaves home:</p>
+
+      <div class="code-block"><code><span class="key">alias</span>: <span class="string">"Chickadee - Screen Off When Away"</span>
+<span class="key">trigger</span>:
+  - <span class="key">platform</span>: <span class="string">state</span>
+    <span class="key">entity_id</span>: <span class="string">zone.home</span>
+    <span class="key">to</span>: <span class="string">"0"</span>
+<span class="key">action</span>:
+  - <span class="key">service</span>: <span class="string">switch.turn_off</span>
+    <span class="key">target</span>:
+      <span class="key">entity_id</span>: <span class="string">switch.chickadee_screen</span></code></div>
+
+      <h3>Wake Screen on Motion</h3>
+
+      <p>Turn on the Chickadee screen when motion is detected nearby:</p>
+
+      <div class="code-block"><code><span class="key">alias</span>: <span class="string">"Chickadee - Wake on Motion"</span>
+<span class="key">trigger</span>:
+  - <span class="key">platform</span>: <span class="string">state</span>
+    <span class="key">entity_id</span>: <span class="string">binary_sensor.hallway_motion</span>
+    <span class="key">to</span>: <span class="string">"on"</span>
+<span class="key">action</span>:
+  - <span class="key">service</span>: <span class="string">switch.turn_on</span>
+    <span class="key">target</span>:
+      <span class="key">entity_id</span>: <span class="string">switch.chickadee_screen</span></code></div>
+
+      <h3>Screen Off: Overlay by Day, Hardware Off at Night</h3>
+
+      <p>Use Black Overlay during the day for instant wake and reliable connections,
+         then switch to Power Off Screen at night to save energy. This is especially useful
+         on devices (like Xiaomi tablets) that drop WebSocket connections during hardware screen off:</p>
+
+      <div class="code-block"><code><span class="key">alias</span>: <span class="string">"Chickadee - Overlay by Day, Off at Night"</span>
+<span class="key">trigger</span>:
+  - <span class="key">platform</span>: <span class="string">time</span>
+    <span class="key">at</span>: <span class="string">"07:00:00"</span>
+    <span class="key">id</span>: <span class="string">morning</span>
+  - <span class="key">platform</span>: <span class="string">time</span>
+    <span class="key">at</span>: <span class="string">"23:00:00"</span>
+    <span class="key">id</span>: <span class="string">night</span>
+<span class="key">action</span>:
+  - <span class="key">choose</span>:
+      - <span class="key">conditions</span>:
+          - <span class="key">condition</span>: <span class="string">trigger</span>
+            <span class="key">id</span>: <span class="string">morning</span>
+        <span class="key">sequence</span>:
+          - <span class="key">service</span>: <span class="string">select.select_option</span>
+            <span class="key">target</span>:
+              <span class="key">entity_id</span>: <span class="string">select.chickadee_screen_off_behavior</span>
+            <span class="key">data</span>:
+              <span class="key">option</span>: <span class="string">"Black Overlay"</span>
+      - <span class="key">conditions</span>:
+          - <span class="key">condition</span>: <span class="string">trigger</span>
+            <span class="key">id</span>: <span class="string">night</span>
+        <span class="key">sequence</span>:
+          - <span class="key">service</span>: <span class="string">select.select_option</span>
+            <span class="key">target</span>:
+              <span class="key">entity_id</span>: <span class="string">select.chickadee_screen_off_behavior</span>
+            <span class="key">data</span>:
+              <span class="key">option</span>: <span class="string">"Power Off Screen"</span></code></div>
+
+      <h3>Start Screensaver at Night</h3>
+
+      <p>Automatically start the photo screensaver in the evening:</p>
+
+      <div class="code-block"><code><span class="key">alias</span>: <span class="string">"Chickadee - Photo Screensaver at Night"</span>
+<span class="key">trigger</span>:
+  - <span class="key">platform</span>: <span class="string">time</span>
+    <span class="key">at</span>: <span class="string">"21:00:00"</span>
+<span class="key">action</span>:
+  - <span class="key">service</span>: <span class="string">select.select_option</span>
+    <span class="key">target</span>:
+      <span class="key">entity_id</span>: <span class="string">select.chickadee_screensaver_mode</span>
+    <span class="key">data</span>:
+      <span class="key">option</span>: <span class="string">"photos"</span>
+  - <span class="key">service</span>: <span class="string">switch.turn_on</span>
+    <span class="key">target</span>:
+      <span class="key">entity_id</span>: <span class="string">switch.chickadee_screensaver</span></code></div>
+
+      <h3>Announce Doorbell</h3>
+
+      <p>Use TTS to announce when someone rings the doorbell:</p>
+
+      <div class="code-block"><code><span class="key">alias</span>: <span class="string">"Chickadee - Doorbell Announcement"</span>
+<span class="key">trigger</span>:
+  - <span class="key">platform</span>: <span class="string">state</span>
+    <span class="key">entity_id</span>: <span class="string">binary_sensor.front_door_doorbell</span>
+    <span class="key">to</span>: <span class="string">"on"</span>
+<span class="key">action</span>:
+  - <span class="key">service</span>: <span class="string">rest_command.chickadee_tts</span>
+    <span class="key">data</span>:
+      <span class="key">text</span>: <span class="string">"Someone is at the front door"</span></code></div>
+
+      <h3>Auto-Adjust Brightness by Ambient Light</h3>
+
+      <p>Automatically adjust screen brightness based on room lighting:</p>
+
+      <div class="code-block"><code><span class="key">alias</span>: <span class="string">"Chickadee - Auto Brightness"</span>
+<span class="key">trigger</span>:
+  - <span class="key">platform</span>: <span class="string">state</span>
+    <span class="key">entity_id</span>: <span class="string">sensor.chickadee_ambient_light</span>
+<span class="key">action</span>:
+  - <span class="key">service</span>: <span class="string">number.set_value</span>
+    <span class="key">target</span>:
+      <span class="key">entity_id</span>: <span class="string">number.chickadee_brightness</span>
+    <span class="key">data</span>:
+      <span class="key">value</span>: <span class="string">"{{ [[states('sensor.chickadee_ambient_light') | int / 10, 100] | min, 20] | max }}"</span></code></div>
+
+      <h3>Enable Camera When Away</h3>
+
+      <p>Start the RTSP camera stream when everyone leaves home for security monitoring:</p>
+
+      <div class="code-block"><code><span class="key">alias</span>: <span class="string">"Chickadee - Camera On When Away"</span>
+<span class="key">trigger</span>:
+  - <span class="key">platform</span>: <span class="string">state</span>
+    <span class="key">entity_id</span>: <span class="string">zone.home</span>
+    <span class="key">to</span>: <span class="string">"0"</span>
+<span class="key">action</span>:
+  - <span class="key">service</span>: <span class="string">rest_command.chickadee_start_camera</span>
+<span class="key">mode</span>: <span class="string">single</span></code></div>
+
+      <div class="info-box tip">
+        <h4>REST Command for Camera</h4>
+        <p>
+          Add this to your <code>configuration.yaml</code> for the camera automation above:
+        </p>
+      </div>
+
+      <div class="code-block"><code><span class="key">rest_command</span>:
+  <span class="key">chickadee_start_camera</span>:
+    <span class="key">url</span>: <span class="string">"http://DEVICE_IP:2323/?cmd=startRtspStream&password=YOUR_PASSWORD"</span>
+    <span class="key">method</span>: <span class="string">GET</span>
+  <span class="key">chickadee_stop_camera</span>:
+    <span class="key">url</span>: <span class="string">"http://DEVICE_IP:2323/?cmd=stopRtspStream&password=YOUR_PASSWORD"</span>
+    <span class="key">method</span>: <span class="string">GET</span></code></div>
+
+      <h3>Low Battery Alert</h3>
+
+      <p>Get notified when the Chickadee device battery is running low:</p>
+
+      <div class="code-block"><code><span class="key">alias</span>: <span class="string">"Chickadee - Low Battery Alert"</span>
+<span class="key">trigger</span>:
+  - <span class="key">platform</span>: <span class="string">numeric_state</span>
+    <span class="key">entity_id</span>: <span class="string">sensor.chickadee_battery</span>
+    <span class="key">below</span>: <span class="string">20</span>
+<span class="key">condition</span>:
+  - <span class="key">condition</span>: <span class="string">state</span>
+    <span class="key">entity_id</span>: <span class="string">binary_sensor.chickadee_plugged_in</span>
+    <span class="key">state</span>: <span class="string">"off"</span>
+<span class="key">action</span>:
+  - <span class="key">service</span>: <span class="string">notify.mobile_app</span>
+    <span class="key">data</span>:
+      <span class="key">message</span>: <span class="string">"Chickadee battery is at {{ states('sensor.chickadee_battery') }}% - please plug it in"</span></code></div>
+
+      <h2>Troubleshooting</h2>
+
+      <h3>Can't find Chickadee in integrations</h3>
+      <ul>
+        <li>Make sure you restarted Home Assistant after copying the files</li>
+        <li>Verify the files are in <code>config/custom_components/chickadee/</code></li>
+        <li>Check Home Assistant logs for any error messages during startup</li>
+      </ul>
+
+      <h3>Connection failed when adding device</h3>
+      <ul>
+        <li>Verify the API is enabled on your Chickadee device</li>
+        <li>Check the IP address is correct and the device is on the same network</li>
+        <li>Try accessing <code>http://DEVICE_IP:2323/?cmd=deviceInfo&amp;type=json</code> in a browser to test</li>
+        <li>Make sure no firewall is blocking port 2323</li>
+      </ul>
+
+      <h3>Device shows as unavailable</h3>
+      <ul>
+        <li>Check that Chickadee is running on the device</li>
+        <li>Verify the device hasn't changed IP address (consider setting a static IP)</li>
+        <li>Restart the Chickadee app or toggle the API off and on</li>
+      </ul>
+
+      <h3>Entities not updating</h3>
+      <ul>
+        <li>The integration polls every 30 seconds by default</li>
+        <li>Check Home Assistant logs for any API errors</li>
+        <li>Verify the device is still responding to API requests</li>
+      </ul>
+
+      <h3>Device added but no entities appear</h3>
+      <ul>
+        <li><strong>Most common cause:</strong> The API is not enabled on the device. Go to the Chickadee sidebar → HOME ASSISTANT section → Toggle <strong>Enable API</strong> to ON</li>
+        <li>Test the API by opening <code>http://DEVICE_IP:2323/?cmd=deviceInfo&amp;type=json</code> in a browser - you should see JSON data</li>
+        <li>If the API test fails, try restarting the Chickadee app</li>
+        <li>Check Home Assistant logs (Settings → System → Logs) and filter for "chickadee" to see any connection errors</li>
+        <li>Try removing the device from Home Assistant and re-adding it after confirming the API is working</li>
+      </ul>
+
+      <div class="info-box important">
+        <h4>Need More Help?</h4>
+        <p>
+          If you're still having trouble, <a href="/v2/contact">contact us</a> with details about your setup
+          and any error messages you're seeing. Include your Home Assistant version and Chickadee app version.
+        </p>
+      </div>
+    </div>
+  </article>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>&copy; 2026 Chickadee LLC. All rights reserved.</p>
+    <div class="footer-links">
+      <a href="/privacy">Privacy Policy</a>
+      <span class="separator">|</span>
+      <a href="/terms">Terms of Service</a>
+    </div>
+  </footer>
+
+  <!-- Analytics -->
+</body>
+</html>

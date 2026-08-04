@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Setting Up Video Feeds &amp; Frigate with Chickadee - Chickadee</title>
+  <link rel="icon" type="image/png" href=".././assets/chickadee-mark.png">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      line-height: 1.6;
+      background: #ffffff;
+      color: #424242;
+      min-height: 100vh;
+    }
+
+    /* Breadcrumb */
+    .breadcrumb {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px 40px 0 40px;
+    }
+
+    .breadcrumb a {
+      color: #666;
+      text-decoration: none;
+      font-size: 14px;
+    }
+
+    .breadcrumb a:hover {
+      color: #ffaa00;
+    }
+
+    .breadcrumb span {
+      color: #999;
+      margin: 0 8px;
+    }
+
+    /* Article */
+    .article {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 30px 40px 60px 40px;
+    }
+
+    .article-header {
+      margin-bottom: 40px;
+    }
+
+    .article-tag {
+      display: inline-block;
+      background: #18bcf2;
+      color: white;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 4px 12px;
+      border-radius: 4px;
+      margin-bottom: 15px;
+    }
+
+    .article h1 {
+      font-size: 2.2em;
+      color: #424242;
+      margin-bottom: 15px;
+      line-height: 1.3;
+    }
+
+    .article-meta {
+      color: #888;
+      font-size: 14px;
+    }
+
+    .article-content h2 {
+      font-size: 1.5em;
+      color: #424242;
+      margin: 40px 0 20px 0;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #ffaa00;
+    }
+
+    .article-content h3 {
+      font-size: 1.2em;
+      color: #424242;
+      margin: 30px 0 15px 0;
+    }
+
+    .article-content p {
+      margin-bottom: 20px;
+      color: #555;
+    }
+
+    .article-content ul,
+    .article-content ol {
+      margin-bottom: 20px;
+      padding-left: 30px;
+    }
+
+    .article-content li {
+      margin-bottom: 10px;
+      color: #555;
+    }
+
+    .article-content a {
+      color: #ffaa00;
+      text-decoration: none;
+    }
+
+    .article-content a:hover {
+      text-decoration: underline;
+    }
+
+    /* Inline code */
+    code {
+      background: #f4f4f4;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Fira Mono', 'Droid Sans Mono', monospace;
+      font-size: 0.9em;
+      color: #d63384;
+    }
+
+    /* Code block */
+    .code-block {
+      background: #2d2d2d;
+      color: #f8f8f2;
+      padding: 20px;
+      border-radius: 8px;
+      margin: 20px 0;
+      overflow-x: auto;
+      font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Fira Mono', 'Droid Sans Mono', monospace;
+      font-size: 0.85em;
+      line-height: 1.5;
+    }
+
+    .code-block code {
+      background: none;
+      padding: 0;
+      color: inherit;
+      font-size: inherit;
+    }
+
+    /* Hero screenshot */
+    .hero-screenshot {
+      margin: 30px 0;
+      text-align: center;
+    }
+
+    .hero-screenshot img {
+      max-width: 100%;
+      border-radius: 12px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+    }
+
+    .hero-screenshot figcaption {
+      margin-top: 12px;
+      font-size: 0.9em;
+      color: #888;
+      font-style: italic;
+    }
+
+    /* Inline figure (smaller, centered) */
+    .figure {
+      margin: 30px auto;
+      text-align: center;
+      max-width: 520px;
+    }
+
+    .figure img {
+      max-width: 100%;
+      border-radius: 12px;
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.12);
+    }
+
+    .figure figcaption {
+      margin-top: 12px;
+      font-size: 0.9em;
+      color: #888;
+      font-style: italic;
+    }
+
+    /* Info boxes */
+    .info-box {
+      padding: 20px;
+      border-radius: 8px;
+      margin: 20px 0;
+    }
+
+    .info-box.warning {
+      background: #fff3cd;
+      border-left: 4px solid #ffc107;
+    }
+
+    .info-box.tip {
+      background: #d1ecf1;
+      border-left: 4px solid #17a2b8;
+    }
+
+    .info-box.important {
+      background: #f8d7da;
+      border-left: 4px solid #dc3545;
+    }
+
+    .info-box h4 {
+      margin-bottom: 10px;
+      color: #424242;
+    }
+
+    .info-box p {
+      margin: 0;
+      color: #555;
+    }
+
+    .info-box p + p {
+      margin-top: 12px;
+    }
+
+    /* Steps */
+    .step {
+      display: flex;
+      gap: 20px;
+      margin: 30px 0;
+      padding: 25px;
+      background: #f9f9f9;
+      border-radius: 12px;
+    }
+
+    .step-number {
+      width: 40px;
+      height: 40px;
+      background: #ffaa00;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 700;
+      font-size: 1.2em;
+      flex-shrink: 0;
+    }
+
+    .step-content h4 {
+      font-size: 1.1em;
+      color: #424242;
+      margin-bottom: 10px;
+    }
+
+    .step-content p {
+      margin-bottom: 10px;
+      color: #555;
+    }
+
+    .step-content p:last-child {
+      margin-bottom: 0;
+    }
+
+    /* Mode cards (subscription modes) */
+    .mode-list {
+      margin: 20px 0;
+    }
+
+    .mode-item {
+      background: #f9f9f9;
+      border-radius: 12px;
+      padding: 20px 25px;
+      margin-bottom: 15px;
+      border-left: 4px solid #ffaa00;
+    }
+
+    .mode-item h4 {
+      font-size: 1.1em;
+      color: #424242;
+      margin-bottom: 6px;
+    }
+
+    .mode-item p {
+      margin: 0;
+      color: #555;
+    }
+
+    /* Requirements list */
+    .requirements {
+      background: #f9f9f9;
+      border-radius: 12px;
+      padding: 25px;
+      margin: 20px 0;
+    }
+
+    .requirements h3 {
+      margin-top: 0;
+      margin-bottom: 15px;
+    }
+
+    .requirements ul {
+      margin: 0;
+      padding-left: 25px;
+    }
+
+    /* Architecture diagram */
+    .architecture {
+      background: #f9f9f9;
+      border-radius: 12px;
+      padding: 30px;
+      margin: 20px 0;
+      text-align: center;
+    }
+
+    .architecture-flow {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 20px 0;
+    }
+
+    .architecture-box {
+      background: white;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 15px 20px;
+      font-weight: 500;
+    }
+
+    .architecture-box.highlight {
+      border-color: #ffaa00;
+      background: #fff8e6;
+    }
+
+    .architecture-arrow {
+      color: #888;
+      font-size: 1.5em;
+    }
+
+    /* Footer */
+    .footer {
+      max-width: 800px;
+      margin: 60px auto 0;
+      padding: 40px;
+      text-align: center;
+      border-top: 1px solid #e0e0e0;
+      color: #999999;
+    }
+
+    .footer-links {
+      margin-top: 20px;
+    }
+
+    .footer-links a {
+      color: #666666;
+      text-decoration: none;
+      margin: 0 15px;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover {
+      color: #ffaa00;
+    }
+
+    /* Mobile Responsive */
+    @media (max-width: 768px) {
+      .breadcrumb,
+      .article {
+        padding-left: 20px;
+        padding-right: 20px;
+      }
+
+      .article h1 {
+        font-size: 1.6em;
+      }
+
+      .step {
+        flex-direction: column;
+        gap: 15px;
+      }
+
+      .architecture-flow {
+        flex-direction: column;
+      }
+
+      .architecture-arrow {
+        transform: rotate(90deg);
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Shared Header/Navigation -->
+  <script src="/v2/components/header.js"></script>
+
+  <!-- Breadcrumb -->
+  <div class="breadcrumb">
+    <a href="/v2/guides/">How To Guides</a>
+    <span>/</span>
+    <a href="#">Video Feeds &amp; Frigate Setup</a>
+  </div>
+
+  <!-- Article -->
+  <article class="article">
+    <header class="article-header">
+      <span class="article-tag">Chickadee for Home Assistant</span>
+      <h1>Setting Up Video Feeds &amp; Frigate with Chickadee</h1>
+      <p class="article-meta">Last updated: May 2026</p>
+    </header>
+
+    <div class="article-content">
+      <p>
+        Chickadee's <strong>Video Feeds</strong> turn your dashboard into a live security monitor. Camera feeds can sit
+        permanently in a sidebar strip, or pop up automatically the moment motion is detected at your front door, in the
+        nursery, or by the pool. When a camera is powered by <a href="https://frigate.video/" target="_blank">Frigate</a>,
+        Chickadee adds a full <strong>recording timeline</strong> so you can scrub back through the day and replay detected
+        events &mdash; all without leaving your dashboard.
+      </p>
+
+      <figure class="hero-screenshot">
+        <img src="/v2/artwork/video-feeds-hero.png" alt="A Chickadee dashboard with the sidebar video-feed icon circled in red and an arrow pointing to the Video Feeds strip of camera thumbnails along the bottom">
+        <figcaption>Tap the video-feed icon in the sidebar (circled) to open the Video Feeds strip along the bottom</figcaption>
+      </figure>
+
+      <h2>About Chickadee Video Feeds</h2>
+
+      <p>
+        A <strong>feed</strong> is a single camera. You define each feed once &mdash; its source, a name, and a quality
+        setting &mdash; and it becomes available on every Chickadee tablet in your home. Each tablet then decides
+        <em>how</em> it wants to use that feed: always-on, motion-triggered, or hidden entirely. This split is the heart of
+        the system: <strong>feeds are shared across the household, but how each device reacts to them is set per device.</strong>
+      </p>
+
+      <p>
+        On screen, feeds appear as cards that you can drag, pin, maximize, or dismiss. For Frigate cameras, a playback button
+        on the card opens a recording timeline with event thumbnails &mdash; a lightweight version of the Frigate UI, built
+        right into your dashboard.
+      </p>
+
+      <div class="info-box tip">
+        <h4>What You'll Be Able to Do</h4>
+        <p>
+          Watch any RTSP, go2rtc, or Home Assistant camera on your dashboard. Have a camera auto-pop with a chime when a
+          door opens or motion is detected. Scrub through Frigate recordings and replay detected events on a timeline. Even
+          turn a spare Chickadee tablet into a camera that the rest of your home can watch.
+        </p>
+      </div>
+
+      <div class="requirements">
+        <h3>Prerequisites</h3>
+        <ul>
+          <li>The <a href="/v2/guides/home-assistant-integration">Chickadee Home Assistant integration</a> installed &mdash; this is what proxies camera streams, delivers motion triggers, and connects to Frigate</li>
+          <li>At least one camera in Home Assistant, exposed as a <code>camera.*</code> entity, an RTSP URL, or a go2rtc stream</li>
+          <li><strong>For recording playback:</strong> <a href="https://frigate.video/" target="_blank">Frigate</a> installed (typically as a Home Assistant add-on) with recording enabled on your cameras</li>
+          <li>Your Chickadee tablets and Home Assistant server on the same local network</li>
+        </ul>
+      </div>
+
+      <h2>How It Works</h2>
+
+      <p>
+        Chickadee does not talk to your cameras directly. Everything flows through the <strong>Chickadee Home Assistant
+        integration</strong>, which acts as a smart proxy: it resolves camera entities to playable streams, watches your
+        motion sensors and pushes alerts to each tablet, and relays requests to Frigate for recordings and events.
+      </p>
+
+      <div class="architecture">
+        <p>Streams and triggers flow through the integration to each Chickadee tablet:</p>
+        <div class="architecture-flow">
+          <div class="architecture-box">Cameras &amp; Frigate<br><small>RTSP / go2rtc / camera.*</small></div>
+          <span class="architecture-arrow">&#8594;</span>
+          <div class="architecture-box highlight">Chickadee HA Integration<br><small>Proxy + Trigger push</small></div>
+          <span class="architecture-arrow">&#8594;</span>
+          <div class="architecture-box">Chickadee Tablets<br><small>Feed cards + Playback</small></div>
+        </div>
+        <p><small>Live video, motion triggers, and Frigate recordings all reach the tablet through the integration.</small></p>
+      </div>
+
+      <p>
+        When you watch a feed, the integration first sends a lightweight stream that starts instantly, then transparently
+        upgrades a focused or maximized card to a higher-quality stream with audio.
+      </p>
+
+      <h2>Part 1: Add a Video Feed</h2>
+
+      <p>
+        Feeds are managed from Chickadee's native settings on the tablet. Add a feed on one tablet and it appears on all of them.
+      </p>
+
+      <div class="step">
+        <div class="step-number">1</div>
+        <div class="step-content">
+          <h4>Open Video Feeds Settings</h4>
+          <p>
+            On your Chickadee tablet, open the sidebar, tap the <strong>Settings</strong> gear, and go to
+            <strong>Video Feeds</strong>. Turn on <strong>Enable Video Feeds</strong> at the top.
+          </p>
+        </div>
+      </div>
+
+      <figure class="figure">
+        <img src="/v2/artwork/video-feeds-settings.png" alt="The Video Feeds settings screen showing the enable toggle, a list of camera feeds, and display settings">
+        <figcaption>The Video Feeds settings screen &mdash; the master toggle, your feed list, and display options</figcaption>
+      </figure>
+
+      <div class="step">
+        <div class="step-number">2</div>
+        <div class="step-content">
+          <h4>Tap "+ Add Feed"</h4>
+          <p>
+            Choose a <strong>Source Type</strong> &mdash; this tells Chickadee where the video comes from:
+          </p>
+          <p>
+            &bull; <strong>HA Camera Entity</strong> &mdash; Pick an existing <code>camera.*</code> entity from a list. The
+            simplest option if your camera is already in Home Assistant.<br>
+            &bull; <strong>RTSP URL</strong> &mdash; Paste a direct stream URL like
+            <code>rtsp://user:pass@192.168.1.50:554/stream1</code>.<br>
+            &bull; <strong>go2rtc Stream</strong> &mdash; Enter the name of a stream you've defined in go2rtc.
+          </p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-number">3</div>
+        <div class="step-content">
+          <h4>Set the Name and Quality</h4>
+          <p>
+            Give the feed a <strong>Stream Name</strong> (e.g. "Front Door"). If you picked a camera entity, Chickadee fills
+            this in for you. Then set:
+          </p>
+          <p>
+            &bull; <strong>Frame Rate</strong> &mdash; 5, 10, 15, or 20 fps, or "Native". Lower frame rates use less
+            bandwidth; 10 fps is a good default for a wall tablet.<br>
+            &bull; <strong>Resolution</strong> &mdash; 320p, 480p, 640p, 720p, or "Native". Feed cards are small, so 480p
+            usually looks great while keeping the tablet responsive.
+          </p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-number">4</div>
+        <div class="step-content">
+          <h4>Save</h4>
+          <p>
+            Tap <strong>Done</strong>. The feed is saved to your home's shared feed list and appears on every Chickadee tablet.
+            Each tablet starts in <strong>On-demand</strong> mode (see Part 2), so nothing pops up unexpectedly until you say so.
+          </p>
+        </div>
+      </div>
+
+      <div class="info-box tip">
+        <h4>Where do feeds appear?</h4>
+        <p>
+          An On-demand feed lives in the camera tray/strip, ready to open with a tap. Triggered feeds pop up on their own.
+          You control the size and placement of these cards in <strong>Display Settings</strong> (Part 3).
+        </p>
+      </div>
+
+      <h2>Part 2: Subscription Modes &amp; Triggers</h2>
+
+      <p>
+        Each feed has a <strong>subscription mode</strong> that controls how <em>this tablet</em> reacts to it. Open a feed
+        from the Video Feeds list to see the four options.
+      </p>
+
+      <figure class="figure">
+        <img src="/v2/artwork/video-feeds-subscription-modes.png" alt="A per-feed detail screen showing the four subscription modes and the feed's stream info">
+        <figcaption>The per-feed screen &mdash; subscription mode at the top, stream and Frigate info below</figcaption>
+      </figure>
+
+      <div class="mode-list">
+        <div class="mode-item">
+          <h4>On-demand</h4>
+          <p>Available on-demand only. The feed never pops up on its own &mdash; it sits in the camera tray waiting for you to open it. This is the default for every new feed.</p>
+        </div>
+        <div class="mode-item">
+          <h4>Trigger</h4>
+          <p>Auto-shows on trigger, silent. When the feed's trigger fires (e.g. motion or a door sensor), the card appears on screen automatically &mdash; with no sound.</p>
+        </div>
+        <div class="mode-item">
+          <h4>Trigger + Alert</h4>
+          <p>Auto-shows and plays an alert sound. Same as Trigger, but also plays a chime so you notice even if you're not looking at the dashboard.</p>
+        </div>
+        <div class="mode-item">
+          <h4>Ignored</h4>
+          <p>Hidden from this device. The feed disappears from this tablet entirely &mdash; no tray entry, no pop-ups. Other tablets are unaffected.</p>
+        </div>
+      </div>
+
+      <div class="info-box tip">
+        <h4>Per-Device by Design</h4>
+        <p>
+          Because the mode is set per device, you can have the nursery camera auto-pop with a chime on the bedroom tablet,
+          stay silent in the kitchen, and be hidden on the living-room TV &mdash; all from one shared feed. Set the mode on
+          each tablet to match how that room should behave.
+        </p>
+      </div>
+
+      <h3>Setting Up a Trigger</h3>
+
+      <p>
+        For Trigger and Trigger + Alert modes to do anything, the feed needs a <strong>Trigger Entity</strong> &mdash; the
+        Home Assistant sensor that decides "show this camera now." Edit the feed and, under the Trigger section, pick a
+        <code>binary_sensor</code> or <code>input_boolean</code>. Common choices:
+      </p>
+      <ul>
+        <li>A door/window contact sensor &mdash; <code>binary_sensor.front_door</code></li>
+        <li>A motion sensor &mdash; <code>binary_sensor.driveway_motion</code></li>
+        <li>A Frigate detection sensor &mdash; <code>binary_sensor.front_door_person</code></li>
+      </ul>
+
+      <p>
+        When that entity turns <code>on</code>, the Chickadee integration pushes a trigger to your tablets, and any tablet
+        subscribed in a Trigger mode pops the camera up. The trigger is an ordinary Home Assistant state change, so anything
+        you can model as a binary sensor &mdash; an automation, a helper toggle, a Frigate event &mdash; can drive a feed.
+      </p>
+
+      <div class="info-box tip">
+        <h4>Frigate cameras trigger the same way</h4>
+        <p>
+          A Frigate camera isn't special when it comes to triggering &mdash; you still bind it to a sensor. Frigate
+          conveniently exposes per-camera <code>binary_sensor.&lt;camera&gt;_motion</code> and
+          <code>binary_sensor.&lt;camera&gt;_person</code> entities; pick whichever matches what you want to be alerted about.
+        </p>
+      </div>
+
+      <h3>Trigger Sounds and Timing</h3>
+
+      <p>
+        These options fine-tune what happens when a feed pops up:
+      </p>
+      <ul>
+        <li><strong>Trigger Sound</strong> &mdash; For Trigger + Alert feeds, choose from a set of built-in chimes (bells, chimes, wood knocks, and more). You can preview each one before saving.</li>
+        <li><strong>Auto-Dismiss</strong> &mdash; How long a popped-up feed stays on screen before closing itself (default 30 seconds, adjustable 0&ndash;300). Set to 0 to keep it up until dismissed manually.</li>
+        <li><strong>Display while Active</strong> &mdash; Keep the feed on screen as long as the trigger sensor stays <code>on</code>, dismissing only once motion clears.</li>
+        <li><strong>Cooldown</strong> &mdash; A quiet period after a feed dismisses, so a flickering sensor doesn't pop the same camera over and over (0&ndash;300 seconds).</li>
+      </ul>
+
+      <div class="info-box tip">
+        <h4>Muting Alerts Temporarily</h4>
+        <p>
+          Tap the bell icon in the sidebar's volume popout to mute video-feed chimes without changing any
+          per-feed settings. There's also an <strong>Alerts</strong> sub-screen in Video Feeds settings with a master
+          enable and a volume slider for the chimes.
+        </p>
+      </div>
+
+      <h2>Part 3: Display Settings</h2>
+
+      <p>
+        At the bottom of the Video Feeds settings screen, <strong>Display Settings</strong> control where feed cards appear
+        and how big they are. These are set per tablet.
+      </p>
+
+      <h3>Display Method</h3>
+      <ul>
+        <li><strong>Sidebar</strong> &mdash; Feeds dock as a vertical strip along the right edge. Cards can be dragged out to float anywhere on the dashboard. Best for an always-on monitoring layout.</li>
+        <li><strong>Notification</strong> &mdash; Triggered feeds appear centered toward the bottom of the screen, like an alert. Up to four cards arrange into a grid. Best when you mostly want pop-ups, not a permanent strip.</li>
+      </ul>
+
+      <h3>Feed Size</h3>
+      <p>
+        Cards are 16:9 and sized as a percentage of the screen width:
+      </p>
+      <ul>
+        <li><strong>Small</strong> &mdash; 25% of screen width</li>
+        <li><strong>Medium</strong> &mdash; 33% (the default)</li>
+        <li><strong>Large</strong> &mdash; 50%</li>
+        <li><strong>Extra Large</strong> &mdash; 75%</li>
+      </ul>
+
+      <h2>Part 4: Frigate Integration</h2>
+
+      <p>
+        If you run <a href="https://frigate.video/" target="_blank">Frigate</a>, Chickadee unlocks recording playback on top of
+        the live view &mdash; no extra configuration in Chickadee required. It detects Frigate cameras for you.
+      </p>
+
+      <h3>How Chickadee Detects a Frigate Camera</h3>
+
+      <p>
+        The integration asks Frigate for its list of camera names and then matches each of your feeds against them. A feed is
+        recognized as a Frigate camera if any of these line up with a Frigate camera name:
+      </p>
+      <ul>
+        <li>The go2rtc stream name</li>
+        <li>The feed's name (lowercased, spaces become underscores &mdash; "Family Room" &rarr; <code>family_room</code>)</li>
+        <li>The camera entity's ID containing the camera name (e.g. <code>camera.pool_camera_sd_stream</code> matches the Frigate camera <code>pool</code>)</li>
+      </ul>
+
+      <p>
+        When there's a match, the feed shows <strong>"Frigate playback enabled"</strong> in the list, and its
+        <strong>Frigate Camera</strong> field reads <em>auto-detected</em>. If the auto-match is wrong, edit the feed and set
+        the <strong>Frigate Camera</strong> override to a specific camera, or to <strong>None</strong> to treat the feed as
+        live-only.
+      </p>
+
+      <div class="info-box tip">
+        <h4>What "Frigate playback enabled" unlocks</h4>
+        <p>
+          A small playback icon appears on the camera card next to its name. Tapping it opens the recording timeline covered
+          in Part 5. Non-Frigate feeds are live-only and don't show this icon.
+        </p>
+      </div>
+
+      <h3>What to Enable on the Frigate Side</h3>
+      <ul>
+        <li><strong>Recording</strong> &mdash; The camera needs <code>record</code> enabled in Frigate. Continuous recording gives you a full, scrubbable timeline; record-on-motion gives you blue segments only where there was activity.</li>
+        <li><strong>Detection &amp; snapshots/clips</strong> &mdash; To get the event thumbnails on the right side of the playback view, the camera needs object detection with clips enabled, so Frigate stores replayable events.</li>
+        <li><strong>Resolution</strong> &mdash; Frigate records at full camera resolution, which can exceed what a tablet can decode. Keep cameras at 1080p or below for playback, or have Frigate/go2rtc provide a downscaled stream (more on this in Part 6).</li>
+      </ul>
+
+      <h2>Part 5: Frigate Clip &amp; Recording Playback</h2>
+
+      <p>
+        Tap the playback icon on a Frigate camera card to switch from live view into playback mode. The card expands into a
+        full timeline view.
+      </p>
+
+      <figure class="hero-screenshot">
+        <img src="/v2/artwork/video-feeds-frigate-playback.png" alt="Frigate recording playback in Chickadee: a live pool camera with a timeline scrubber along the bottom and a column of event thumbnails on the right">
+        <figcaption>Frigate playback &mdash; the recording timeline runs along the bottom, with detected-event thumbnails down the right</figcaption>
+      </figure>
+
+      <h3>The Timeline</h3>
+
+      <p>
+        Along the bottom is a scrollable timeline. <strong>Blue segments</strong> mark where Frigate has recorded footage, and
+        small colored dots mark detected events (orange for people, blue for cars, and so on). The timeline is "Tapo-style":
+        a fixed marker stays in the center and the timeline scrolls beneath it, with the current time shown above the marker.
+      </p>
+      <ul>
+        <li><strong>Scrub</strong> &mdash; Drag the timeline left or right. When you stop, Chickadee loads the recording at that moment and starts playing.</li>
+        <li><strong>Zoom</strong> &mdash; Use the magnifier <strong>+</strong> / <strong>&minus;</strong> buttons to zoom from a wide multi-hour view down to fine, minute-level scrubbing.</li>
+        <li><strong>Go to Live</strong> &mdash; The pill in the corner shows <strong>&#9679; LIVE</strong> when you're watching the live stream, or <strong>Go to Live</strong> when you're in a recording. Tap it (or scrub all the way to "now") to jump back to live.</li>
+      </ul>
+
+      <h3>Event Thumbnails</h3>
+
+      <p>
+        The column on the right lists recent detected events, each with a snapshot, a timestamp, and the type of object. Tap
+        an event to jump straight to that clip. Events without a stored clip show a brief "Clip not recorded" note instead of
+        playing.
+      </p>
+
+      <p>
+        As a clip plays out, Chickadee automatically continues into the next segment of recording, so you can watch a stretch of
+        the day continuously. When playback catches up to the present, it returns to the live stream on its own.
+      </p>
+
+      <div class="info-box warning">
+        <h4>"Camera resolution too high for this device"</h4>
+        <p>
+          If a clip won't play and you see this message, the recording's resolution is beyond what the tablet's video decoder
+          can handle. Lower the camera's recording resolution to 1080p or below, or have Frigate/go2rtc serve a downscaled
+          stream. (The integration can transcode clips down to 720p if FFmpeg is available in your Frigate/HA environment.)
+        </p>
+      </div>
+
+      <h2>Part 6: Using a Chickadee Tablet as a Camera (Advanced)</h2>
+
+      <p>
+        A spare Chickadee tablet or TV stick can publish its own front camera as a video feed that the rest of your home &mdash;
+        and Frigate &mdash; can watch. This is great for a nursery cam, a pet cam, or a second angle on a room.
+      </p>
+
+      <h3>Turn On the Device Camera</h3>
+
+      <p>
+        Enable the device's RTSP camera in Chickadee settings. The device starts an on-board RTSP server (hardware-encoded
+        H.264, on port <code>8554</code>) and the Chickadee HA integration exposes it as a normal Home Assistant camera entity,
+        e.g. <code>camera.&lt;device&gt;_camera</code>. From there you can add it as a feed on other tablets exactly like any
+        other camera (Part 1), and other Chickadee tablets can view it live with no extra setup.
+      </p>
+
+      <div class="info-box important">
+        <h4>Recording a Chickadee-tablet camera in Frigate needs a re-encode</h4>
+        <p>
+          Watching a tablet's camera live works everywhere. But getting <strong>Frigate to record</strong> it is the catch.
+          The tablet's H.264 stream doesn't repeat its stream parameters (SPS/PPS) at every keyframe, so Frigate's
+          copy-into-MP4 recording path produces unplayable segments.
+        </p>
+        <p>
+          The fix is to have go2rtc <strong>re-encode</strong> the stream before Frigate records it. A plain
+          remux (<code>#video=copy</code>) is <em>not</em> enough &mdash; the video has to be genuinely transcoded so the
+          parameter sets are rewritten.
+        </p>
+      </div>
+
+      <h3>The go2rtc Re-Encode</h3>
+
+      <p>
+        In the go2rtc configuration that Frigate uses, wrap the tablet's stream with an FFmpeg transcode. The second line is
+        what does the work:
+      </p>
+
+      <div class="code-block"><code>go2rtc:
+  streams:
+    nursery_tablet:
+      - rtsp://192.168.1.49:8554/
+      - "ffmpeg:nursery_tablet#video=h264#audio=aac"</code></div>
+
+      <p>
+        Then point a Frigate camera at the <code>nursery_tablet</code> go2rtc stream and enable detect/record as usual. This
+        re-encode is a <strong>manual entry you maintain on the Frigate/go2rtc host</strong> &mdash; Chickadee doesn't write it
+        for you, because it lives in Frigate's own configuration.
+      </p>
+
+      <div class="info-box tip">
+        <h4>Save CPU with hardware acceleration</h4>
+        <p>
+          A software re-encode costs roughly 5&ndash;10% of one CPU core per tablet-camera at 480p on the Frigate host. If
+          your host has a supported GPU, add a hardware flag to cut that to 1&ndash;2%: <code>#hardware=qsv</code> for Intel
+          iGPUs, <code>#hardware=vaapi</code>, or <code>#hardware=nvenc</code> for NVIDIA. You can also append
+          <code>#vflip</code> or a rotation if the camera mounts upside-down.
+        </p>
+      </div>
+
+      <h2>Troubleshooting</h2>
+
+      <h3>A feed shows a black card or won't load</h3>
+      <ul>
+        <li>Confirm the Chickadee Home Assistant integration is installed and online &mdash; it's required for every feed</li>
+        <li>For a camera entity, open it in Home Assistant first to confirm the stream itself works</li>
+        <li>For an RTSP URL, double-check the address, port, and credentials</li>
+        <li>Make sure the tablet and Home Assistant are on the same local network</li>
+      </ul>
+
+      <h3>A triggered feed never pops up</h3>
+      <ul>
+        <li>Check that this tablet's subscription mode for the feed is <strong>Trigger</strong> or <strong>Trigger + Alert</strong>, not On-demand</li>
+        <li>Confirm the feed has a <strong>Trigger Entity</strong> bound and that the entity actually turns <code>on</code> in Home Assistant when you expect</li>
+        <li>Make sure <strong>Enable Video Feeds</strong> is on, and that alerts aren't muted (bell icon in the volume popout)</li>
+        <li>Watch the <strong>Cooldown</strong> window &mdash; a feed won't re-pop during its cooldown period</li>
+      </ul>
+
+      <h3>No playback icon on a Frigate camera</h3>
+      <ul>
+        <li>The feed must be recognized as a Frigate camera &mdash; check that its <strong>Frigate Camera</strong> field shows a name (auto-detected) and isn't set to None</li>
+        <li>If auto-detection missed it, set the Frigate Camera override manually in the feed's settings</li>
+        <li>Confirm the camera name in Frigate matches what Chickadee is trying to match against (the feed name, entity ID, or go2rtc stream name)</li>
+      </ul>
+
+      <h3>The timeline is empty or has no blue segments</h3>
+      <ul>
+        <li>The camera needs <code>record</code> enabled in Frigate &mdash; without recordings there's nothing to scrub</li>
+        <li>Blue segments only appear where footage exists; record-on-motion cameras will have gaps</li>
+        <li>Give Frigate a few minutes after enabling recording before footage shows up</li>
+      </ul>
+
+      <h3>A clip won't play ("resolution too high")</h3>
+      <ul>
+        <li>Lower the camera's recording resolution to 1080p or below in the camera/Frigate settings</li>
+        <li>Or provide a downscaled stream via go2rtc/Frigate so the tablet can decode it</li>
+      </ul>
+
+      <h3>A Chickadee-tablet camera plays live but won't record in Frigate</h3>
+      <ul>
+        <li>This is the SPS/PPS issue from Part 6 &mdash; add the FFmpeg re-encode to the go2rtc stream Frigate uses</li>
+        <li>A plain <code>#video=copy</code> remux won't fix it; use <code>#video=h264</code> so the stream is fully transcoded</li>
+      </ul>
+
+      <div class="info-box important">
+        <h4>Need More Help?</h4>
+        <p>
+          If you're still stuck, <a href="/v2/contact">contact us</a> with details about your setup &mdash; your camera type,
+          source (entity/RTSP/go2rtc), and whether Frigate is involved. For Frigate-specific configuration, see the
+          <a href="https://docs.frigate.video/" target="_blank">Frigate documentation</a>.
+        </p>
+      </div>
+    </div>
+  </article>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>&copy; 2026 Chickadee LLC. All rights reserved.</p>
+    <div class="footer-links">
+      <a href="/privacy">Privacy Policy</a>
+      <span class="separator">|</span>
+      <a href="/terms">Terms of Service</a>
+    </div>
+  </footer>
+
+  <!-- Analytics -->
+</body>
+</html>

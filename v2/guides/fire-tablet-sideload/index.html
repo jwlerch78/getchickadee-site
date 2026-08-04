@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>How to Sideload Chickadee on an Android Tablet - Chickadee</title>
+  <link rel="icon" type="image/png" href=".././assets/chickadee-mark.png">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      line-height: 1.6;
+      background: #ffffff;
+      color: #424242;
+      min-height: 100vh;
+    }
+
+    /* Breadcrumb */
+    .breadcrumb {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px 40px 0 40px;
+    }
+
+    .breadcrumb a {
+      color: #666;
+      text-decoration: none;
+      font-size: 14px;
+    }
+
+    .breadcrumb a:hover {
+      color: #ffaa00;
+    }
+
+    .breadcrumb span {
+      color: #999;
+      margin: 0 8px;
+    }
+
+    /* Article */
+    .article {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 30px 40px 60px 40px;
+    }
+
+    .article-header {
+      margin-bottom: 40px;
+    }
+
+    .article-tag {
+      display: inline-block;
+      background: #18bcf2;
+      color: white;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 4px 12px;
+      border-radius: 4px;
+      margin-bottom: 15px;
+    }
+
+    .article h1 {
+      font-size: 2.2em;
+      color: #424242;
+      margin-bottom: 15px;
+      line-height: 1.3;
+    }
+
+    .article-meta {
+      color: #888;
+      font-size: 14px;
+    }
+
+    .article-content h2 {
+      font-size: 1.5em;
+      color: #424242;
+      margin: 40px 0 20px 0;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #ffaa00;
+    }
+
+    .article-content h3 {
+      font-size: 1.2em;
+      color: #424242;
+      margin: 30px 0 15px 0;
+    }
+
+    .article-content p {
+      margin-bottom: 20px;
+      color: #555;
+    }
+
+    .article-content ul,
+    .article-content ol {
+      margin-bottom: 20px;
+      padding-left: 30px;
+    }
+
+    .article-content li {
+      margin-bottom: 10px;
+      color: #555;
+    }
+
+    .article-content a {
+      color: #ffaa00;
+      text-decoration: none;
+    }
+
+    .article-content a:hover {
+      text-decoration: underline;
+    }
+
+    /* Code blocks */
+    .code-block {
+      background: #1e1e1e;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 20px 0;
+      overflow-x: auto;
+    }
+
+    .code-block code {
+      color: #d4d4d4;
+      font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Fira Mono', 'Droid Sans Mono', monospace;
+      font-size: 14px;
+      line-height: 1.5;
+      background: transparent;
+    }
+
+    .code-block .comment {
+      color: #6a9955;
+    }
+
+    .code-block .command {
+      color: #dcdcaa;
+    }
+
+    .code-block .string {
+      color: #ce9178;
+    }
+
+    /* Inline code */
+    code {
+      background: #f4f4f4;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Fira Mono', 'Droid Sans Mono', monospace;
+      font-size: 0.9em;
+      color: #d63384;
+    }
+
+    /* Info boxes */
+    .info-box {
+      padding: 20px;
+      border-radius: 8px;
+      margin: 20px 0;
+    }
+
+    .info-box.warning {
+      background: #fff3cd;
+      border-left: 4px solid #ffc107;
+    }
+
+    .info-box.tip {
+      background: #d1ecf1;
+      border-left: 4px solid #17a2b8;
+    }
+
+    .info-box.important {
+      background: #f8d7da;
+      border-left: 4px solid #dc3545;
+    }
+
+    .info-box h4 {
+      margin-bottom: 10px;
+      color: #424242;
+    }
+
+    .info-box p {
+      margin: 0;
+      color: #555;
+    }
+
+    /* Steps */
+    .step {
+      display: flex;
+      gap: 20px;
+      margin: 30px 0;
+      padding: 25px;
+      background: #f9f9f9;
+      border-radius: 12px;
+    }
+
+    .step-number {
+      width: 40px;
+      height: 40px;
+      background: #ffaa00;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 700;
+      font-size: 1.2em;
+      flex-shrink: 0;
+    }
+
+    .step-content h4 {
+      font-size: 1.1em;
+      color: #424242;
+      margin-bottom: 10px;
+    }
+
+    .step-content p {
+      margin-bottom: 10px;
+      color: #555;
+    }
+
+    .step-content p:last-child {
+      margin-bottom: 0;
+    }
+
+    /* Requirements list */
+    .requirements {
+      background: #f9f9f9;
+      border-radius: 12px;
+      padding: 25px;
+      margin: 20px 0;
+    }
+
+    .requirements h3 {
+      margin-top: 0;
+      margin-bottom: 15px;
+    }
+
+    .requirements ul {
+      margin: 0;
+      padding-left: 25px;
+    }
+
+    /* Footer */
+    .footer {
+      max-width: 800px;
+      margin: 60px auto 0;
+      padding: 40px;
+      text-align: center;
+      border-top: 1px solid #e0e0e0;
+      color: #999999;
+    }
+
+    .footer-links {
+      margin-top: 20px;
+    }
+
+    .footer-links a {
+      color: #666666;
+      text-decoration: none;
+      margin: 0 15px;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover {
+      color: #ffaa00;
+    }
+
+    /* Mobile Responsive */
+    @media (max-width: 768px) {
+
+      .breadcrumb,
+      .article {
+        padding-left: 20px;
+        padding-right: 20px;
+      }
+
+      .article h1 {
+        font-size: 1.6em;
+      }
+
+      .step {
+        flex-direction: column;
+        gap: 15px;
+      }
+
+      .code-block {
+        padding: 15px;
+      }
+
+      .code-block code {
+        font-size: 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Shared Header/Navigation -->
+  <script src="/v2/components/header.js"></script>
+
+  <!-- Breadcrumb -->
+  <div class="breadcrumb">
+    <a href="/v2/guides/">How To Guides</a>
+    <span>/</span>
+    <a href="#">Android Tablet Sideload</a>
+  </div>
+
+  <!-- Article -->
+  <article class="article">
+    <header class="article-header">
+      <span class="article-tag">Chickadee</span>
+      <h1>How to Sideload Chickadee on an Android Tablet</h1>
+      <p class="article-meta">Last updated: April 2026</p>
+    </header>
+
+    <div class="article-content">
+      <p>
+        Android tablets — including Amazon Fire tablets, Samsung Galaxy tablets, and budget Android tablets —
+        are a cost-effective way to run Chickadee as a dedicated Home Assistant dashboard. If Chickadee isn't available
+        through your tablet's app store (or you want the latest version), you can sideload the APK using ADB
+        (Android Debug Bridge).
+      </p>
+
+      <div class="requirements">
+        <h3>What You'll Need</h3>
+        <ul>
+          <li>An Android tablet (Fire OS 5+, Android 7+, or similar)</li>
+          <li>Computer (Windows, Mac, or Linux)</li>
+          <li>USB data cable (not a charge-only cable)</li>
+          <li>Chickadee APK file (download from <a href="/v2/features">chickadee-lite page</a>)</li>
+        </ul>
+      </div>
+
+      <h2>Part 1: Enable Developer Options</h2>
+
+      <p>
+        On most Android tablets, you unlock Developer Options by tapping the <strong>Serial Number</strong>
+        (or <strong>Build Number</strong>) field 7 times in Settings. The exact menu path varies slightly by manufacturer.
+      </p>
+
+      <div class="info-box tip">
+        <h4>Amazon Fire Tablets</h4>
+        <p>
+          On Fire OS, the Serial Number lives under <strong>Settings → Device Options</strong>
+          (or just "Device" on older Fire OS versions). On most other Android tablets, look under
+          <strong>Settings → About Tablet</strong> instead.
+        </p>
+      </div>
+
+      <div class="step">
+        <div class="step-number">1</div>
+        <div class="step-content">
+          <h4>Open Settings</h4>
+          <p>Swipe down from the top of the screen and tap the gear icon, or find Settings in your app drawer.</p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-number">2</div>
+        <div class="step-content">
+          <h4>Find Device Info</h4>
+          <p>
+            On Fire tablets, tap <strong>Device Options</strong>. On stock Android (Samsung, Google, etc.),
+            tap <strong>About Tablet</strong> or <strong>About Phone</strong>.
+          </p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-number">3</div>
+        <div class="step-content">
+          <h4>Tap Serial Number 7 Times</h4>
+          <p>
+            Find the <strong>Serial Number</strong> field (called <strong>Build Number</strong> on some Android
+            tablets) and tap it 7 times rapidly. You'll see a toast message saying "You are now a developer!"
+            or "Developer Options enabled."
+          </p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-number">4</div>
+        <div class="step-content">
+          <h4>Enable ADB Debugging</h4>
+          <p>
+            Go back to the previous menu. You'll now see a new <strong>Developer Options</strong> entry.
+            Tap it and enable <strong>ADB debugging</strong> (called <strong>USB debugging</strong> on most
+            non-Fire Android tablets).
+          </p>
+        </div>
+      </div>
+
+      <h2>Part 2: Install ADB on Your Computer</h2>
+
+      <h3>For Windows</h3>
+      <p>Open Command Prompt or PowerShell and run:</p>
+      <div class="code-block">
+        <code><span class="command">winget install Google.PlatformTools</span></code>
+      </div>
+
+      <h3>For macOS</h3>
+      <p>The easiest way is using Homebrew:</p>
+      <div class="code-block">
+        <code><span class="comment"># Install Homebrew if you don't have it</span><br>
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"<br><br>
+<span class="comment"># Install ADB</span><br>
+<span class="command">brew install android-platform-tools</span></code>
+      </div>
+
+      <h3>For Linux</h3>
+      <div class="code-block">
+        <code><span class="comment"># Ubuntu/Debian</span><br>
+<span class="command">sudo apt install android-tools-adb</span><br><br>
+<span class="comment"># Fedora</span><br>
+<span class="command">sudo dnf install android-tools</span></code>
+      </div>
+
+      <h2>Part 3: Connect and Install Chickadee</h2>
+
+      <div class="step">
+        <div class="step-number">1</div>
+        <div class="step-content">
+          <h4>Connect Your Tablet</h4>
+          <p>
+            Connect your tablet to your computer using a USB data cable.
+            A dialog may appear on the tablet asking to "Allow USB debugging" - tap <strong>OK</strong> or <strong>Always allow</strong>.
+          </p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-number">2</div>
+        <div class="step-content">
+          <h4>Verify Connection</h4>
+          <p>Open Terminal (Mac/Linux) or Command Prompt (Windows) and run:</p>
+          <div class="code-block">
+            <code><span class="command">adb devices</span></code>
+          </div>
+          <p>You should see your device listed. If it shows "unauthorized", check your tablet for the USB debugging prompt.</p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-number">3</div>
+        <div class="step-content">
+          <h4>Install Chickadee APK</h4>
+          <p>Navigate to where you downloaded the Chickadee APK and run:</p>
+          <div class="code-block">
+            <code><span class="command">adb install chickadee-lite.apk</span></code>
+          </div>
+          <p>Wait for the installation to complete. You'll see "Success" when it's done.</p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-number">4</div>
+        <div class="step-content">
+          <h4>Launch Chickadee</h4>
+          <p>
+            Disconnect the USB cable. Find Chickadee in your app drawer and tap to open it.
+            Enter your Home Assistant URL when prompted.
+          </p>
+        </div>
+      </div>
+
+      <div class="info-box tip">
+        <h4>Wireless ADB</h4>
+        <p>
+          After the initial USB setup, you can enable wireless ADB for future updates.
+          In Developer Options, enable "ADB over network" and connect using <code>adb connect &lt;tablet-ip&gt;:5555</code>
+        </p>
+      </div>
+
+      <h2>Fire Tablet: Stop Waking to an Ad &amp; Save Battery</h2>
+
+      <p>
+        A common frustration with Amazon Fire tablets used as dashboards: the tablet sleeps to save
+        power, but when it wakes (on touch or motion) you see an Amazon <strong>Special Offers</strong>
+        ad or the lock screen instead of your dashboard. People often work around this by never letting
+        the screen sleep — running it at brightness 1 all day — which drains the battery and adds charge
+        cycles. You don't need that workaround.
+      </p>
+
+      <h3>Step 1: Remove the lock-screen ads (ADB)</h3>
+      <p>
+        With your tablet still connected over ADB, disable Amazon's lock-screen ads and the lock screen
+        itself so nothing sits between wake and your dashboard:
+      </p>
+      <div class="code-block">
+        <code><span class="comment"># Grant overlay permission (lets Chickadee appear over the lock screen on wake)</span><br>
+<span class="command">adb shell appops set com.chickadeeapp.Chickadee SYSTEM_ALERT_WINDOW allow</span><br><br>
+<span class="comment"># Disable lock screen ads (Amazon Special Offers)</span><br>
+<span class="command">adb shell settings put global LOCKSCREEN_AD_ENABLED 0</span><br><br>
+<span class="comment"># Disable the lock screen entirely (no swipe to unlock)</span><br>
+<span class="command">adb shell locksettings set-disabled true</span></code>
+      </div>
+
+      <div class="info-box tip">
+        <h4>Why Chickadee wakes straight to the dashboard</h4>
+        <p>
+          Chickadee sets itself to show over the lock screen and turn the screen on when it wakes, so the
+          dashboard is what's on screen — not the launcher or an ad. The ADB commands above remove
+          Amazon's ad layer; Chickadee handles being on top. (This is also why you don't need a third-party
+          kiosk browser to dodge the wake-to-ad problem.)
+        </p>
+      </div>
+
+      <h3>Step 2: Let the tablet sleep properly instead of dimming it</h3>
+      <p>
+        Once the wake-to-ad problem is gone, you can let the screen actually turn off instead of leaving
+        it on all day. Chickadee has built-in sleep/wake controls under
+        <strong>Settings → Sleep / Wake</strong>:
+      </p>
+      <ul>
+        <li><strong>Sleep Mode → Schedule</strong> (e.g. off 22:00, on 07:00) or <strong>Timeout</strong> (sleep after N minutes of inactivity)</li>
+        <li><strong>Screen-Off Behavior → Power Off Screen</strong> — a true hardware screen-off that actually cuts panel draw, rather than just showing a black overlay</li>
+        <li><strong>Reduce Brightness While Asleep</strong> and <strong>Motion Wake</strong> — wake on approach without keeping the panel at full brightness</li>
+      </ul>
+      <p>
+        This saves far more power than running the screen on-but-dimmed, because the backlight is the
+        biggest draw on these tablets.
+      </p>
+
+      <div class="info-box warning">
+        <h4>About bloatware and charging</h4>
+        <p>
+          Two things to set expectations on. Fire OS <strong>protects much of its built-in
+          software</strong> (the launcher and several Amazon services), so you can only trim the edges
+          without rooting — and a factory reset re-enables it. Separately, some Fire tablets
+          <strong>negotiate USB charging poorly on a fresh power cycle</strong> (connecting at 4–5W until
+          the cable is physically replugged); that's a hardware charging-handshake quirk, not something
+          software on the tablet can reliably fix. Reducing how often the screen is fully on (above) is
+          the most effective lever you control.
+        </p>
+      </div>
+
+      <h2>Troubleshooting</h2>
+
+      <h3>Device not showing in <code>adb devices</code></h3>
+      <ul>
+        <li>Try a different USB cable (make sure it's a data cable, not charge-only)</li>
+        <li>Ensure USB debugging is enabled in Developer Options</li>
+      </ul>
+
+      <h3>Installation fails with "INSTALL_FAILED_VERIFICATION_FAILURE"</h3>
+      <p>Disable app verification in Developer Options:</p>
+      <ol>
+        <li>Go to Developer Options</li>
+        <li>Find "Verify apps over USB" and disable it</li>
+        <li>Try the install command again</li>
+      </ol>
+
+      <h3>App crashes on launch</h3>
+      <ul>
+        <li>Ensure your tablet is running Fire OS 5+ or Android 7+</li>
+        <li>Try restarting the tablet</li>
+      </ul>
+
+      <div class="info-box important">
+        <h4>Need More Help?</h4>
+        <p>
+          If you're still having trouble, <a href="/v2/contact">contact us</a> with details about your tablet make, model, and the error you're seeing.
+        </p>
+      </div>
+    </div>
+  </article>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>&copy; 2026 Chickadee LLC. All rights reserved.</p>
+    <div class="footer-links">
+      <a href="/privacy">Privacy Policy</a>
+      <span class="separator">|</span>
+      <a href="/terms">Terms of Service</a>
+    </div>
+  </footer>
+
+  <!-- Analytics -->
+</body>
+</html>

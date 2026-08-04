@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Using the Chickadee Console - Chickadee</title>
+  <link rel="icon" type="image/png" href=".././assets/chickadee-mark.png">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      line-height: 1.6;
+      background: #ffffff;
+      color: #424242;
+      min-height: 100vh;
+    }
+
+    /* Breadcrumb */
+    .breadcrumb {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px 40px 0 40px;
+    }
+
+    .breadcrumb a {
+      color: #666;
+      text-decoration: none;
+      font-size: 14px;
+    }
+
+    .breadcrumb a:hover {
+      color: #ffaa00;
+    }
+
+    .breadcrumb span {
+      color: #999;
+      margin: 0 8px;
+    }
+
+    /* Article */
+    .article {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 30px 40px 60px 40px;
+    }
+
+    .article-header {
+      margin-bottom: 40px;
+    }
+
+    .article-tag {
+      display: inline-block;
+      background: #18bcf2;
+      color: white;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 4px 12px;
+      border-radius: 4px;
+      margin-bottom: 15px;
+    }
+
+    .article h1 {
+      font-size: 2.2em;
+      color: #424242;
+      margin-bottom: 15px;
+      line-height: 1.3;
+    }
+
+    .article-meta {
+      color: #888;
+      font-size: 14px;
+    }
+
+    .article-content h2 {
+      font-size: 1.5em;
+      color: #424242;
+      margin: 40px 0 20px 0;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #ffaa00;
+    }
+
+    .article-content h3 {
+      font-size: 1.2em;
+      color: #424242;
+      margin: 30px 0 15px 0;
+    }
+
+    .article-content p {
+      margin-bottom: 20px;
+      color: #555;
+    }
+
+    .article-content ul,
+    .article-content ol {
+      margin-bottom: 20px;
+      padding-left: 30px;
+    }
+
+    .article-content li {
+      margin-bottom: 10px;
+      color: #555;
+    }
+
+    .article-content a {
+      color: #ffaa00;
+      text-decoration: none;
+    }
+
+    .article-content a:hover {
+      text-decoration: underline;
+    }
+
+    /* Inline code */
+    code {
+      background: #f4f4f4;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Fira Mono', 'Droid Sans Mono', monospace;
+      font-size: 0.9em;
+      color: #d63384;
+    }
+
+    /* Full-width screenshot image in content */
+    .screenshot-image {
+      margin: 25px 0;
+    }
+
+    .screenshot-image img {
+      width: 100%;
+      height: auto;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    /* Placeholder for a screenshot to be added later. Drop-in: replace
+       the .screenshot-placeholder block with a <div class="screenshot-image">
+       <img src="..."> </div> when the asset is ready. */
+    .screenshot-placeholder {
+      margin: 25px 0;
+      border: 2px dashed #cccccc;
+      border-radius: 12px;
+      background: #fafafa;
+      padding: 40px 30px;
+      text-align: center;
+      color: #888;
+    }
+
+    .screenshot-placeholder .placeholder-label {
+      display: inline-block;
+      background: #e0e0e0;
+      color: #555;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: 3px;
+      margin-bottom: 12px;
+    }
+
+    .screenshot-placeholder .placeholder-caption {
+      font-size: 0.95em;
+      color: #666;
+      max-width: 540px;
+      margin: 0 auto;
+    }
+
+    .screenshot-placeholder .placeholder-spec {
+      font-size: 0.8em;
+      color: #999;
+      margin-top: 12px;
+      font-family: 'SF Mono', 'Monaco', monospace;
+    }
+
+    /* Info boxes */
+    .info-box {
+      padding: 20px;
+      border-radius: 8px;
+      margin: 20px 0;
+    }
+
+    .info-box.warning {
+      background: #fff3cd;
+      border-left: 4px solid #ffc107;
+    }
+
+    .info-box.tip {
+      background: #d1ecf1;
+      border-left: 4px solid #17a2b8;
+    }
+
+    .info-box.important {
+      background: #f8d7da;
+      border-left: 4px solid #dc3545;
+    }
+
+    .info-box h4 {
+      margin-bottom: 10px;
+      color: #424242;
+    }
+
+    .info-box p {
+      margin: 0;
+      color: #555;
+    }
+
+    /* ────────────────────────────────────────────────────────────
+       Master tab control — toggles all path-dependent content
+       across the page. Web is the default; HA can be toggled and
+       persisted via localStorage.
+       ──────────────────────────────────────────────────────────── */
+    .path-tabs {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: #ffffff;
+      border-bottom: 1px solid #e0e0e0;
+      display: flex;
+      gap: 4px;
+      padding: 12px 0 0 0;
+      margin: 0 0 24px 0;
+    }
+
+    .path-tab {
+      flex: 1;
+      background: transparent;
+      border: 0;
+      padding: 14px 20px;
+      font-family: inherit;
+      font-size: 0.95em;
+      font-weight: 600;
+      color: #888;
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      transition: color 0.15s, border-color 0.15s;
+    }
+
+    .path-tab:hover {
+      color: #555;
+    }
+
+    .path-tab.active {
+      color: #424242;
+      border-bottom-color: #ffaa00;
+    }
+
+    .path-tab .path-tab-sub {
+      display: block;
+      font-size: 0.8em;
+      font-weight: 400;
+      color: #999;
+      margin-top: 2px;
+    }
+
+    /* Path-conditional content. The page is in one of two states:
+       body.path-web or body.path-ha. Each .path-only element shows
+       only when its data-path attribute matches.
+
+       Sections that are identical across both paths just omit
+       .path-only and are always visible. */
+    .path-only { display: none; }
+    body.path-web .path-only[data-path="web"] { display: block; }
+    body.path-ha  .path-only[data-path="ha"]  { display: block; }
+
+    /* Inline-tag versions (web/ha labels in prose) — same idea, but
+       inline so they don't break paragraph flow. */
+    .path-tag {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 3px;
+      color: white;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-right: 6px;
+      vertical-align: middle;
+    }
+
+    .path-tag.web { background: #ffaa00; }
+    .path-tag.ha  { background: #18bcf2; }
+
+    /* Requirements list */
+    .requirements {
+      background: #f9f9f9;
+      border-radius: 12px;
+      padding: 25px;
+      margin: 20px 0;
+    }
+
+    .requirements h3 {
+      margin-top: 0;
+      margin-bottom: 15px;
+    }
+
+    .requirements ul {
+      margin: 0;
+      padding-left: 25px;
+    }
+
+    /* See-also block at end of a section */
+    .see-also {
+      background: #fff8e6;
+      border-left: 4px solid #ffaa00;
+      padding: 16px 20px;
+      border-radius: 6px;
+      margin: 20px 0;
+    }
+
+    .see-also h4 {
+      font-size: 0.95em;
+      color: #424242;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .see-also p {
+      margin: 0;
+      font-size: 0.95em;
+    }
+
+    /* Footer */
+    .footer {
+      max-width: 800px;
+      margin: 60px auto 0;
+      padding: 40px;
+      text-align: center;
+      border-top: 1px solid #e0e0e0;
+      color: #999999;
+    }
+
+    .footer-links {
+      margin-top: 20px;
+    }
+
+    .footer-links a {
+      color: #666666;
+      text-decoration: none;
+      margin: 0 15px;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover {
+      color: #ffaa00;
+    }
+
+    /* Mobile Responsive */
+    @media (max-width: 768px) {
+      .breadcrumb,
+      .article {
+        padding-left: 20px;
+        padding-right: 20px;
+      }
+
+      .article h1 {
+        font-size: 1.6em;
+      }
+
+      .path-tab {
+        padding: 12px 8px;
+        font-size: 0.85em;
+      }
+
+      .path-tab .path-tab-sub {
+        font-size: 0.75em;
+      }
+
+      .screenshot-placeholder {
+        padding: 28px 16px;
+      }
+    }
+  </style>
+</head>
+<body class="path-web">
+  <!-- Shared Header/Navigation -->
+  <script src="/v2/components/header.js"></script>
+
+  <!-- Breadcrumb -->
+  <div class="breadcrumb">
+    <a href="/v2/guides/">How To Guides</a>
+    <span>/</span>
+    <a href="#">Using the Chickadee Console</a>
+  </div>
+
+  <!-- Article -->
+  <article class="article">
+    <header class="article-header">
+      <span class="article-tag">Chickadee</span>
+      <h1>Using the Chickadee Console</h1>
+      <p class="article-meta">Last updated: June 2026 • Console v0.1.120</p>
+    </header>
+
+    <div class="article-content">
+      <p>
+        The Chickadee Console is where you manage everything about your Chickadee household — your tablets, family
+        members, calendars, photo albums, AI personality, voice settings, and account. It's the same UI
+        whether you reach it on the web or from inside Home Assistant.
+      </p>
+
+      <p>
+        Use the tabs below to switch between the two paths. The tabs apply to the whole page — pick once,
+        and every section will show the right instructions for your setup.
+      </p>
+
+      <!-- Master tab control. Tabs toggle body.path-web / body.path-ha,
+           which drives visibility of all .path-only blocks on the page. -->
+      <div class="path-tabs" role="tablist">
+        <button class="path-tab active" role="tab" aria-selected="true" data-path="web" onclick="setPath('web')">
+          Web
+          <span class="path-tab-sub">chickadeeapp.com/console</span>
+        </button>
+        <button class="path-tab" role="tab" aria-selected="false" data-path="ha" onclick="setPath('ha')">
+          In Home Assistant
+          <span class="path-tab-sub">Chickadee Console app</span>
+        </button>
+      </div>
+
+      <div class="screenshot-placeholder">
+        <span class="placeholder-label">Screenshot</span>
+        <div class="placeholder-caption">
+          Hero shot of the Console UI showing the sidebar (Devices, Family, AI &amp; Voice, Photos, Account)
+          and the Devices section open with several device cards visible. Wide-screen browser view.
+        </div>
+        <div class="placeholder-spec">file: console-overview.png · suggested width: 1400px</div>
+      </div>
+
+      <div class="info-box tip">
+        <h4>Most of the Console works the same on both paths</h4>
+        <p>
+          Family members, AI personality, voice settings, and photo albums all look and behave identically
+          whether you're on the web or in HA. <strong>Devices</strong> is where the paths meaningfully
+          diverge — the in-HA Console can talk directly to your tablets through Home Assistant and surface
+          live metrics, history charts, and instant controls the web Console can't see.
+        </p>
+      </div>
+
+      <div class="requirements">
+        <h3>What you need</h3>
+        <ul>
+          <li>A Chickadee account — sign up at <a href="https://getchickadee.org" target="_blank">chickadeeapp.com</a></li>
+          <li class="path-only" data-path="ha">The Chickadee Console app installed in Home Assistant. See <a href="/v2/guides/home-assistant-integration">Set up Chickadee in Home Assistant</a> (Part 4) for the install.</li>
+        </ul>
+      </div>
+
+      <h2>Opening the Console</h2>
+
+      <p>
+        Sign-in is the one place the two paths look visibly different. Both end at the same Console UI.
+      </p>
+
+      <!-- Sign-in: Web path -->
+      <div class="path-only" data-path="web">
+        <p>
+          Open <a href="https://getchickadee.org/console" target="_blank">chickadeeapp.com/console</a> in a browser.
+          Click <strong>Sign in with Google</strong> (or your account provider). You'll be sent to Google's
+          standard sign-in and bounced back to the Console.
+        </p>
+        <p>
+          The session sticks in browser cookies — close the tab, open it later, you're still signed in. Sign
+          out from the Account menu in the bottom-left of the sidebar.
+        </p>
+
+        <div class="screenshot-placeholder">
+          <span class="placeholder-label">Screenshot</span>
+          <div class="placeholder-caption">
+            The web Console sign-in screen at <code>chickadeeapp.com/console</code> showing the
+            "Sign in with Google" button. Browser address bar visible.
+          </div>
+          <div class="placeholder-spec">file: console-signin-web.png · suggested width: 1400px</div>
+        </div>
+      </div>
+
+      <!-- Sign-in: HA path -->
+      <div class="path-only" data-path="ha">
+        <p>
+          Click <strong>Chickadee Console</strong> in your HA sidebar (or open
+          <strong>Settings → Apps → Chickadee Console → Open Web UI</strong>).
+        </p>
+        <p>
+          First time, you'll see an 8-character code. On your phone or laptop, open
+          <a href="https://getchickadee.org/link" target="_blank">chickadeeapp.com/link</a>, sign in, enter the
+          code, and approve. The HA Console stays signed in across HA reboots.
+        </p>
+
+        <div class="screenshot-placeholder">
+          <span class="placeholder-label">Screenshot</span>
+          <div class="placeholder-caption">
+            Side-by-side: the in-HA Console device-flow screen with an 8-character code on the left,
+            and a phone showing <code>chickadeeapp.com/link</code> with the code field on the right.
+            (Or two stacked screenshots if side-by-side is awkward.)
+          </div>
+          <div class="placeholder-spec">file: console-signin-ha.png · suggested width: 1400px</div>
+        </div>
+      </div>
+
+      <h2>Managing your devices</h2>
+
+      <p>
+        <strong>Devices</strong> is your fleet view — every Chickadee tablet, TV, or kiosk display tied to your
+        account. Each device shows up as a card; click into one for details.
+      </p>
+
+      <!-- Devices: Web -->
+      <div class="path-only" data-path="web">
+        <p>The web Console covers the cloud-synced layer of every device:</p>
+        <ul>
+          <li>See every device on your account</li>
+          <li>Rename devices, set room labels</li>
+          <li>Change theme, sleep schedule, screensaver mode</li>
+          <li>Set photo album, layout mode, font/display size</li>
+          <li>Archive old devices</li>
+        </ul>
+        <p>
+          Per-device settings sync to the device the next time it checks in with the Chickadee cloud (usually
+          within seconds while it's online).
+        </p>
+
+        <div class="screenshot-placeholder">
+          <span class="placeholder-label">Screenshot</span>
+          <div class="placeholder-caption">
+            The web Console Devices page showing 2–3 device cards in the simple view (theme, sleep window,
+            photo album, current dashboard). No technical chips, no screenshots.
+          </div>
+          <div class="placeholder-spec">file: console-devices-web.png · suggested width: 1400px</div>
+        </div>
+
+        <p>
+          Click any card to open the device detail page, where you can rename it, change its theme, configure
+          its sleep schedule, pick a photo album, and adjust other per-device preferences.
+        </p>
+
+        <div class="screenshot-placeholder">
+          <span class="placeholder-label">Screenshot</span>
+          <div class="placeholder-caption">
+            Device detail page on the web Console with the Display section expanded (Theme, Sleep schedule,
+            Screensaver, Advanced Display Options visible).
+          </div>
+          <div class="placeholder-spec">file: console-device-detail-web.png · suggested width: 1400px</div>
+        </div>
+      </div>
+
+      <!-- Devices: HA -->
+      <div class="path-only" data-path="ha">
+        <p>The in-HA Console does everything the web Console does, plus:</p>
+        <ul>
+          <li><strong>Live metrics</strong> — battery, RAM, Wi-Fi, current screenshot, refreshed every few seconds</li>
+          <li><strong>History charts</strong> — click any metric chip to see 1h / 24h / week / custom-range graphs</li>
+          <li><strong>Direct controls</strong> — turn the screen on/off, adjust brightness/volume, lock the device, toggle the screensaver in real time</li>
+          <li><strong>Discovered devices</strong> — tablets running Chickadee on your network that aren't yet on your account, with a one-click <strong>Adopt</strong> button</li>
+        </ul>
+        <p>
+          The in-HA Console reaches your tablets through the Chickadee HA integration, so controls happen in
+          real time over your local network.
+        </p>
+
+        <div class="screenshot-placeholder">
+          <span class="placeholder-label">Screenshot</span>
+          <div class="placeholder-caption">
+            The in-HA Console Devices page in technical view, showing 2–3 device cards with live metric
+            chips (battery, RAM, Wi-Fi), a dashboard screenshot panel, and control buttons (screen,
+            screensaver, lock) on each card.
+          </div>
+          <div class="placeholder-spec">file: console-devices-ha-tech.png · suggested width: 1400px</div>
+        </div>
+
+        <div class="info-box tip">
+          <h4>Technical view toggle</h4>
+          <p>
+            The button at the top of the Devices list flips each card between a <strong>simple summary
+            view</strong> ("what's playing on this dashboard") and the <strong>full technical view</strong>
+            (every metric, screenshot, and control). In the in-HA Console it defaults to ON.
+          </p>
+        </div>
+
+        <p>
+          Click any metric chip on a card — battery, RAM, Wi-Fi — to open a history chart with presets
+          for 1h, 3h, 6h, 12h, 24h, 3d, 1w, 2w, 1m, plus a Custom range picker.
+        </p>
+
+        <div class="screenshot-placeholder">
+          <span class="placeholder-label">Screenshot</span>
+          <div class="placeholder-caption">
+            The history chart modal opened over a device card, showing the RAM-usage line graph for the
+            last 24h with the range-picker buttons (1h, 3h, 6h, 12h, 24h, 3d, 1w, 2w, 1m, Custom)
+            visible at the top.
+          </div>
+          <div class="placeholder-spec">file: console-history-chart.png · suggested width: 1400px</div>
+        </div>
+
+        <p>
+          If you're running Chickadee on a tablet that hasn't been signed into your account (a pure-kiosk
+          install, say), it'll show up at the bottom of the Devices list under <strong>Discovered</strong>.
+          Click <strong>Adopt</strong> to claim it into your account — no sign-in required on the tablet.
+        </p>
+
+        <div class="screenshot-placeholder">
+          <span class="placeholder-label">Screenshot</span>
+          <div class="placeholder-caption">
+            The Discovered section of the Devices page, showing 1–2 discovered devices with their
+            HA-side names and the <strong>Adopt</strong> button visible on each card.
+          </div>
+          <div class="placeholder-spec">file: console-discovered.png · suggested width: 1400px</div>
+        </div>
+      </div>
+
+      <h2>Family members and calendars</h2>
+
+      <p>
+        The <strong>Family</strong> section is where you add the people in your household, link their Google
+        calendars, and decide whose schedule appears on each dashboard. Same UI on both paths.
+      </p>
+
+      <p>
+        For each member you can: link a Google account (for calendar sync), pick which calendars are visible
+        to Chickadee, assign a color and icon, and decide which devices should display their events.
+      </p>
+
+      <div class="screenshot-placeholder">
+        <span class="placeholder-label">Screenshot</span>
+        <div class="placeholder-caption">
+          The Family section showing 3–4 family member cards with names, avatars/colors, and the
+          calendar count badge on each. Header "Family" visible.
+        </div>
+        <div class="placeholder-spec">file: console-family.png · suggested width: 1400px</div>
+      </div>
+
+      <h2>AI personality and voice</h2>
+
+      <p>
+        Under <strong>AI &amp; Voice</strong> (sometimes shown as "Chickadee Voice" on the sidebar)
+        you'll find the settings that shape how Chickadee talks back. Personality presets, custom prompts,
+        wake word, voice selection, and which AI model handles requests. Same UI on both paths.
+      </p>
+
+      <p>
+        Voice changes propagate to every device on your account: pick a new personality on the Console,
+        and the next time the tablet wakes up it'll use that personality. Wake-word changes take effect
+        at the device's next reboot or settings refresh.
+      </p>
+
+      <div class="screenshot-placeholder">
+        <span class="placeholder-label">Screenshot</span>
+        <div class="placeholder-caption">
+          The AI &amp; Voice section showing the personality selector at the top (a few preset cards with
+          names and short descriptions), the voice picker dropdown, and the wake-word selector below.
+        </div>
+        <div class="placeholder-spec">file: console-ai-voice.png · suggested width: 1400px</div>
+      </div>
+
+      <div class="see-also">
+        <h4>Deep dive</h4>
+        <p>See <a href="/v2/guides/chickadee-voice-setup">Chickadee Voice Setup</a> for the full personality-and-voice walkthrough, plus <a href="/v2/guides/voice-control-setup">Voice Control Setup</a> for the wake-word details.</p>
+      </div>
+
+      <h2>Photos</h2>
+
+      <p>
+        <strong>Photos</strong> lets you build albums that show up on your dashboards' photo widgets and on
+        the screensaver. Add photos by uploading from your phone or computer, or by linking a Google Photos
+        album. Same UI on both paths.
+      </p>
+
+      <p>
+        Each device picks its photo source independently — useful when one tablet shows family photos in
+        the kitchen and another shows vacation pics in the bedroom. You choose the album per-device in the
+        Devices section.
+      </p>
+
+      <div class="screenshot-placeholder">
+        <span class="placeholder-label">Screenshot</span>
+        <div class="placeholder-caption">
+          The Photos section showing a list of albums (e.g. "Family", "Vacations", "Kids") each with a
+          photo count and a small grid of thumbnails. An "Add album" button visible at the top.
+        </div>
+        <div class="placeholder-spec">file: console-photos.png · suggested width: 1400px</div>
+      </div>
+
+      <div class="see-also">
+        <h4>Deep dive</h4>
+        <p>See <a href="/v2/guides/photos-setup">Photos Setup</a> for upload, Google Photos linking, and the screensaver photo flow.</p>
+      </div>
+
+      <h2>Troubleshooting</h2>
+
+      <div class="path-only" data-path="ha">
+        <h3>I'm signed in on web but the in-HA Console asks me to sign in again</h3>
+        <p>
+          That's expected. The web Console uses browser cookies; the in-HA Console runs inside a separate
+          ingress-isolated session and signs in independently via the device-flow code at
+          <code>chickadeeapp.com/link</code>. You only need to do it once per HA install.
+        </p>
+
+        <h3>My device shows up on web but not in the in-HA Devices list</h3>
+        <p>
+          The in-HA Console only sees devices that are also registered as HA devices via the Chickadee
+          integration. Make sure you've completed Parts 1–3 of the
+          <a href="/v2/guides/home-assistant-integration">HA setup guide</a>. If the device exists in HA but
+          isn't on your Chickadee account, the in-HA Console will surface it as <strong>Discovered</strong>
+          with an <strong>Adopt</strong> button.
+        </p>
+      </div>
+
+      <h3>Changes I make on the Console don't appear on my tablet</h3>
+      <p>
+        Most settings sync within seconds while the device is online. If a setting isn't taking, check that
+        the device is awake and connected (battery icon, last-seen timestamp on the device card). Photo
+        album changes take effect at the next photo refresh interval (a few minutes by default).
+      </p>
+
+      <div class="info-box important">
+        <h4>Need more help?</h4>
+        <p>
+          If something isn't behaving as described, <a href="/v2/contact">contact us</a> with your account
+          email, the device name, and what you were trying to do. Screenshots help.
+        </p>
+      </div>
+    </div>
+  </article>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>&copy; 2026 Chickadee LLC. All rights reserved.</p>
+    <div class="footer-links">
+      <a href="/privacy">Privacy Policy</a>
+      <span class="separator">|</span>
+      <a href="/terms">Terms of Service</a>
+    </div>
+  </footer>
+
+  <!-- Analytics -->
+
+  <script>
+    // Master path switcher — toggles body class so every .path-only
+    // block on the page swaps in unison. Choice persists in
+    // localStorage so a refresh (or returning later) keeps the
+    // reader on whichever path matches their setup.
+    (function () {
+      const KEY = 'chickadee-console-guide-path';
+      const VALID = ['web', 'ha'];
+
+      function applyPath(path) {
+        if (!VALID.includes(path)) path = 'web';
+        document.body.classList.remove('path-web', 'path-ha');
+        document.body.classList.add('path-' + path);
+        document.querySelectorAll('.path-tab').forEach(t => {
+          const active = t.dataset.path === path;
+          t.classList.toggle('active', active);
+          t.setAttribute('aria-selected', active ? 'true' : 'false');
+        });
+      }
+
+      window.setPath = function (path) {
+        try { localStorage.setItem(KEY, path); } catch (_) {}
+        applyPath(path);
+      };
+
+      // Hydrate from saved preference on load.
+      try {
+        const saved = localStorage.getItem(KEY);
+        if (saved) applyPath(saved);
+      } catch (_) {}
+    })();
+  </script>
+</body>
+</html>

@@ -593,16 +593,14 @@ const headerHTML = `
         </div>
       </li>
       <li><a href="/v2/voice" class="${getActiveClass('/v2/voice')}">Voice &amp; AI</a></li>
-      <li><a href="/v2/download" class="${getActiveClass('/v2/download')}">Download</a></li>
-      <li><a href="/guides/" class="${getActiveClass('/guides')}">How to Guides</a></li>
-      <li><a href="/blog/" class="${getActiveClass('/blog')}">Blog</a></li>
+      <li><a href="/v2/guides/" class="${getActiveClass('/v2/guides')}">How to Guides</a></li>
 
       <li class="nav-dropdown">
         <a href="#" onclick="event.preventDefault();">About <span class="nav-caret">&#9662;</span></a>
         <div class="nav-dropdown-menu">
           <a href="/privacy">Privacy Policy</a>
           <a href="/terms">Terms of Service</a>
-          <a href="/contact">Contact Us</a>
+          <a href="/v2/contact">Contact Us</a>
         </div>
       </li>
     </ul>
@@ -642,14 +640,12 @@ const headerHTML = `
     <li><a href="/v2/features#video-streaming" class="mobile-sub-item">Video Streaming</a></li>
     <li><a href="/v2/features#battery-management" class="mobile-sub-item">Battery Management</a></li>
     <li><a href="/v2/voice" class="${getActiveClass('/v2/voice')}">Voice &amp; AI</a></li>
-    <li><a href="/v2/download" class="${getActiveClass('/v2/download')}">Download</a></li>
-    <li><a href="/guides/" class="${getActiveClass('/guides')}">How to Guides</a></li>
-    <li><a href="/blog/" class="${getActiveClass('/blog')}">Blog</a></li>
+    <li><a href="/v2/guides/" class="${getActiveClass('/v2/guides')}">How to Guides</a></li>
 
     <li><a href="#" onclick="event.preventDefault();" class="mobile-menu-label">About</a></li>
     <li><a href="/privacy" class="mobile-sub-item">Privacy Policy</a></li>
     <li><a href="/terms" class="mobile-sub-item">Terms of Service</a></li>
-    <li><a href="/contact" class="mobile-sub-item ${getActiveClass('/contact')}">Contact Us</a></li>
+    <li><a href="/v2/contact" class="mobile-sub-item ${getActiveClass('/v2/contact')}">Contact Us</a></li>
   </ul>
   <div class="mobile-menu-buttons">
     <a href="/v2/download" class="btn-login">Download</a>
